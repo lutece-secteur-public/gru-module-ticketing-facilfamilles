@@ -1,0 +1,12 @@
+<#if config?exists>
+    <input name="redirect" id="redirect" value="" type="hidden">
+    <#include "/admin/util/editor/editor.html" />
+    <#if config.isWithEmail(  ) >
+    <@fieldInputText i18nLabelKey="module.workflow.ticketingfacilfamilles.task_ticket_facilfamilles_form.label_email" inputName="email_${config.idTask}" mandatory=true value="" maxlength=255 i18nHelpBlockKey='' cssClass='ticketing input-xlarge' />
+    </#if>
+    
+    <textarea class="richtext" class="ticketing input-xxlarge" name="message_${config.idTask}"><p>${user_signature}</p></textarea>
+
+    <a href="jsp/admin/plugins/ticketing/UserPreferences.jsp" class="btn btn-primary btn-xs btn-flat" >#i18n{module.workflow.ticketingfacilfamilles.button.manageUserSignature}</a>
+    <@initEditor />
+</#if>
