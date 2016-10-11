@@ -38,23 +38,25 @@ import fr.paris.lutece.plugins.workflowcore.business.config.ITaskConfigDAO;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+
 /**
  *
  */
 public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTicketFacilFamillesConfig>
 {
-	private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = " SELECT id_task, message_direction FROM workflow_task_ticketing_facilfamilles_config WHERE id_task = ? ";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = " SELECT id_task, message_direction FROM workflow_task_ticketing_facilfamilles_config WHERE id_task = ? ";
     private static final String SQL_QUERY_INSERT = " INSERT INTO workflow_task_ticketing_facilfamilles_config ( id_task, message_direction ) VALUES ( ?,? ) ";
     private static final String SQL_QUERY_UPDATE = "UPDATE workflow_task_ticketing_facilfamilles_config SET message_direction = ? WHERE id_task = ? ";
     private static final String SQL_QUERY_DELETE = " DELETE FROM workflow_task_ticketing_facilfamilles_config WHERE id_task = ? ";
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public synchronized void insert( TaskTicketFacilFamillesConfig config )
-	{
-		DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void insert( TaskTicketFacilFamillesConfig config )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT,
+                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         int nIndex = 1;
 
@@ -63,15 +65,16 @@ public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTick
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
-	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void store( TaskTicketFacilFamillesConfig config )
-	{
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void store( TaskTicketFacilFamillesConfig config )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE,
+                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         int nIndex = 1;
 
@@ -80,15 +83,15 @@ public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTick
         daoUtil.setInt( nIndex++, config.getIdTask(  ) );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
-	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public TaskTicketFacilFamillesConfig load( int nIdTask )
-	{
-		TaskTicketFacilFamillesConfig config = null;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TaskTicketFacilFamillesConfig load( int nIdTask )
+    {
+        TaskTicketFacilFamillesConfig config = null;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY,
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
@@ -108,19 +111,19 @@ public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTick
         daoUtil.free(  );
 
         return config;
-	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void delete( int nIdTask )
-	{
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void delete( int nIdTask )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE,
+                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdTask );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
-	}
-
+    }
 }

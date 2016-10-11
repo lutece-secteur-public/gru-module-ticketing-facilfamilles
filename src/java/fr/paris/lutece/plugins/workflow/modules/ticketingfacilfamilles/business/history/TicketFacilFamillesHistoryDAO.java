@@ -33,33 +33,35 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.WorkflowTicketingFacilFamillesPlugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  *
  */
 public class TicketFacilFamillesHistoryDAO implements ITicketFacilFamillesHistoryDAO
 {
-	private static final String SQL_QUERY_FIND_BY_ID_HISTORY = " SELECT id_task, id_history, email_agent, message FROM workflow_task_ticketing_facilfamilles_history " +
-	        " WHERE id_history = ? ";
+    private static final String SQL_QUERY_FIND_BY_ID_HISTORY = " SELECT id_task, id_history, email_agent, message FROM workflow_task_ticketing_facilfamilles_history " +
+        " WHERE id_history = ? ";
     private static final String SQL_QUERY_INSERT = " INSERT INTO workflow_task_ticketing_facilfamilles_history ( id_task, id_history, email_agent, message ) " +
         " VALUES ( ?,?,?,? ) ";
     private static final String SQL_QUERY_DELETE = " DELETE FROM workflow_task_ticketing_facilfamilles_history WHERE id_task = ? and id_history = ? ";
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional( "workflow.transactionManager" )
     public void insert( TicketFacilFamillesHistory emailAgent )
     {
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT,
+                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
-    	int nIndex = 1;
+        int nIndex = 1;
 
         daoUtil.setInt( nIndex++, emailAgent.getIdTask(  ) );
         daoUtil.setInt( nIndex++, emailAgent.getIdResourceHistory(  ) );
@@ -70,15 +72,16 @@ public class TicketFacilFamillesHistoryDAO implements ITicketFacilFamillesHistor
         daoUtil.free(  );
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TicketFacilFamillesHistory loadByIdHistory( int nIdHistory )
     {
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_HISTORY, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_HISTORY,
+                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
-    	daoUtil.setInt( 1, nIdHistory );
+        daoUtil.setInt( 1, nIdHistory );
 
         daoUtil.executeQuery(  );
 
@@ -87,31 +90,31 @@ public class TicketFacilFamillesHistoryDAO implements ITicketFacilFamillesHistor
 
         if ( daoUtil.next(  ) )
         {
-        	emailAgent = new TicketFacilFamillesHistory(  );
-        	emailAgent.setIdTask( daoUtil.getInt( nIndex++ ) );
-        	emailAgent.setIdResourceHistory( daoUtil.getInt( nIndex++ ) );
-        	emailAgent.setEmailAgent( daoUtil.getString( nIndex++ ) );
-        	emailAgent.setMessage( daoUtil.getString( nIndex++ ) );
+            emailAgent = new TicketFacilFamillesHistory(  );
+            emailAgent.setIdTask( daoUtil.getInt( nIndex++ ) );
+            emailAgent.setIdResourceHistory( daoUtil.getInt( nIndex++ ) );
+            emailAgent.setEmailAgent( daoUtil.getString( nIndex++ ) );
+            emailAgent.setMessage( daoUtil.getString( nIndex++ ) );
         }
 
         daoUtil.free(  );
-        
+
         return emailAgent;
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional( "workflow.transactionManager" )
     public void deleteByHistory( int nIdHistory, int nIdTask )
     {
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
-    	
-    	daoUtil.setInt( 1, nIdTask );
-    	daoUtil.setInt( 2, nIdHistory );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE,
+                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+
+        daoUtil.setInt( 1, nIdTask );
+        daoUtil.setInt( 2, nIdHistory );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-	
 }

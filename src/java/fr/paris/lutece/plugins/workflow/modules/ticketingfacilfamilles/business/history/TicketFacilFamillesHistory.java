@@ -44,74 +44,74 @@ public class TicketFacilFamillesHistory
 
     /** The _n id resource history. */
     private int _nIdResourceHistory;
-    
+
     /** the email of the user agent*/
     private String _strEmailAgent;
-    
+
     /** the message to the agent*/
     private String _strMessage;
 
-	/**
-	 * @return the _nIdTask
-	 */
-	public int getIdTask()
-	{
-		return _nIdTask;
-	}
+    /**
+     * @return the _nIdTask
+     */
+    public int getIdTask(  )
+    {
+        return _nIdTask;
+    }
 
-	/**
-	 * @param nIdTask the nIdTask to set
-	 */
-	public void setIdTask( int nIdTask )
-	{
-		this._nIdTask = nIdTask;
-	}
+    /**
+     * @param nIdTask the nIdTask to set
+     */
+    public void setIdTask( int nIdTask )
+    {
+        this._nIdTask = nIdTask;
+    }
 
-	/**
-	 * @return the _nIdResourceHistory
-	 */
-	public int getIdResourceHistory()
-	{
-		return _nIdResourceHistory;
-	}
+    /**
+     * @return the _nIdResourceHistory
+     */
+    public int getIdResourceHistory(  )
+    {
+        return _nIdResourceHistory;
+    }
 
-	/**
-	 * @param nIdResourceHistory the nIdResourceHistory to set
-	 */
-	public void setIdResourceHistory( int nIdResourceHistory )
-	{
-		this._nIdResourceHistory = nIdResourceHistory;
-	}
+    /**
+     * @param nIdResourceHistory the nIdResourceHistory to set
+     */
+    public void setIdResourceHistory( int nIdResourceHistory )
+    {
+        this._nIdResourceHistory = nIdResourceHistory;
+    }
 
-	/**
-	 * @return the _strEmailAgent
-	 */
-	public String getEmailAgent()
-	{
-		return _strEmailAgent;
-	}
+    /**
+     * @return the _strEmailAgent
+     */
+    public String getEmailAgent(  )
+    {
+        return _strEmailAgent;
+    }
 
-	/**
-	 * @param strEmailAgent the strEmailAgent to set
-	 */
-	public void setEmailAgent( String strEmailAgent )
-	{
-		this._strEmailAgent = strEmailAgent;
-	}
+    /**
+     * @param strEmailAgent the strEmailAgent to set
+     */
+    public void setEmailAgent( String strEmailAgent )
+    {
+        this._strEmailAgent = strEmailAgent;
+    }
 
-	/**
-	 * @return the _strMessage
-	 */
-	public String getMessage()
-	{
-		return _strMessage;
-	}
+    /**
+     * @return the _strMessage
+     */
+    public String getMessage(  )
+    {
+        return _strMessage;
+    }
 
-	/**
-	 * @param strMessage the strMessage to set
-	 */
-	public void setMessage( String strMessage )
-	{
-		this._strMessage = strMessage;
-	}
+    /**
+     * @param strMessage the strMessage to set
+     */
+    public void setMessage( String strMessage )
+    {
+        this._strMessage = strMessage;
+    }
 }

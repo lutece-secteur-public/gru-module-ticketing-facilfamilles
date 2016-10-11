@@ -33,16 +33,18 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider;
 
+
 /**
  *
  */
 public final class TicketFacilFamillesNotifyGruConstants
 {
-	// DEFAULT PROVIDER IMPL
-	public static final String STR_NO_CUSTOMER_ID = "0";
-	public static final int EMPTY_OPTIONAL_DEMAND_ID_TYPE = 0;
-	// GENERIC GRU
-	public static final String MARK_GUID = "identification_guid";
+    // DEFAULT PROVIDER IMPL
+    public static final String STR_NO_CUSTOMER_ID = "0";
+    public static final int EMPTY_OPTIONAL_DEMAND_ID_TYPE = 0;
+
+    // GENERIC GRU
+    public static final String MARK_GUID = "identification_guid";
     public static final String MARK_FIRSTNAME = "firstname";
     public static final String MARK_LASTNAME = "lastname";
     public static final String MARK_FIXED_PHONE = "fixed_phone";
@@ -62,10 +64,11 @@ public final class TicketFacilFamillesNotifyGruConstants
     public static final String MARK_LIST_FORM = "list_form";
     public static final String MARK_TICKET = "ticket";
     public static final String MARK_LIST_MARKER = "list_markers";
+
     //SPECIFIC EMAIL AGENT
     public static final String MARK_EMAILAGENT_MESSAGE = "message";
     public static final String MARK_EMAILAGENT_LINK = "ticketing_ticket_link";
-    
+
     /**
      * Private constructor
      */

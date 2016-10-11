@@ -39,7 +39,7 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business
  */
 public interface ITicketFacilFamillesHistoryDAO
 {
-	/** The Constant BEAN_SERVICE. */
+    /** The Constant BEAN_SERVICE. */
     String BEAN_SERVICE = "workflow-ticketingfacilfamilles.ticketFacilFamillesHistoryDAO";
 
     /**

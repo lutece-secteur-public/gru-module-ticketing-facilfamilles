@@ -33,12 +33,6 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.task;
 
-import java.util.Locale;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.MessageDirection;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketFacilFamillesConfig;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.ITicketFacilFamillesHistoryDAO;
@@ -46,6 +40,14 @@ import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.
 import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.task.SimpleTask;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+
+import java.util.Locale;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  *
@@ -58,91 +60,93 @@ public class TaskTicketFacilFamilles extends SimpleTask
     // Parameters
     private static final String PARAMETER_MESSAGE = "message";
     private static final String PARAMETER_EMAIL = "email";
-	// Messages
-	private static final String MESSAGE_TICKET = "module.workflow.ticketingfacilfamilles.task_ticket_facilfamilles.label";
-    
-	// Other constants
+
+    // Messages
+    private static final String MESSAGE_TICKET = "module.workflow.ticketingfacilfamilles.task_ticket_facilfamilles.label";
+
+    // Other constants
     private static final String UNDERSCORE = "_";
     @Inject
     @Named( BEAN_TICKET_CONFIG_SERVICE )
     private ITaskConfigService _taskTicketConfigService;
-    
     @Inject
     @Named( ITicketFacilFamillesHistoryDAO.BEAN_SERVICE )
     private ITicketFacilFamillesHistoryDAO _ticketFacilFamillesHistoryDAO;
-    
-    
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void processTask( int nIdResourceHistory, HttpServletRequest request, Locale locale )
-	{
-		TaskTicketFacilFamillesConfig config = _taskTicketConfigService.findByPrimaryKey( getId(  ) );
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void processTask( int nIdResourceHistory, HttpServletRequest request, Locale locale )
+    {
+        TaskTicketFacilFamillesConfig config = _taskTicketConfigService.findByPrimaryKey( getId(  ) );
 
         if ( config != null )
         {
-        	MessageDirection messageDirection = config.getMessageDirection(  );
-	
-	        if ( messageDirection == MessageDirection.AGENT_TO_TERRAIN )
-	        {
-	            processAgentTask( nIdResourceHistory, request, locale, config );
-	        }
-	        else
-	        {
-	            processTerrainTask( nIdResourceHistory, request, locale, config );
-	        }
+            MessageDirection messageDirection = config.getMessageDirection(  );
+
+            if ( messageDirection == MessageDirection.AGENT_TO_TERRAIN )
+            {
+                processAgentTask( nIdResourceHistory, request, locale, config );
+            }
+            else
+            {
+                processTerrainTask( nIdResourceHistory, request, locale, config );
+            }
         }
-	}
-	
-	/**
-	 * Process agent to agent terrain task
-	 * @param nIdResourceHistory resourceHistory ID
-	 * @param request HttpRequest from doAction
-	 * @param locale current Locale
-	 * @param config configuration of the current task 
-	 */	
-	private void processAgentTask( int nIdResourceHistory, HttpServletRequest request, Locale locale, TaskTicketFacilFamillesConfig config )
-	{
-		String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId(  ) );
-		String strEmail = request.getParameter( PARAMETER_EMAIL + UNDERSCORE + getId(  ) );
-		//create resource item
-		TicketFacilFamillesHistory emailAgent = new TicketFacilFamillesHistory(  );
-		emailAgent.setIdResourceHistory( nIdResourceHistory );
-		emailAgent.setIdTask( getId(  ) );
-		emailAgent.setMessage( strAgentMessage );
-		emailAgent.setEmailAgent( strEmail );
-		_ticketFacilFamillesHistoryDAO.insert( emailAgent );
-	}
-	
-	/**
-	 * Process agent terrain to agent task (response)
-	 * @param nIdResourceHistory resourceHistory ID
-	 * @param request HttpRequest from doAction
-	 * @param locale current Locale
-	 * @param config configuration of the current task
-	 */	
-	private void processTerrainTask( int nIdResourceHistory, HttpServletRequest request, Locale locale, TaskTicketFacilFamillesConfig config )
-	{
-		String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId(  ) );
-		//create resource item
-		TicketFacilFamillesHistory emailAgent = new TicketFacilFamillesHistory(  );
-		emailAgent.setIdResourceHistory( nIdResourceHistory );
-		emailAgent.setIdTask( getId(  ) );
-		emailAgent.setMessage( strAgentMessage );
-		emailAgent.setEmailAgent( null );
-		_ticketFacilFamillesHistoryDAO.insert( emailAgent );
-		
-		//no email for this process
-	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getTitle( Locale locale )
-	{
-		return I18nService.getLocalizedString( MESSAGE_TICKET, locale );
-	}
+    /**
+     * Process agent to agent terrain task
+     * @param nIdResourceHistory resourceHistory ID
+     * @param request HttpRequest from doAction
+     * @param locale current Locale
+     * @param config configuration of the current task
+     */
+    private void processAgentTask( int nIdResourceHistory, HttpServletRequest request, Locale locale,
+        TaskTicketFacilFamillesConfig config )
+    {
+        String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId(  ) );
+        String strEmail = request.getParameter( PARAMETER_EMAIL + UNDERSCORE + getId(  ) );
 
+        //create resource item
+        TicketFacilFamillesHistory emailAgent = new TicketFacilFamillesHistory(  );
+        emailAgent.setIdResourceHistory( nIdResourceHistory );
+        emailAgent.setIdTask( getId(  ) );
+        emailAgent.setMessage( strAgentMessage );
+        emailAgent.setEmailAgent( strEmail );
+        _ticketFacilFamillesHistoryDAO.insert( emailAgent );
+    }
+
+    /**
+     * Process agent terrain to agent task (response)
+     * @param nIdResourceHistory resourceHistory ID
+     * @param request HttpRequest from doAction
+     * @param locale current Locale
+     * @param config configuration of the current task
+     */
+    private void processTerrainTask( int nIdResourceHistory, HttpServletRequest request, Locale locale,
+        TaskTicketFacilFamillesConfig config )
+    {
+        String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId(  ) );
+
+        //create resource item
+        TicketFacilFamillesHistory emailAgent = new TicketFacilFamillesHistory(  );
+        emailAgent.setIdResourceHistory( nIdResourceHistory );
+        emailAgent.setIdTask( getId(  ) );
+        emailAgent.setMessage( strAgentMessage );
+        emailAgent.setEmailAgent( null );
+        _ticketFacilFamillesHistoryDAO.insert( emailAgent );
+
+        //no email for this process
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTitle( Locale locale )
+    {
+        return I18nService.getLocalizedString( MESSAGE_TICKET, locale );
+    }
 }

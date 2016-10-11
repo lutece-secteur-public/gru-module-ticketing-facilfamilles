@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business
 
 import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
 
+
 /**
  * configuration for the task TaskTicket
  */
@@ -59,12 +60,12 @@ public class TaskTicketFacilFamillesConfig extends TaskConfig
     {
         this._messageDirection = messageDirection;
     }
-    
+
     /**
-	 * @return true if the config allow email
-	 */
-	public boolean isWithEmail()
-	{
-		return MessageDirection.AGENT_TO_TERRAIN.equals( this._messageDirection );
-	}
+         * @return true if the config allow email
+         */
+    public boolean isWithEmail(  )
+    {
+        return MessageDirection.AGENT_TO_TERRAIN.equals( this._messageDirection );
+    }
 }
