@@ -297,9 +297,11 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
 
         //SPECIFIC EMAIL AGENT
         model.put( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_EMAIL,
-        		( ticketFacilFamillesHistory.getEmailAgent(  ) != null ) ? ticketFacilFamillesHistory.getEmailAgent(  ) : StringUtils.EMPTY );
+            ( ticketFacilFamillesHistory.getEmailAgent(  ) != null ) ? ticketFacilFamillesHistory.getEmailAgent(  )
+                                                                     : StringUtils.EMPTY );
         model.put( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE,
-                ( ticketFacilFamillesHistory.getMessage(  ) != null ) ? ticketFacilFamillesHistory.getMessage(  ) : StringUtils.EMPTY );
+            ( ticketFacilFamillesHistory.getMessage(  ) != null ) ? ticketFacilFamillesHistory.getMessage(  )
+                                                                  : StringUtils.EMPTY );
         model.put( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_LINK,
             buildTicketLink( ticket.getId(  ), ticketFacilFamillesHistory.getIdTask(  ) ) );
 
