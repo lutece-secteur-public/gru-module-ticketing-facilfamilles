@@ -133,7 +133,7 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
     @Override
     public String getUserEmail( int nIdResourceHistory )
     {
-        return getTicketFacilFamillesHistory( nIdResourceHistory ).getEmailAgent(  );
+        return getTicket( nIdResourceHistory ).getEmail(  );
     }
 
     /**
@@ -208,8 +208,9 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
         lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_CHANNEL );
         lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_URL_COMPLETED );
         //SPECIFIC EMAIL AGENT;
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_EMAILAGENT_MESSAGE );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_EMAILAGENT_LINK );
+        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_EMAIL );
+        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE );
+        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_LINK );
 
         model.put( LIST_ENTRIES, lstEntries );
 
@@ -295,9 +296,11 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
         model.put( TicketFacilFamillesNotifyGruConstants.MARK_URL_COMPLETED, strUrlCompleted.replaceAll( "&", "&amp;" ) );
 
         //SPECIFIC EMAIL AGENT
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_EMAILAGENT_MESSAGE,
-            ticketFacilFamillesHistory.getMessage(  ) );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_EMAILAGENT_LINK,
+        model.put( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_EMAIL,
+        		( ticketFacilFamillesHistory.getEmailAgent(  ) != null ) ? ticketFacilFamillesHistory.getEmailAgent(  ) : StringUtils.EMPTY );
+        model.put( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE,
+                ( ticketFacilFamillesHistory.getMessage(  ) != null ) ? ticketFacilFamillesHistory.getMessage(  ) : StringUtils.EMPTY );
+        model.put( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_LINK,
             buildTicketLink( ticket.getId(  ), ticketFacilFamillesHistory.getIdTask(  ) ) );
 
         return model;

@@ -65,9 +65,10 @@ public final class TicketFacilFamillesNotifyGruConstants
     public static final String MARK_TICKET = "ticket";
     public static final String MARK_LIST_MARKER = "list_markers";
 
-    //SPECIFIC EMAIL AGENT
-    public static final String MARK_EMAILAGENT_MESSAGE = "message";
-    public static final String MARK_EMAILAGENT_LINK = "ticketing_ticket_link";
+    //SPECIFIC FACILFAMILLE
+    public static final String MARK_FACILFAMILLE_EMAIL = "agent_email";
+    public static final String MARK_FACILFAMILLE_MESSAGE = "message";
+    public static final String MARK_FACILFAMILLE_LINK = "ticketing_ticket_link";
 
     /**
      * Private constructor
