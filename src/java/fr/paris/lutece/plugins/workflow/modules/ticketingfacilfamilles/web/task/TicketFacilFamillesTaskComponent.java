@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.web.task;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.MessageDirection;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketFacilFamillesConfig;
@@ -54,6 +46,15 @@ import fr.paris.lutece.plugins.workflowcore.web.task.SimpleTaskComponent;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -74,7 +75,6 @@ public class TicketFacilFamillesTaskComponent extends SimpleTaskComponent
 
     // Parameters
     private static final String PARAMETER_MESSAGE_DIRECTION = "message_direction";
-    
     @Inject
     @Named( TaskTicketFacilFamilles.BEAN_TICKET_CONFIG_SERVICE )
     private ITaskConfigService _taskTicketConfigService;
@@ -98,7 +98,7 @@ public class TicketFacilFamillesTaskComponent extends SimpleTaskComponent
         return template.getHtml(  );
     }
 
-	/**
+    /**
      * {@inheritDoc}
      */
     @Override
