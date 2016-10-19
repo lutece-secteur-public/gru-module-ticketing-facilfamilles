@@ -26,10 +26,10 @@
         p:taskConfigDAO-ref="workflow-ticketingfacilfamilles.taskTicketFacilFamillesConfigDAO" />
         
     <!-- NotifyGRU Provider -->
-    <bean id="notifygru-ticketing-facilfamilles.ProviderService" class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider.TicketFacilFamillesNotifyGruProvider" scope="prototype"
-        p:key="notifygru-ticketing-facilfamilles.ProviderService"
+    <bean id="workflow-ticketingfacilfamilles.ProviderService" class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider.TicketFacilFamillesNotifyGruProvider" scope="prototype"
+        p:key="workflow-ticketingfacilfamilles.ProviderService"
         p:titleI18nKey="module.workflow.ticketingfacilfamilles.task_ticket_facilfamilles.notifygru_provider"
-        p:beanName="notifygru-ticketing-facilfamilles.ProviderService"   
+        p:beanName="workflow-ticketingfacilfamilles.ProviderService"   
         p:managerProvider="false" />
         
     <!-- Task config -->

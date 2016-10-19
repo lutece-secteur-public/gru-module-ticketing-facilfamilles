@@ -41,7 +41,7 @@ INSERT INTO workflow_task_upload_config (id_task, title, max_file, max_size_file
 -- config workflow_task_upload_config
 DELETE FROM workflow_task_notify_gru_cf WHERE id_task >= 1300 and id_task <= 1305;
 INSERT INTO workflow_task_notify_gru_cf (id_task, id_spring_provider, is_active_onglet_guichet, is_active_onglet_agent, is_active_onglet_email, is_active_onglet_sms, id_mailing_list_broadcast, email_broadcast, sender_name_broadcast, subject_broadcast, message_broadcast, recipients_cc_broadcast, recipients_cci_broadcast, is_active_onglet_broadcast) VALUES
-	(1302, 'notifygru-ticketing-facilfamilles.ProviderService', 0, 0, 0, 0, -1, "${agent_email}", "Mairie de Paris", "[GRU] La sollicitation ${reference} requiert une action de votre part", "Bonjour,<br>Vous avez reçu un message du service Facil'Famille<br>${message}<br>Vous pouvez répondre au message via le lien suivant ${ticketing_ticket_link}", '', '', 1)
+	(1302, 'workflow-ticketingfacilfamilles.ProviderService', 0, 0, 0, 0, -1, "${agent_email}", "Mairie de Paris", "[GRU] La sollicitation ${reference} requiert une action de votre part", "Bonjour,<br>Vous avez reçu un message du service Facil'Famille<br>${message}<br>Vous pouvez répondre au message via le lien suivant ${ticketing_ticket_link}", '', '', 1)
 ;
 
 -- table specific
