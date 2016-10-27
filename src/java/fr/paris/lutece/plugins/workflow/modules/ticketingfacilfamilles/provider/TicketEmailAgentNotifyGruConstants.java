@@ -37,7 +37,7 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider
 /**
  *
  */
-public final class TicketFacilFamillesNotifyGruConstants
+public final class TicketEmailAgentNotifyGruConstants
 {
     // DEFAULT PROVIDER IMPL
     public static final String STR_NO_CUSTOMER_ID = "0";
@@ -70,10 +70,15 @@ public final class TicketFacilFamillesNotifyGruConstants
     public static final String MARK_FACILFAMILLE_MESSAGE = "message";
     public static final String MARK_FACILFAMILLE_LINK = "ticketing_ticket_link";
 
+    // Parameters URL
+    public static final String PARAMETER_ID_MESSAGE_AGENT = "id_message_agent";
+    public static final String PARAMETER_SIGNATURE = "signature";
+    public static final String PARAMETER_ID_TIMETAMP = "timestamp";
+
     /**
      * Private constructor
      */
-    private TicketFacilFamillesNotifyGruConstants(  )
+    private TicketEmailAgentNotifyGruConstants(  )
     {
     }
 }

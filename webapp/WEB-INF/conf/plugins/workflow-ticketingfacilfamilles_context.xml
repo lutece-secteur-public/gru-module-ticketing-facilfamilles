@@ -15,40 +15,57 @@
         p:pluginName="workflow-ticketingfacilfamilles" />
     
     <!-- DAO -->
-    <bean id="workflow-ticketingfacilfamilles.taskTicketFacilFamillesConfigDAO"
-        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketFacilFamillesConfigDAO" />
-    <bean id="workflow-ticketingfacilfamilles.ticketFacilFamillesHistoryDAO"
-        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketFacilFamillesHistoryDAO" />
+    <bean id="workflow-ticketingfacilfamilles.taskTicketEmailAgentConfigDAO"
+        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketEmailAgentConfigDAO" />
+    <bean id="workflow-ticketingfacilfamilles.ticketEmailAgentHistoryDAO"
+        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketEmailAgentHistoryDAO" />
+    <bean id="workflow-ticketingfacilfamilles.ticketingEmailAgentMessageDAO"
+        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.TicketingEmailAgentMessageDAO" />
         
     <!-- Service -->
-    <bean id="workflow-ticketingfacilfamilles.taskTicketFacilFamillesConfigService"
+    <bean id="workflow-ticketingfacilfamilles.taskTicketEmailAgentConfigService"
         class="fr.paris.lutece.plugins.workflowcore.service.config.TaskConfigService"
-        p:taskConfigDAO-ref="workflow-ticketingfacilfamilles.taskTicketFacilFamillesConfigDAO" />
+        p:taskConfigDAO-ref="workflow-ticketingfacilfamilles.taskTicketEmailAgentConfigDAO" />
         
     <!-- NotifyGRU Provider -->
-    <bean id="workflow-ticketingfacilfamilles.ProviderService" class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider.TicketFacilFamillesNotifyGruProvider" scope="prototype"
-        p:key="workflow-ticketingfacilfamilles.ProviderService"
-        p:titleI18nKey="module.workflow.ticketingfacilfamilles.task_ticket_facilfamilles.notifygru_provider"
-        p:beanName="workflow-ticketingfacilfamilles.ProviderService"   
+    <bean id="workflow-ticketingfacilfamilles.EmailAgentProviderService" class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider.TicketEmailAgentNotifyGruProvider" scope="prototype"
+        p:key="workflow-ticketingfacilfamilles.EmailAgentProviderService"
+        p:titleI18nKey="module.workflow.ticketingfacilfamilles.task_ticket_emailagent.notifygru_provider"
+        p:beanName="workflow-ticketingfacilfamilles.EmailAgentProviderService"   
         p:managerProvider="false" />
         
     <!-- Task config -->
-    <bean id="workflow-ticketingfacilfamilles.taskTicketFacilFamillesConfig"
-        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketFacilFamillesConfig"
+    <bean id="workflow-ticketingfacilfamilles.taskTicketEmailAgentConfig"
+        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketEmailAgentConfig"
         scope="prototype" />    
 
     <!-- Task Sollicitation Acteur Terrain -->
-    <bean id="workflow-ticketingfacilfamilles.taskTicketFacilFamilles"
-        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.task.TaskTicketFacilFamilles"
+    <bean id="workflow-ticketingfacilfamilles.taskTicketEmailAgent"
+        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.task.TaskTicketEmailAgent"
         scope="prototype" />
-    <bean id="workflow-ticketingfacilfamilles.taskTypeTicketFacilFamilles"
+    <bean id="workflow-ticketingfacilfamilles.taskTypeTicketEmailAgent"
         class="fr.paris.lutece.plugins.workflowcore.business.task.TaskType"
-        p:key="taskTicketingFacilFamilles" p:titleI18nKey="module.workflow.ticketingfacilfamilles.task_ticket_facilfamilles.title"
-        p:beanName="workflow-ticketingfacilfamilles.taskTicketFacilFamilles" p:configBeanName="workflow-ticketingfacilfamilles.taskTicketFacilFamillesConfig"
+        p:key="taskTicketingEmailAgent" p:titleI18nKey="module.workflow.ticketingfacilfamilles.task_ticket_emailagent.title"
+        p:beanName="workflow-ticketingfacilfamilles.taskTicketEmailAgent" p:configBeanName="workflow-ticketingfacilfamilles.taskTicketEmailAgentConfig"
         p:configRequired="true" p:formTaskRequired="true" />
-    <bean id="workflow-ticketingfacilfamilles.ticketFacilFamillesTaskComponent"
-        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.web.task.TicketFacilFamillesTaskComponent"
-        p:taskType-ref="workflow-ticketingfacilfamilles.taskTypeTicketFacilFamilles"
-        p:taskConfigService-ref="workflow-ticketingfacilfamilles.taskTicketFacilFamillesConfigService" />    
+    <bean id="workflow-ticketingfacilfamilles.ticketEmailAgentTaskComponent"
+        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.web.task.TicketEmailAgentTaskComponent"
+        p:taskType-ref="workflow-ticketingfacilfamilles.taskTypeTicketEmailAgent"
+        p:taskConfigService-ref="workflow-ticketingfacilfamilles.taskTicketEmailAgentConfigService" />    
     
+   <!-- SignRequest -->
+   <bean id="workflow-ticketingfacilfamilles.hashService"
+      class="fr.paris.lutece.util.signrequest.security.Sha1HashService" />
+   <bean id="workflow-ticketingfacilfamilles.requestAuthentication"
+      class="fr.paris.lutece.util.signrequest.RequestHashAuthenticator">
+      <property name="hashService" ref="workflow-ticketingfacilfamilles.hashService" />
+      <property name="signatureElements">
+         <list>
+            <value>id_message_agent</value>
+         </list>
+      </property>
+      <property name="privateKey">
+         <value>wkFFemailAgent</value>
+      </property>
+   </bean>
 </beans>

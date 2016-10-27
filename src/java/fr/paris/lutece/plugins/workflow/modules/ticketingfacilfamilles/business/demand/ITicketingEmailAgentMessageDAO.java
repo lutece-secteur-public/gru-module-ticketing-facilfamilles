@@ -31,41 +31,51 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config;
-
-import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
-
+package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand;
 
 /**
- * configuration for the task TaskTicket
+ * TicketingEmailAgentDemand DAO interface
  */
-public class TaskTicketFacilFamillesConfig extends TaskConfig
+public interface ITicketingEmailAgentMessageDAO
 {
-    private MessageDirection _messageDirection;
+    /** The Constant BEAN_SERVICE. */
+    String BEAN_SERVICE = "workflow-ticketingfacilfamilles.ticketingEmailAgentMessageDAO";
 
     /**
-     * Gives the message direction
-     * @return the message direction
+     * Create Question.
+     *
+     * @param emailAgentMessage the TicketingEmailAgentMessage
      */
-    public MessageDirection getMessageDirection(  )
-    {
-        return _messageDirection;
-    }
+    void createQuestion( TicketingEmailAgentMessage emailAgentMessage );
 
     /**
-     * Sets the message direction
-     * @param messageDirection the message direction to set
+     * Test if the id given is the last question of a ticket
+     * @param nIdTicket ticket ID
+     * @param nIdMessageAgent message ID
+     * @return true if the nIdMessageAgent is the last question of nIdTicket
      */
-    public void setMessageDirection( MessageDirection messageDirection )
-    {
-        this._messageDirection = messageDirection;
-    }
+    boolean isLastQuestion( int nIdTicket, int nIdMessageAgent );
+    /**
+     * add Answer.
+     *
+     * @param nIdTicket the id of the ticket
+     * @param strReponse the response to the question
+     * @return the id of the TicketingEmailAgentMessage
+     */
+    int addAnswer( int nIdTicket, String strReponse );
 
     /**
-         * @return true if the config allow email
-         */
-    public boolean isWithEmail(  )
-    {
-        return MessageDirection.AGENT_TO_TERRAIN.equals( this._messageDirection );
-    }
+     * Load.
+     *
+     * @param nIdMessageAgent the id of message
+     * @return the TicketingEmailAgentMessage element
+     */
+    TicketingEmailAgentMessage loadByIdMessageAgent( int nIdMessageAgent );
+
+    /**
+     * Delete by idMessageAgent.
+     *
+     * @param nIdMessageAgent the n id of message
+     */
+    void deleteByIdMessageAgent( int nIdMessageAgent );
 }

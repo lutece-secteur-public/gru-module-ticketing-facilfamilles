@@ -31,87 +31,34 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history;
+package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service;
+
+import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.util.signrequest.AbstractAuthenticator;
 
 
 /**
  *
+ * RequestAuthenticationService
+ *
  */
-public class TicketFacilFamillesHistory
+public final class RequestAuthenticationService
 {
-    /** The _n id task. */
-    private int _nIdTask;
-
-    /** The _n id resource history. */
-    private int _nIdResourceHistory;
-
-    /** the email of the user agent*/
-    private String _strEmailAgent;
-
-    /** the message to the agent*/
-    private String _strMessage;
+    private static final String BEAN_REQUEST_AUTHENTICATION = "workflow-ticketingfacilfamilles.requestAuthentication";
 
     /**
-     * @return the _nIdTask
+     * Private constructor
      */
-    public int getIdTask(  )
+    private RequestAuthenticationService(  )
     {
-        return _nIdTask;
     }
 
     /**
-     * @param nIdTask the nIdTask to set
+     * Get the instance of {@link AbstractAuthenticator} defined in the context.xml
+     * @return the instance of {@link AbstractAuthenticator}
      */
-    public void setIdTask( int nIdTask )
+    public static AbstractAuthenticator getRequestAuthenticator(  )
     {
-        this._nIdTask = nIdTask;
-    }
-
-    /**
-     * @return the _nIdResourceHistory
-     */
-    public int getIdResourceHistory(  )
-    {
-        return _nIdResourceHistory;
-    }
-
-    /**
-     * @param nIdResourceHistory the nIdResourceHistory to set
-     */
-    public void setIdResourceHistory( int nIdResourceHistory )
-    {
-        this._nIdResourceHistory = nIdResourceHistory;
-    }
-
-    /**
-     * @return the _strEmailAgent
-     */
-    public String getEmailAgent(  )
-    {
-        return _strEmailAgent;
-    }
-
-    /**
-     * @param strEmailAgent the strEmailAgent to set
-     */
-    public void setEmailAgent( String strEmailAgent )
-    {
-        this._strEmailAgent = strEmailAgent;
-    }
-
-    /**
-     * @return the _strMessage
-     */
-    public String getMessage(  )
-    {
-        return _strMessage;
-    }
-
-    /**
-     * @param strMessage the strMessage to set
-     */
-    public void setMessage( String strMessage )
-    {
-        this._strMessage = strMessage;
+        return (AbstractAuthenticator) SpringContextService.getBean( BEAN_REQUEST_AUTHENTICATION );
     }
 }

@@ -31,37 +31,58 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history;
+package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config;
+
+import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
 
 
 /**
- *
+ * configuration for the task TaskTicket
  */
-public interface ITicketFacilFamillesHistoryDAO
+public class TaskTicketEmailAgentConfig extends TaskConfig
 {
-    /** The Constant BEAN_SERVICE. */
-    String BEAN_SERVICE = "workflow-ticketingfacilfamilles.ticketFacilFamillesHistoryDAO";
+    private MessageDirection _messageDirection;
+    private Integer _nIdFollowingAction; 
 
     /**
-     * Insert.
-     *
-     * @param emailAgent the TicketFacilFamillesHistory
+     * Gives the message direction
+     * @return the message direction
      */
-    void insert( TicketFacilFamillesHistory emailAgent );
+    public MessageDirection getMessageDirection(  )
+    {
+        return _messageDirection;
+    }
 
     /**
-     * Load.
-     *
-     * @param nIdHistory the n id emailAgent
-     * @return the TicketFacilFamillesHistory element
+     * Sets the message direction
+     * @param messageDirection the message direction to set
      */
-    TicketFacilFamillesHistory loadByIdHistory( int nIdHistory );
+    public void setMessageDirection( MessageDirection messageDirection )
+    {
+        this._messageDirection = messageDirection;
+    }
 
     /**
-     * Delete by history.
-     *
-     * @param nIdHistory the n id emailAgent
-     * @param nIdTask the n id of the task
+	 * @return the idFollowingAction
+	 */
+	public Integer getIdFollowingAction()
+	{
+		return _nIdFollowingAction;
+	}
+
+	/**
+	 * @param nIdFollowingAction the idFollowingAction to set
+	 */
+	public void setIdFollowingAction( Integer nIdFollowingAction )
+	{
+		this._nIdFollowingAction = nIdFollowingAction;
+	}
+
+	/**
+     * @return true if the direction is agent to terrain
      */
-    void deleteByHistory( int nIdHistory, int nIdTask );
+    public boolean isMessageToFieldAgent(  )
+    {
+        return MessageDirection.AGENT_TO_TERRAIN.equals( this._messageDirection );
+    }
 }

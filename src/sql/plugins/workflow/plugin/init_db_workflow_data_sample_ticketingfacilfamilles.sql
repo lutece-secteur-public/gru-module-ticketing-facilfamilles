@@ -24,10 +24,10 @@ INSERT INTO workflow_action (id_action, name, description, id_workflow, id_state
 
 -- ajout task 
 INSERT INTO workflow_task (id_task, task_type_key, id_action, display_order) 
-	VALUES  (1300,'taskTicketingFacilFamilles',1201,1), -- Sollicitation Agent Terrain
+	VALUES  (1300,'taskTicketingEmailAgent',1201,1), -- Sollicitation Agent Terrain
 			(1301,'taskTypeUpload',1201,2),
 			(1302,'taskNotifyGru',1201,3),
-			(1303,'taskTicketingFacilFamilles',1202,1),  -- Reponse Agent Terrain
+			(1303,'taskTicketingEmailAgent',1202,1),  -- Reponse Agent Terrain
 			(1304,'taskTypeUpload',1202,2)
 ;
 
@@ -41,14 +41,14 @@ INSERT INTO workflow_task_upload_config (id_task, title, max_file, max_size_file
 -- config workflow_task_upload_config
 DELETE FROM workflow_task_notify_gru_cf WHERE id_task >= 1300 and id_task <= 1305;
 INSERT INTO workflow_task_notify_gru_cf (id_task, id_spring_provider, is_active_onglet_guichet, is_active_onglet_agent, is_active_onglet_email, is_active_onglet_sms, id_mailing_list_broadcast, email_broadcast, sender_name_broadcast, subject_broadcast, message_broadcast, recipients_cc_broadcast, recipients_cci_broadcast, is_active_onglet_broadcast) VALUES
-	(1302, 'workflow-ticketingfacilfamilles.ProviderService', 0, 0, 0, 0, -1, "${agent_email}", "Mairie de Paris", "[GRU] La sollicitation ${reference} requiert une action de votre part", "Bonjour,<br>Vous avez reçu un message du service Facil'Famille<br>${message}<br>Vous pouvez répondre au message via le lien suivant ${ticketing_ticket_link}", '', '', 1)
+	(1302, 'workflow-ticketingfacilfamilles.EmailAgentProviderService', 0, 0, 0, 0, -1, "${agent_email}", "Mairie de Paris", "[GRU] La sollicitation ${reference} requiert une action de votre part", "Bonjour,<br>Vous avez reçu un message du service Facil'Famille<br>${message}<br>Vous pouvez répondre au message via le lien suivant ${ticketing_ticket_link}", '', '', 1)
 ;
 
 -- table specific
-DELETE FROM workflow_task_ticketing_facilfamilles_config where id_task > 0;
-INSERT INTO workflow_task_ticketing_facilfamilles_config (id_task, message_direction) 
-    VALUES  (1300, 1),
-    		(1303, 0)
+DELETE FROM workflow_task_ticketing_facilfamilles_emailagent_config where id_task > 0;
+INSERT INTO workflow_task_ticketing_facilfamilles_emailagent_config (id_task, message_direction, id_following_action) 
+    VALUES  (1300, 1, 1202),
+    		(1303, 0, NULL)
 ;
 
 -- conf core

@@ -36,8 +36,11 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.workflow.modules.notifygru.service.AbstractServiceProvider;
-import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.ITicketFacilFamillesHistoryDAO;
-import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketFacilFamillesHistory;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.ITicketingEmailAgentMessageDAO;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.TicketingEmailAgentMessage;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.ITicketEmailAgentHistoryDAO;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketEmailAgentHistory;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.RequestAuthenticationService;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
@@ -46,10 +49,12 @@ import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
+import fr.paris.lutece.util.url.UrlItem;
 
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -62,23 +67,32 @@ import javax.inject.Named;
 /**
  *
  */
-public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvider
+public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
 {
     /** The Constant FORM_HELPER. */
     private static final String FORM_HELPER = "admin/plugins/workflow/modules/ticketingfacilfamilles/form_helper.html";
     private static final String LIST_ENTRIES = "list_entries";
 
     /** Parameter for response url */
-    private static final String RESPONSE_URL = "module.workflow.ticketingfacilfamilles.task_ticket_facilfamilles.url_response";
+    private static final String RESPONSE_URL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.url_response";
 
     /** The _resource history service. */
     @Inject
     private IResourceHistoryService _resourceHistoryService;
 
-    /** The TicketFacilFamillesHistory DAO. */
+    /** The TicketEmailAgentHistory DAO. */
     @Inject
-    @Named( ITicketFacilFamillesHistoryDAO.BEAN_SERVICE )
-    private ITicketFacilFamillesHistoryDAO _ticketFacilFamillesHistoryDAO;
+    @Named( ITicketEmailAgentHistoryDAO.BEAN_SERVICE )
+    private ITicketEmailAgentHistoryDAO _ticketEmailAgentHistoryDAO;
+
+    /** The TicketingEmailAgentDemand DAO. */
+    @Inject
+    @Named( ITicketingEmailAgentMessageDAO.BEAN_SERVICE )
+    private ITicketingEmailAgentMessageDAO _ticketingEmailAgentDemandDAO;
+    
+    private Ticket _ticket;
+    private TicketEmailAgentHistory _ticketEmailAgentHistory;
+    private TicketingEmailAgentMessage _emailAgentDemand;
 
     /**
      * Get ticket fot the given id resource
@@ -88,34 +102,61 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
      */
     private Ticket getTicket( int nIdResourceHistory )
     {
-        ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
-        Ticket ticket = TicketHome.findByPrimaryKey( resourceHistory.getIdResource(  ) );
+    	if( _ticket == null )
+    	{
+	        ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
+	        _ticket = TicketHome.findByPrimaryKey( resourceHistory.getIdResource(  ) );
+	
+	        if ( _ticket == null )
+	        {
+	            throw new AppException( "No ticket found for resource history Id : " + nIdResourceHistory );
+	        }
+    	}
 
-        if ( ticket == null )
-        {
-            throw new AppException( "No ticket found for resource history Id : " + nIdResourceHistory );
-        }
-
-        return ticket;
+        return _ticket;
     }
 
     /**
-     * Get ticketFacilFamillesHistory fot the given id resource
+     * Get ticketEmailAgentHistory fot the given id resource
      *
      * @param nIdResourceHistory the n id resource history
      * @return the ticket
      */
-    private TicketFacilFamillesHistory getTicketFacilFamillesHistory( int nIdResourceHistory )
+    private TicketEmailAgentHistory getTicketEmailAgentHistory( int nIdResourceHistory )
     {
-        TicketFacilFamillesHistory ticketFacilFamillesHistory = _ticketFacilFamillesHistoryDAO.loadByIdHistory( nIdResourceHistory );
+    	if( _ticketEmailAgentHistory == null )
+    	{
+    		_ticketEmailAgentHistory = _ticketEmailAgentHistoryDAO.loadByIdHistory( nIdResourceHistory );
+	
+	        if ( _ticketEmailAgentHistory == null )
+	        {
+	            throw new AppException( "No ticketEmailAgentHistory found for resource history Id : " +
+	                nIdResourceHistory );
+	        }
+    	}
 
-        if ( ticketFacilFamillesHistory == null )
-        {
-            throw new AppException( "No ticketFacilFamillesHistory found for resource history Id : " +
-                nIdResourceHistory );
-        }
+        return _ticketEmailAgentHistory;
+    }
 
-        return ticketFacilFamillesHistory;
+    /**
+     * Get TicketingEmailAgentMessage fot the given id demand
+     *
+     * @param nIdMessageAgent the id MessageAgent
+     * @return the ticketingEmailAgentMessage
+     */
+    private TicketingEmailAgentMessage getTicketingEmailAgentMessage( int nIdMessageAgent )
+    {
+    	if( _emailAgentDemand == null )
+    	{
+    		_emailAgentDemand = _ticketingEmailAgentDemandDAO.loadByIdMessageAgent( nIdMessageAgent );
+	
+	        if ( _emailAgentDemand == null )
+	        {
+	            throw new AppException( "No TicketingEmailAgentDemand found for demand id : " + nIdMessageAgent );
+	        }
+    	}
+
+        return _emailAgentDemand;
     }
 
     /**
@@ -160,7 +201,7 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
     @Override
     public String getCustomerId( int nIdResourceHistory )
     {
-        return TicketFacilFamillesNotifyGruConstants.STR_NO_CUSTOMER_ID;
+        return TicketEmailAgentNotifyGruConstants.STR_NO_CUSTOMER_ID;
     }
 
     /**
@@ -170,7 +211,7 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
     public int getOptionalDemandIdType( int nIdResourceHistory )
     {
         //NOT USED FOR THE MOMENT
-        return TicketFacilFamillesNotifyGruConstants.EMPTY_OPTIONAL_DEMAND_ID_TYPE;
+        return TicketEmailAgentNotifyGruConstants.EMPTY_OPTIONAL_DEMAND_ID_TYPE;
     }
 
     /**
@@ -190,27 +231,26 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
     {
         List<String> lstEntries = new ArrayList<String>(  );
         Map<String, Object> model = new HashMap<String, Object>(  );
-        //FIXME remove unnecessary field
         // GENERIC GRU
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_FIRSTNAME );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_LASTNAME );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_FIXED_PHONE );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_MOBILE_PHONE );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_EMAIL );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_UNIT_NAME );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_REFERENCE );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_USER_TITLES );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_TICKET_TYPES );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_TICKET_DOMAINS );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_TICKET_CATEGORIES );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_CONTACT_MODES );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_COMMENT );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_CHANNEL );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_URL_COMPLETED );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_FIRSTNAME );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_LASTNAME );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_FIXED_PHONE );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_MOBILE_PHONE );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_EMAIL );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_UNIT_NAME );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_REFERENCE );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_USER_TITLES );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_TICKET_TYPES );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_TICKET_DOMAINS );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_TICKET_CATEGORIES );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_CONTACT_MODES );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_COMMENT );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_CHANNEL );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_URL_COMPLETED );
         //SPECIFIC EMAIL AGENT;
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_EMAIL );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE );
-        lstEntries.add( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_LINK );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE );
+        lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_LINK );
 
         model.put( LIST_ENTRIES, lstEntries );
 
@@ -232,12 +272,13 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
 
         if ( nIdResourceHistory > 0 )
         {
+        	TicketEmailAgentHistory ticketEmailAgentHistory = getTicketEmailAgentHistory( nIdResourceHistory );
             model = buildModelNotifyGruTicketing( getTicket( nIdResourceHistory ),
-                    getTicketFacilFamillesHistory( nIdResourceHistory ) );
+                     getTicketingEmailAgentMessage( ticketEmailAgentHistory.getIdMessageAgent(  ) ) );
         }
         else
         {
-            model = buildModelNotifyGruTicketing( new Ticket(  ), new TicketFacilFamillesHistory(  ) );
+            model = buildModelNotifyGruTicketing( new Ticket(  ), new TicketingEmailAgentMessage(  ) );
         }
 
         return model;
@@ -247,80 +288,84 @@ public class TicketFacilFamillesNotifyGruProvider extends AbstractServiceProvide
      * Builds the model notify gru ticketing.
      *
      * @param ticket the ticket
-     * @param ticketFacilFamillesHistory the ticketFacilFamillesHistory
+     * @param emailAgentDemand the TicketingEmailAgentDemand
      * @return the map
      */
     private Map<String, Object> buildModelNotifyGruTicketing( Ticket ticket,
-        TicketFacilFamillesHistory ticketFacilFamillesHistory )
+        TicketingEmailAgentMessage emailAgentDemand )
     {
-        //FIXME remove unnecessary field
         Map<String, Object> model = new HashMap<String, Object>(  );
         // GENERIC GRU
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_GUID,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_GUID,
             ( ticket.getGuid(  ) != null ) ? ticket.getGuid(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_FIRSTNAME,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_FIRSTNAME,
             ( ticket.getFirstname(  ) != null ) ? ticket.getFirstname(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_LASTNAME,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_LASTNAME,
             ( ticket.getLastname(  ) != null ) ? ticket.getLastname(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_FIXED_PHONE,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_FIXED_PHONE,
             ( ticket.getFixedPhoneNumber(  ) != null ) ? ticket.getFixedPhoneNumber(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_MOBILE_PHONE,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_MOBILE_PHONE,
             ( ticket.getMobilePhoneNumber(  ) != null ) ? ticket.getMobilePhoneNumber(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_EMAIL,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_EMAIL,
             ( ticket.getEmail(  ) != null ) ? ticket.getEmail(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_UNIT_NAME,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_UNIT_NAME,
             ( ( ticket.getAssigneeUnit(  ) != null ) && ( ticket.getAssigneeUnit(  ).getName(  ) != null ) )
             ? ticket.getAssigneeUnit(  ).getName(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_REFERENCE,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_REFERENCE,
             ( ticket.getReference(  ) != null ) ? ticket.getReference(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_TICKET, ticket );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_USER_TITLES,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET, ticket );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_USER_TITLES,
             ( ticket.getUserTitle(  ) != null ) ? ticket.getUserTitle(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_TICKET_TYPES,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_TYPES,
             ( ticket.getTicketType(  ) != null ) ? ticket.getTicketType(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_TICKET_DOMAINS,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_DOMAINS,
             ( ticket.getTicketDomain(  ) != null ) ? ticket.getTicketDomain(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_TICKET_CATEGORIES,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_CATEGORIES,
             ( ticket.getTicketCategory(  ) != null ) ? ticket.getTicketCategory(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_CONTACT_MODES,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_CONTACT_MODES,
             ( ticket.getContactMode(  ) != null ) ? ticket.getContactMode(  ) : "" );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_COMMENT,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_COMMENT,
             ( ticket.getTicketComment(  ) != null ) ? ticket.getTicketComment(  ) : "" );
 
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_CHANNEL,
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_CHANNEL,
             ( ( ticket.getChannel(  ) != null ) && ( ticket.getChannel(  ).getLabel(  ) != null ) )
             ? ticket.getChannel(  ).getLabel(  ) : "" );
 
         String strUrlCompleted = ( ticket.getUrl(  ) != null ) ? ticket.getUrl(  ) : "";
 
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_URL_COMPLETED, strUrlCompleted.replaceAll( "&", "&amp;" ) );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_URL_COMPLETED, strUrlCompleted.replaceAll( "&", "&amp;" ) );
 
         //SPECIFIC EMAIL AGENT
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_EMAIL,
-            ( ticketFacilFamillesHistory.getEmailAgent(  ) != null ) ? ticketFacilFamillesHistory.getEmailAgent(  )
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL,
+            ( emailAgentDemand.getEmailAgent(  ) != null ) ? emailAgentDemand.getEmailAgent(  )
                                                                      : StringUtils.EMPTY );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE,
-            ( ticketFacilFamillesHistory.getMessage(  ) != null ) ? ticketFacilFamillesHistory.getMessage(  )
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE,
+            ( emailAgentDemand.getMessageQuestion(  ) != null ) ? emailAgentDemand.getMessageQuestion(  )
                                                                   : StringUtils.EMPTY );
-        model.put( TicketFacilFamillesNotifyGruConstants.MARK_FACILFAMILLE_LINK,
-            buildTicketLink( ticket.getId(  ), ticketFacilFamillesHistory.getIdTask(  ) ) );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_LINK,
+            buildTicketLink( emailAgentDemand.getIdMessageAgent(  ) ) );
 
         return model;
     }
 
     /**
-     * @param nIdTicket the ticket id
-     * @param nIdTask the task id
+     * @param nIdMessageAgent the MessageAgent id
      * @return build url
      */
-    private String buildTicketLink( int nIdTicket, int nIdTask )
+    private String buildTicketLink( int nIdMessageAgent )
     {
-        //TODO UPDATE
-        StringBuilder strTicketLink = new StringBuilder( AppPropertiesService.getProperty( RESPONSE_URL ) );
-        strTicketLink.append( "&id=" );
-        strTicketLink.append( nIdTicket );
+    	List<String> listElements = new ArrayList<String>(  );
+        listElements.add( Integer.toString( nIdMessageAgent ) );
 
-        return strTicketLink.toString(  );
+        String strTimestamp = Long.toString( new Date(  ).getTime(  ) );
+        String strSignature = RequestAuthenticationService.getRequestAuthenticator(  ).buildSignature( listElements, strTimestamp );
+        
+        UrlItem urlTicketLink = new UrlItem( AppPropertiesService.getProperty( RESPONSE_URL ) );
+        urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_MESSAGE_AGENT , nIdMessageAgent );
+        urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_SIGNATURE, strSignature );
+        urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_TIMETAMP, strTimestamp );
+
+        return urlTicketLink.getUrl(  );
     }
 
     /**

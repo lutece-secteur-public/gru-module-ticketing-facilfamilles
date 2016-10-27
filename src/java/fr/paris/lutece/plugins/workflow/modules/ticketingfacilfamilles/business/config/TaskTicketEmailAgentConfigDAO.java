@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config;
 
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.WorkflowTicketingFacilFamillesPlugin;
 import fr.paris.lutece.plugins.workflowcore.business.config.ITaskConfigDAO;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -42,18 +44,18 @@ import fr.paris.lutece.util.sql.DAOUtil;
 /**
  *
  */
-public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTicketFacilFamillesConfig>
+public class TaskTicketEmailAgentConfigDAO implements ITaskConfigDAO<TaskTicketEmailAgentConfig>
 {
-    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = " SELECT id_task, message_direction FROM workflow_task_ticketing_facilfamilles_config WHERE id_task = ? ";
-    private static final String SQL_QUERY_INSERT = " INSERT INTO workflow_task_ticketing_facilfamilles_config ( id_task, message_direction ) VALUES ( ?,? ) ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE workflow_task_ticketing_facilfamilles_config SET message_direction = ? WHERE id_task = ? ";
-    private static final String SQL_QUERY_DELETE = " DELETE FROM workflow_task_ticketing_facilfamilles_config WHERE id_task = ? ";
+    private static final String SQL_QUERY_FIND_BY_PRIMARY_KEY = " SELECT id_task, message_direction, id_following_action FROM workflow_task_ticketing_facilfamilles_emailagent_config WHERE id_task = ? ";
+    private static final String SQL_QUERY_INSERT = " INSERT INTO workflow_task_ticketing_facilfamilles_emailagent_config ( id_task, message_direction, id_following_action ) VALUES ( ?,?,? ) ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE workflow_task_ticketing_facilfamilles_emailagent_config SET message_direction = ?, id_following_action = ? WHERE id_task = ? ";
+    private static final String SQL_QUERY_DELETE = " DELETE FROM workflow_task_ticketing_facilfamilles_emailagent_config WHERE id_task = ? ";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public synchronized void insert( TaskTicketFacilFamillesConfig config )
+    public synchronized void insert( TaskTicketEmailAgentConfig config )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT,
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
@@ -62,6 +64,14 @@ public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTick
 
         daoUtil.setInt( nIndex++, config.getIdTask(  ) );
         daoUtil.setInt( nIndex++, config.getMessageDirection(  ).ordinal(  ) );
+        if( config.getIdFollowingAction(  ) == null )
+        {
+        	daoUtil.setIntNull( nIndex++ );
+        }
+        else
+        {
+            daoUtil.setInt( nIndex++, config.getIdFollowingAction(  ) );        	
+        }
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -71,7 +81,7 @@ public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTick
      * {@inheritDoc}
      */
     @Override
-    public void store( TaskTicketFacilFamillesConfig config )
+    public void store( TaskTicketEmailAgentConfig config )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE,
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
@@ -79,6 +89,14 @@ public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTick
         int nIndex = 1;
 
         daoUtil.setInt( nIndex++, config.getMessageDirection(  ).ordinal(  ) );
+        if( config.getIdFollowingAction(  ) == null )
+        {
+        	daoUtil.setIntNull( nIndex++ );
+        }
+        else
+        {
+            daoUtil.setInt( nIndex++, config.getIdFollowingAction(  ) );        	
+        }
 
         daoUtil.setInt( nIndex++, config.getIdTask(  ) );
         daoUtil.executeUpdate(  );
@@ -89,9 +107,9 @@ public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTick
      * {@inheritDoc}
      */
     @Override
-    public TaskTicketFacilFamillesConfig load( int nIdTask )
+    public TaskTicketEmailAgentConfig load( int nIdTask )
     {
-        TaskTicketFacilFamillesConfig config = null;
+        TaskTicketEmailAgentConfig config = null;
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY,
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
@@ -103,9 +121,14 @@ public class TaskTicketFacilFamillesConfigDAO implements ITaskConfigDAO<TaskTick
 
         if ( daoUtil.next(  ) )
         {
-            config = new TaskTicketFacilFamillesConfig(  );
+            config = new TaskTicketEmailAgentConfig(  );
             config.setIdTask( daoUtil.getInt( nIndex++ ) );
             config.setMessageDirection( MessageDirection.valueOf( daoUtil.getInt( nIndex++ ) ) );
+            String strIdFollowingAction = daoUtil.getString( nIndex++ );
+            if( StringUtils.isNotEmpty( strIdFollowingAction ) )
+            {
+            	config.setIdFollowingAction( Integer.parseInt( strIdFollowingAction ) );
+            }
         }
 
         daoUtil.free(  );

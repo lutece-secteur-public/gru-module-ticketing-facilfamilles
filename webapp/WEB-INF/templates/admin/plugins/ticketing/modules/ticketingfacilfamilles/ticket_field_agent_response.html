@@ -1,0 +1,74 @@
+<#-- include from plugin-ticketing -->
+<#include "/admin/plugins/ticketing/include/user_info.html"/>
+<script>$(".content-header").toggle();</script>
+
+<div class="gru-wrapper">
+  <div id="customer-panel" class="row ticket-head bg-gru-light">
+    <div class="col-xs-12 col-sm-offset-1 col-sm-10">
+      <h2>#i18n{module.workflow.ticketingfacilfamilles.fieldAgentResponse.pageTitle}</h2>
+      <h3>#i18n{module.workflow.ticketingfacilfamilles.fieldAgentResponse.title}</h3>
+    </div>
+  </div>
+  <br/>
+  <div id="demand-panel" class="row ticket-content">
+	<form class="form-horizontal" action="${form_action}" method="post" enctype="multipart/form-data">
+	<input id="action" name="action" value="doProcessWorkflowAction" type="hidden">
+	<input id="id_action" name="id_action" value="${id_action}" type="hidden">
+	<input id="id" name="id" value="${id_ticket}" type="hidden">
+	<input id="page" name="page" value="" type="hidden">
+	<input id="redirect" name="redirect" value="" type="hidden">
+    <div class="col-xs-12 col-sm-offset-1 col-sm-10">
+    	<div class="row form-group">
+    	<#-- admin user -->
+          <#assign info_offset="col-md-offset-3 col-lg-offset-3">
+		  <#if user_admin?exists && user_factory?exists>
+			<#assign user=user_factory.create(user_admin.userId)>
+			<#if user?has_content>
+            <div class="info_user col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label right" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="top">
+                <em>${user_admin.firstName} ${user_admin.lastName}</em>&nbsp;&nbsp;
+			  <#if avatar_available>
+			    <img class="fa direct-chat-img" src="servlet/plugins/adminavatar/avatar?id_user=${user_admin.userId}">
+              </#if>
+			</div>
+			  <@info_user user/>
+          	<#else>
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label">
+                <em>&nbsp;&nbsp;${user_admin.firstName} ${user_admin.lastName}</em>
+            </div>
+          	</#if>
+          	<#assign info_offset="">
+	  	  </#if> 
+    	<#-- infos question -->	
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 ${info_offset} form-control-static">
+				<b>${reference!}</b><br/><br/>
+				${agent_message!}<br/><br/>
+		      <#if list_file_uploaded?has_content >
+		      <#list list_file_uploaded as file_uploaded>
+			    <#if file_uploaded?has_content >
+			    <div class="clearfix">
+			        <a class="pull-left" href="${list_url[file_uploaded.idUploadFile?string]}">${file_uploaded.file.title}</a>    
+			    </div>
+			    </#if>
+			  </#list>		
+		      </#if>
+			</div>
+		</div>		
+		<br/>
+		<div class="row form-group">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<#if task_ticket_emailagent_form??>
+					${task_ticket_emailagent_form}
+				</#if>
+				<div class="row form-group">
+					<div class="col-xs-12 col-sm-offset-3 col-sm-9">
+						<button id="next_button" class="btn btn-primary" type="submit" name="save">
+							<i class="fa fa-check"></i> #i18n{ticketing.tasks_form_workflow.button_save}
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+    </form>
+  </div>
+</div>
