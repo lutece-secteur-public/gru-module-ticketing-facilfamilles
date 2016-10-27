@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand;
 
+
 /**
  *
  */
@@ -40,7 +41,7 @@ public class TicketingEmailAgentMessage
 {
     /** The id message. */
     private int _nIdMessageAgent;
-    
+
     /** The id demand. */
     private int _nIdTicket;
 
@@ -52,7 +53,7 @@ public class TicketingEmailAgentMessage
 
     /** the response to the agent*/
     private String _strMessageResponse;
-    
+
     /** true if the field agent has answered */
     private boolean _bIsAnswered;
 
@@ -70,27 +71,27 @@ public class TicketingEmailAgentMessage
     public void setIdMessageAgent( int nIdMessageAgent )
     {
         this._nIdMessageAgent = nIdMessageAgent;
-    }    
+    }
 
     /**
-	 * @return the IdTicket
-	 */
-	public int getIdTicket()
-	{
-		return _nIdTicket;
-	}
-
-	/**
-	 * @param nIdTicket the IdTicket to set
-	 */
-	public void setIdTicket( int nIdTicket )
-	{
-		this._nIdTicket = nIdTicket;
-	}
-
-	/**
-     * @return the _strEmailAgent
+     * @return the IdTicket
      */
+    public int getIdTicket(  )
+    {
+        return _nIdTicket;
+    }
+
+    /**
+     * @param nIdTicket the IdTicket to set
+     */
+    public void setIdTicket( int nIdTicket )
+    {
+        this._nIdTicket = nIdTicket;
+    }
+
+    /**
+    * @return the _strEmailAgent
+    */
     public String getEmailAgent(  )
     {
         return _strEmailAgent;
@@ -104,53 +105,51 @@ public class TicketingEmailAgentMessage
         this._strEmailAgent = strEmailAgent;
     }
 
-	/**
-	 * @return the strMessageQuestion
-	 */
-	public String getMessageQuestion()
-	{
-		return _strMessageQuestion;
-	}
+    /**
+     * @return the strMessageQuestion
+     */
+    public String getMessageQuestion(  )
+    {
+        return _strMessageQuestion;
+    }
 
-	/**
-	 * @param strMessageQuestion the strMessageQuestion to set
-	 */
-	public void setMessageQuestion( String strMessageQuestion )
-	{
-		this._strMessageQuestion = strMessageQuestion;
-	}
+    /**
+     * @param strMessageQuestion the strMessageQuestion to set
+     */
+    public void setMessageQuestion( String strMessageQuestion )
+    {
+        this._strMessageQuestion = strMessageQuestion;
+    }
 
-	/**
-	 * @return the strMessageResponse
-	 */
-	public String getMessageResponse()
-	{
-		return _strMessageResponse;
-	}
+    /**
+     * @return the strMessageResponse
+     */
+    public String getMessageResponse(  )
+    {
+        return _strMessageResponse;
+    }
 
-	/**
-	 * @param strMessageResponse the strMessageResponse to set
-	 */
-	public void setMessageResponse( String strMessageResponse )
-	{
-		this._strMessageResponse = strMessageResponse;
-	}
+    /**
+     * @param strMessageResponse the strMessageResponse to set
+     */
+    public void setMessageResponse( String strMessageResponse )
+    {
+        this._strMessageResponse = strMessageResponse;
+    }
 
-	/**
-	 * @return the bIsAnswered
-	 */
-	public boolean getIsAnswered()
-	{
-		return _bIsAnswered;
-	}
+    /**
+     * @return the bIsAnswered
+     */
+    public boolean getIsAnswered(  )
+    {
+        return _bIsAnswered;
+    }
 
-	/**
-	 * @param bIsAnswered the bIsAnswered to set
-	 */
-	public void setIsAnswered( boolean bIsAnswered )
-	{
-		this._bIsAnswered = bIsAnswered;
-	}
-    
-    
+    /**
+     * @param bIsAnswered the bIsAnswered to set
+     */
+    public void setIsAnswered( boolean bIsAnswered )
+    {
+        this._bIsAnswered = bIsAnswered;
+    }
 }

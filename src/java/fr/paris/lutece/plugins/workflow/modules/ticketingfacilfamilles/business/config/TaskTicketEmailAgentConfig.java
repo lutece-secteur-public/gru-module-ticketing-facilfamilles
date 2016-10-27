@@ -42,7 +42,7 @@ import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
 public class TaskTicketEmailAgentConfig extends TaskConfig
 {
     private MessageDirection _messageDirection;
-    private Integer _nIdFollowingAction; 
+    private Integer _nIdFollowingAction;
 
     /**
      * Gives the message direction
@@ -63,22 +63,22 @@ public class TaskTicketEmailAgentConfig extends TaskConfig
     }
 
     /**
-	 * @return the idFollowingAction
-	 */
-	public Integer getIdFollowingAction()
-	{
-		return _nIdFollowingAction;
-	}
+     * @return the idFollowingAction
+     */
+    public Integer getIdFollowingAction(  )
+    {
+        return _nIdFollowingAction;
+    }
 
-	/**
-	 * @param nIdFollowingAction the idFollowingAction to set
-	 */
-	public void setIdFollowingAction( Integer nIdFollowingAction )
-	{
-		this._nIdFollowingAction = nIdFollowingAction;
-	}
+    /**
+     * @param nIdFollowingAction the idFollowingAction to set
+     */
+    public void setIdFollowingAction( Integer nIdFollowingAction )
+    {
+        this._nIdFollowingAction = nIdFollowingAction;
+    }
 
-	/**
+    /**
      * @return true if the direction is agent to terrain
      */
     public boolean isMessageToFieldAgent(  )

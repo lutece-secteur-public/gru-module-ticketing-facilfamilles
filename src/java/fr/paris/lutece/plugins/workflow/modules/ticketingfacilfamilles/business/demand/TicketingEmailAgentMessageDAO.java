@@ -33,11 +33,11 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.WorkflowTicketingFacilFamillesPlugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -45,8 +45,8 @@ import fr.paris.lutece.util.sql.DAOUtil;
  */
 public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessageDAO
 {
-	private static final String SQL_QUERY_NEW_PK = " SELECT max( id_message_agent ) FROM ticketing_facilfamilles_emailagent ";
-	private static final String SQL_QUERY_LAST_QUESTION = " SELECT max( id_message_agent ) FROM ticketing_facilfamilles_emailagent WHERE id_ticket = ? AND is_answered = 0";
+    private static final String SQL_QUERY_NEW_PK = " SELECT max( id_message_agent ) FROM ticketing_facilfamilles_emailagent ";
+    private static final String SQL_QUERY_LAST_QUESTION = " SELECT max( id_message_agent ) FROM ticketing_facilfamilles_emailagent WHERE id_ticket = ? AND is_answered = 0";
     private static final String SQL_QUERY_FIND_BY_ID_DEMAND = " SELECT id_message_agent, id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent " +
         " WHERE id_message_agent = ? ";
     private static final String SQL_QUERY_INSERT_QUESTION = " INSERT INTO ticketing_facilfamilles_emailagent ( id_message_agent, id_ticket, email_agent, message_question ) " +
@@ -60,7 +60,8 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
      */
     private int nextPrimaryKey(  )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEW_PK,
+                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
         daoUtil.executeQuery(  );
 
         int nKey;
@@ -76,7 +77,7 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
 
         return nKey;
     }
-    
+
     /**
      * Retrieve the last demande with no response for a given ticket id
      * @param nIdTicket the ticket id
@@ -84,7 +85,7 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
      */
     private int getLastQuestion( int nIdTicket )
     {
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_LAST_QUESTION,
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_LAST_QUESTION,
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdTicket );
@@ -97,11 +98,12 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
             // if the table is not empty
             nKey = daoUtil.getInt( 1 );
         }
-        
+
         daoUtil.free(  );
+
         return nKey;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -109,8 +111,8 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
     @Transactional( "workflow.transactionManager" )
     public synchronized void createQuestion( TicketingEmailAgentMessage emailAgentDemand )
     {
-    	emailAgentDemand.setIdMessageAgent( nextPrimaryKey(  ) );
-    	
+        emailAgentDemand.setIdMessageAgent( nextPrimaryKey(  ) );
+
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT_QUESTION,
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
@@ -124,46 +126,47 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
-	 * {@inheritDoc}
-	 */
+     * {@inheritDoc}
+     */
     @Override
     public boolean isLastQuestion( int nIdTicket, int nIdMessageAgent )
     {
-    	int nLastIdMessageAgent = getLastQuestion( nIdTicket );
-	    return ( ( nLastIdMessageAgent > 0 ) && ( nIdMessageAgent == nLastIdMessageAgent ) );
+        int nLastIdMessageAgent = getLastQuestion( nIdTicket );
+
+        return ( ( nLastIdMessageAgent > 0 ) && ( nIdMessageAgent == nLastIdMessageAgent ) );
     }
 
-	/**
+    /**
      * {@inheritDoc}
      */
     @Override
     @Transactional( "workflow.transactionManager" )
     public synchronized int addAnswer( int nIdTicket, String strReponse )
-    {    	
+    {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ADD_ANSWER,
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         int nIndex = 1;
         int nIdMessageAgent = getLastQuestion( nIdTicket );
-        
+
         daoUtil.setString( nIndex++, strReponse );
         daoUtil.setInt( nIndex++, nIdMessageAgent );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
-        
+
         return nIdMessageAgent;
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TicketingEmailAgentMessage loadByIdMessageAgent( int nIdMessageAgent )
     {
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_DEMAND,
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_DEMAND,
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdMessageAgent );
@@ -175,13 +178,13 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
 
         if ( daoUtil.next(  ) )
         {
-        	emailAgentDemand = new TicketingEmailAgentMessage(  );
-        	emailAgentDemand.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );
-        	emailAgentDemand.setIdTicket( daoUtil.getInt( nIndex++ ) );
-        	emailAgentDemand.setEmailAgent( daoUtil.getString( nIndex++ ) );
-        	emailAgentDemand.setMessageQuestion( daoUtil.getString( nIndex++ ) );
-        	emailAgentDemand.setMessageResponse( daoUtil.getString( nIndex++ ) );
-        	emailAgentDemand.setIsAnswered( daoUtil.getBoolean( nIndex++ ) );
+            emailAgentDemand = new TicketingEmailAgentMessage(  );
+            emailAgentDemand.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );
+            emailAgentDemand.setIdTicket( daoUtil.getInt( nIndex++ ) );
+            emailAgentDemand.setEmailAgent( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setMessageQuestion( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setMessageResponse( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setIsAnswered( daoUtil.getBoolean( nIndex++ ) );
         }
 
         daoUtil.free(  );

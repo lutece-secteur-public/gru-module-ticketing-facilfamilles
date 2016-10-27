@@ -33,12 +33,6 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.task;
 
-import java.util.Locale;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.MessageDirection;
@@ -53,6 +47,13 @@ import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistorySer
 import fr.paris.lutece.plugins.workflowcore.service.task.SimpleTask;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 
+import java.util.Locale;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  *
@@ -65,9 +66,10 @@ public class TaskTicketEmailAgent extends SimpleTask
     // Parameters
     public static final String PARAMETER_MESSAGE = "message";
     public static final String PARAMETER_EMAIL = "email";
+
     // Other constants
     public static final String UNDERSCORE = "_";
-    
+
     // Messages
     private static final String MESSAGE_TICKET = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.label";
     @Inject
@@ -90,9 +92,9 @@ public class TaskTicketEmailAgent extends SimpleTask
     @Override
     public void processTask( int nIdResourceHistory, HttpServletRequest request, Locale locale )
     {
-    	ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
+        ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
         Ticket ticket = TicketHome.findByPrimaryKey( resourceHistory.getIdResource(  ) );
-        
+
         TaskTicketEmailAgentConfig config = _taskTicketConfigService.findByPrimaryKey( getId(  ) );
 
         if ( config != null )
@@ -123,7 +125,7 @@ public class TaskTicketEmailAgent extends SimpleTask
     {
         String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId(  ) );
         String strEmail = request.getParameter( PARAMETER_EMAIL + UNDERSCORE + getId(  ) );
-        
+
         //create demand item
         TicketingEmailAgentMessage emailAgentDemand = new TicketingEmailAgentMessage(  );
         emailAgentDemand.setIdTicket( ticket.getId(  ) );
@@ -151,7 +153,7 @@ public class TaskTicketEmailAgent extends SimpleTask
         TaskTicketEmailAgentConfig config )
     {
         String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId(  ) );
-        
+
         //create demand item
         int nIdMessageAgent = _ticketingEmailAgentDemandDAO.addAnswer( ticket.getId(  ), strAgentMessage );
 

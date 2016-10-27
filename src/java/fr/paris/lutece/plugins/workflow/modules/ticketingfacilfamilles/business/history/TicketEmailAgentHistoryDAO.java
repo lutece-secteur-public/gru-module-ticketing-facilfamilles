@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.WorkflowTicketingFacilFamillesPlugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -105,13 +105,13 @@ public class TicketEmailAgentHistoryDAO implements ITicketEmailAgentHistoryDAO
         return emailAgent;
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<TicketEmailAgentHistory> loadByIdMessageAgent( int nIdMessageAgent )
     {
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_MESSAGE,
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_MESSAGE,
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdMessageAgent );
@@ -124,7 +124,7 @@ public class TicketEmailAgentHistoryDAO implements ITicketEmailAgentHistoryDAO
 
         while ( daoUtil.next(  ) )
         {
-        	emailAgent = new TicketEmailAgentHistory(  );
+            emailAgent = new TicketEmailAgentHistory(  );
             emailAgent.setIdTask( daoUtil.getInt( nIndex++ ) );
             emailAgent.setIdResourceHistory( daoUtil.getInt( nIndex++ ) );
             emailAgent.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );

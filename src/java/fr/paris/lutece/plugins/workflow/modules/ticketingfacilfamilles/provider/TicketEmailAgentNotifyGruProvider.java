@@ -89,7 +89,6 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     @Inject
     @Named( ITicketingEmailAgentMessageDAO.BEAN_SERVICE )
     private ITicketingEmailAgentMessageDAO _ticketingEmailAgentDemandDAO;
-    
     private Ticket _ticket;
     private TicketEmailAgentHistory _ticketEmailAgentHistory;
     private TicketingEmailAgentMessage _emailAgentDemand;
@@ -102,16 +101,16 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
      */
     private Ticket getTicket( int nIdResourceHistory )
     {
-    	if( _ticket == null )
-    	{
-	        ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
-	        _ticket = TicketHome.findByPrimaryKey( resourceHistory.getIdResource(  ) );
-	
-	        if ( _ticket == null )
-	        {
-	            throw new AppException( "No ticket found for resource history Id : " + nIdResourceHistory );
-	        }
-    	}
+        if ( _ticket == null )
+        {
+            ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
+            _ticket = TicketHome.findByPrimaryKey( resourceHistory.getIdResource(  ) );
+
+            if ( _ticket == null )
+            {
+                throw new AppException( "No ticket found for resource history Id : " + nIdResourceHistory );
+            }
+        }
 
         return _ticket;
     }
@@ -124,16 +123,16 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
      */
     private TicketEmailAgentHistory getTicketEmailAgentHistory( int nIdResourceHistory )
     {
-    	if( _ticketEmailAgentHistory == null )
-    	{
-    		_ticketEmailAgentHistory = _ticketEmailAgentHistoryDAO.loadByIdHistory( nIdResourceHistory );
-	
-	        if ( _ticketEmailAgentHistory == null )
-	        {
-	            throw new AppException( "No ticketEmailAgentHistory found for resource history Id : " +
-	                nIdResourceHistory );
-	        }
-    	}
+        if ( _ticketEmailAgentHistory == null )
+        {
+            _ticketEmailAgentHistory = _ticketEmailAgentHistoryDAO.loadByIdHistory( nIdResourceHistory );
+
+            if ( _ticketEmailAgentHistory == null )
+            {
+                throw new AppException( "No ticketEmailAgentHistory found for resource history Id : " +
+                    nIdResourceHistory );
+            }
+        }
 
         return _ticketEmailAgentHistory;
     }
@@ -146,15 +145,15 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
      */
     private TicketingEmailAgentMessage getTicketingEmailAgentMessage( int nIdMessageAgent )
     {
-    	if( _emailAgentDemand == null )
-    	{
-    		_emailAgentDemand = _ticketingEmailAgentDemandDAO.loadByIdMessageAgent( nIdMessageAgent );
-	
-	        if ( _emailAgentDemand == null )
-	        {
-	            throw new AppException( "No TicketingEmailAgentDemand found for demand id : " + nIdMessageAgent );
-	        }
-    	}
+        if ( _emailAgentDemand == null )
+        {
+            _emailAgentDemand = _ticketingEmailAgentDemandDAO.loadByIdMessageAgent( nIdMessageAgent );
+
+            if ( _emailAgentDemand == null )
+            {
+                throw new AppException( "No TicketingEmailAgentDemand found for demand id : " + nIdMessageAgent );
+            }
+        }
 
         return _emailAgentDemand;
     }
@@ -272,9 +271,9 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
 
         if ( nIdResourceHistory > 0 )
         {
-        	TicketEmailAgentHistory ticketEmailAgentHistory = getTicketEmailAgentHistory( nIdResourceHistory );
+            TicketEmailAgentHistory ticketEmailAgentHistory = getTicketEmailAgentHistory( nIdResourceHistory );
             model = buildModelNotifyGruTicketing( getTicket( nIdResourceHistory ),
-                     getTicketingEmailAgentMessage( ticketEmailAgentHistory.getIdMessageAgent(  ) ) );
+                    getTicketingEmailAgentMessage( ticketEmailAgentHistory.getIdMessageAgent(  ) ) );
         }
         else
         {
@@ -291,8 +290,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
      * @param emailAgentDemand the TicketingEmailAgentDemand
      * @return the map
      */
-    private Map<String, Object> buildModelNotifyGruTicketing( Ticket ticket,
-        TicketingEmailAgentMessage emailAgentDemand )
+    private Map<String, Object> buildModelNotifyGruTicketing( Ticket ticket, TicketingEmailAgentMessage emailAgentDemand )
     {
         Map<String, Object> model = new HashMap<String, Object>(  );
         // GENERIC GRU
@@ -337,11 +335,10 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
 
         //SPECIFIC EMAIL AGENT
         model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL,
-            ( emailAgentDemand.getEmailAgent(  ) != null ) ? emailAgentDemand.getEmailAgent(  )
-                                                                     : StringUtils.EMPTY );
+            ( emailAgentDemand.getEmailAgent(  ) != null ) ? emailAgentDemand.getEmailAgent(  ) : StringUtils.EMPTY );
         model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE,
             ( emailAgentDemand.getMessageQuestion(  ) != null ) ? emailAgentDemand.getMessageQuestion(  )
-                                                                  : StringUtils.EMPTY );
+                                                                : StringUtils.EMPTY );
         model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_LINK,
             buildTicketLink( emailAgentDemand.getIdMessageAgent(  ) ) );
 
@@ -354,14 +351,15 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
      */
     private String buildTicketLink( int nIdMessageAgent )
     {
-    	List<String> listElements = new ArrayList<String>(  );
+        List<String> listElements = new ArrayList<String>(  );
         listElements.add( Integer.toString( nIdMessageAgent ) );
 
         String strTimestamp = Long.toString( new Date(  ).getTime(  ) );
-        String strSignature = RequestAuthenticationService.getRequestAuthenticator(  ).buildSignature( listElements, strTimestamp );
-        
+        String strSignature = RequestAuthenticationService.getRequestAuthenticator(  )
+                                                          .buildSignature( listElements, strTimestamp );
+
         UrlItem urlTicketLink = new UrlItem( AppPropertiesService.getProperty( RESPONSE_URL ) );
-        urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_MESSAGE_AGENT , nIdMessageAgent );
+        urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_MESSAGE_AGENT, nIdMessageAgent );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_SIGNATURE, strSignature );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_TIMETAMP, strTimestamp );
 

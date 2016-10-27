@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand;
 
+
 /**
  * TicketingEmailAgentDemand DAO interface
  */
@@ -55,6 +56,7 @@ public interface ITicketingEmailAgentMessageDAO
      * @return true if the nIdMessageAgent is the last question of nIdTicket
      */
     boolean isLastQuestion( int nIdTicket, int nIdMessageAgent );
+
     /**
      * add Answer.
      *

@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config;
 
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.WorkflowTicketingFacilFamillesPlugin;
 import fr.paris.lutece.plugins.workflowcore.business.config.ITaskConfigDAO;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.util.sql.DAOUtil;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -64,13 +64,14 @@ public class TaskTicketEmailAgentConfigDAO implements ITaskConfigDAO<TaskTicketE
 
         daoUtil.setInt( nIndex++, config.getIdTask(  ) );
         daoUtil.setInt( nIndex++, config.getMessageDirection(  ).ordinal(  ) );
-        if( config.getIdFollowingAction(  ) == null )
+
+        if ( config.getIdFollowingAction(  ) == null )
         {
-        	daoUtil.setIntNull( nIndex++ );
+            daoUtil.setIntNull( nIndex++ );
         }
         else
         {
-            daoUtil.setInt( nIndex++, config.getIdFollowingAction(  ) );        	
+            daoUtil.setInt( nIndex++, config.getIdFollowingAction(  ) );
         }
 
         daoUtil.executeUpdate(  );
@@ -89,13 +90,14 @@ public class TaskTicketEmailAgentConfigDAO implements ITaskConfigDAO<TaskTicketE
         int nIndex = 1;
 
         daoUtil.setInt( nIndex++, config.getMessageDirection(  ).ordinal(  ) );
-        if( config.getIdFollowingAction(  ) == null )
+
+        if ( config.getIdFollowingAction(  ) == null )
         {
-        	daoUtil.setIntNull( nIndex++ );
+            daoUtil.setIntNull( nIndex++ );
         }
         else
         {
-            daoUtil.setInt( nIndex++, config.getIdFollowingAction(  ) );        	
+            daoUtil.setInt( nIndex++, config.getIdFollowingAction(  ) );
         }
 
         daoUtil.setInt( nIndex++, config.getIdTask(  ) );
@@ -124,10 +126,12 @@ public class TaskTicketEmailAgentConfigDAO implements ITaskConfigDAO<TaskTicketE
             config = new TaskTicketEmailAgentConfig(  );
             config.setIdTask( daoUtil.getInt( nIndex++ ) );
             config.setMessageDirection( MessageDirection.valueOf( daoUtil.getInt( nIndex++ ) ) );
+
             String strIdFollowingAction = daoUtil.getString( nIndex++ );
-            if( StringUtils.isNotEmpty( strIdFollowingAction ) )
+
+            if ( StringUtils.isNotEmpty( strIdFollowingAction ) )
             {
-            	config.setIdFollowingAction( Integer.parseInt( strIdFollowingAction ) );
+                config.setIdFollowingAction( Integer.parseInt( strIdFollowingAction ) );
             }
         }
 

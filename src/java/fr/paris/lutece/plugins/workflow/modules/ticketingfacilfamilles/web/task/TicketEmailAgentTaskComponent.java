@@ -33,16 +33,6 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.web.task;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.MessageDirection;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketEmailAgentConfig;
@@ -60,6 +50,17 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -82,10 +83,9 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     // Parameters config
     private static final String PARAMETER_MESSAGE_DIRECTION = "message_direction";
     private static final String PARAMETER_FOLLOW_ACTION_ID = "following_action_id";
-    
+
     // Error message
     private static final String MESSAGE_EMPTY_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.empty";
-    
     @Inject
     @Named( TaskTicketEmailAgent.BEAN_TICKET_CONFIG_SERVICE )
     private ITaskConfigService _taskTicketConfigService;
@@ -107,13 +107,14 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
         TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-        if( config.getMessageDirection(  ) == MessageDirection.AGENT_TO_TERRAIN )
+
+        if ( config.getMessageDirection(  ) == MessageDirection.AGENT_TO_TERRAIN )
         {
             model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageQuestion(  ) );
         }
         else
         {
-        	model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageResponse(  ) );
+            model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageResponse(  ) );
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_TICKET_INFORMATION, locale, model );
@@ -160,25 +161,28 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     }
 
     /**
-	 * {@inheritDoc}
-	 */
+         * {@inheritDoc}
+         */
     @Override
-    public String doValidateTask( int nIdResource, String strResourceType, HttpServletRequest request, Locale locale, ITask task )
+    public String doValidateTask( int nIdResource, String strResourceType, HttpServletRequest request, Locale locale,
+        ITask task )
     {
-    	TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
-    	String strEMail = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL + TaskTicketEmailAgent.UNDERSCORE + task.getId(  ) );
-    	
-    	if( config.getMessageDirection(  ) == MessageDirection.AGENT_TO_TERRAIN && StringUtils.isEmpty( strEMail ) )
-    	{
-    		return AdminMessageService.getMessageUrl( request, MESSAGE_EMPTY_EMAIL, AdminMessage.TYPE_STOP );
-    	}
-        
-    	return StringUtils.EMPTY;
+        TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
+        String strEMail = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL + TaskTicketEmailAgent.UNDERSCORE +
+                task.getId(  ) );
+
+        if ( ( config.getMessageDirection(  ) == MessageDirection.AGENT_TO_TERRAIN ) &&
+                StringUtils.isEmpty( strEMail ) )
+        {
+            return AdminMessageService.getMessageUrl( request, MESSAGE_EMPTY_EMAIL, AdminMessage.TYPE_STOP );
+        }
+
+        return StringUtils.EMPTY;
     }
 
-	/**
-     * {@inheritDoc}
-     */
+    /**
+    * {@inheritDoc}
+    */
     @Override
     public String getDisplayConfigForm( HttpServletRequest request, Locale locale, ITask task )
     {
@@ -193,10 +197,11 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
         if ( config != null )
         {
             model.put( MARK_MESSAGE_DIRECTION, config.getMessageDirection(  ).ordinal(  ) );
-            if( config.getIdFollowingAction(  ) != null )
+
+            if ( config.getIdFollowingAction(  ) != null )
             {
-            	model.put( MARK_CONFIG_FOLLOW_ACTION_ID, config.getIdFollowingAction(  ) );
-            }            
+                model.put( MARK_CONFIG_FOLLOW_ACTION_ID, config.getIdFollowingAction(  ) );
+            }
         }
         else
         {
@@ -219,9 +224,10 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
         int nMessageDirectionId = Integer.parseInt( request.getParameter( PARAMETER_MESSAGE_DIRECTION ) );
         String strFollowActionId = request.getParameter( PARAMETER_FOLLOW_ACTION_ID );
         Integer nIdFollowingAction = null;
-        if( StringUtils.isNotEmpty( strFollowActionId ) )
+
+        if ( StringUtils.isNotEmpty( strFollowActionId ) )
         {
-        	nIdFollowingAction = Integer.parseInt( strFollowActionId );
+            nIdFollowingAction = Integer.parseInt( strFollowActionId );
         }
 
         TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
