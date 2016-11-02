@@ -46,7 +46,9 @@ import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistorySer
 import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppException;
+import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
+import fr.paris.lutece.portal.web.LocalVariables;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
@@ -358,7 +360,8 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
         String strSignature = RequestAuthenticationService.getRequestAuthenticator(  )
                                                           .buildSignature( listElements, strTimestamp );
 
-        UrlItem urlTicketLink = new UrlItem( AppPropertiesService.getProperty( RESPONSE_URL ) );
+        UrlItem urlTicketLink = new UrlItem( AppPathService.getProdUrl( LocalVariables.getRequest(  ) ) +
+                AppPropertiesService.getProperty( RESPONSE_URL ) );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_MESSAGE_AGENT, nIdMessageAgent );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_SIGNATURE, strSignature );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_TIMETAMP, strTimestamp );
