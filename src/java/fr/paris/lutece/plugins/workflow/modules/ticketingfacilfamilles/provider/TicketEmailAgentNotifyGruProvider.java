@@ -53,6 +53,7 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -333,7 +334,8 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
 
         String strUrlCompleted = ( ticket.getUrl(  ) != null ) ? ticket.getUrl(  ) : "";
 
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_URL_COMPLETED, strUrlCompleted.replaceAll( "&", "&amp;" ) );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_URL_COMPLETED,
+            StringEscapeUtils.escapeHtml( strUrlCompleted ) );
 
         //SPECIFIC EMAIL AGENT
         model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL,
@@ -366,7 +368,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_SIGNATURE, strSignature );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_TIMETAMP, strTimestamp );
 
-        return urlTicketLink.getUrl(  );
+        return StringEscapeUtils.escapeHtml( urlTicketLink.getUrl(  ) );
     }
 
     /**
