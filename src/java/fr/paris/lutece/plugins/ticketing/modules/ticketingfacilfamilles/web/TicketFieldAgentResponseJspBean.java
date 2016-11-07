@@ -58,6 +58,7 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.message.SiteMessage;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppPathService;
@@ -111,6 +112,7 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
     private static final String MARK_USER_ADMIN = "user_admin";
     private static final String MARK_TASK_TICKET_EMAILAGENT_FORM = "task_ticket_emailagent_form";
     private static final String MARK_KEY_MESSAGE = "key_message";
+    private static final String MARK_TYPE_MESSAGE = "type_message";
 
     // Views
     private static final String VIEW_TICKET_FIELD_AGENT_RESPONSE = "fieldAgentReponse";
@@ -174,7 +176,7 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
             if ( !_ticketingEmailAgentDemandDAO.isLastQuestion( emailAgentMessage.getIdTicket(  ), nIdEmailAgent ) ||
                     emailAgentMessage.getIsAnswered(  ) )
             {
-                return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_ALREADY_ANSWER );
+                return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_ALREADY_ANSWER, SiteMessage.TYPE_WARNING );
             }
 
             List<TicketEmailAgentHistory> lstFFemailAgentHistory = _ticketEmailAgentHistoryDAO.loadByIdMessageAgent( nIdEmailAgent );
@@ -248,7 +250,7 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
-        return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_OK );
+        return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_OK, SiteMessage.TYPE_INFO );
     }
 
     /**
@@ -272,12 +274,14 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
     /**
      * call TEMPLATE_FIELD_AGENT_MESSAGE template for the given message key
      * @param strKeyMessage the key of the message
+     * @param nMessageType the message type
      * @return the content of the page
      */
-    private String getMessagePage( String strKeyMessage )
+    private String getMessagePage( String strKeyMessage, int nMessageType )
     {
         Map<String, Object> model = getModel(  );
         model.put( MARK_KEY_MESSAGE, strKeyMessage );
+        model.put( MARK_TYPE_MESSAGE, nMessageType );
 
         return getPage( PROPERTY_PAGE_TITLE_FIELD_AGENT_RESPONSE, TEMPLATE_FIELD_AGENT_MESSAGE, model );
     }
