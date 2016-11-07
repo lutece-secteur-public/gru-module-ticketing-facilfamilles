@@ -33,6 +33,16 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.web.task;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.MessageDirection;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketEmailAgentConfig;
@@ -41,8 +51,12 @@ import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.ITicketEmailAgentHistoryDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketEmailAgentHistory;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.task.TaskTicketEmailAgent;
+import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.config.ITaskConfig;
+import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
+import fr.paris.lutece.plugins.workflowcore.service.action.ActionService;
 import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
+import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
 import fr.paris.lutece.plugins.workflowcore.web.task.TaskComponent;
 import fr.paris.lutece.portal.service.message.AdminMessage;
@@ -50,17 +64,6 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -86,6 +89,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
     // Error message
     private static final String MESSAGE_EMPTY_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.empty";
+    private static final String MESSAGE_ALREADY_ANSWER = "module.workflow.ticketingfacilfamilles.fieldAgentResponse.message.already_answer";
     @Inject
     @Named( TaskTicketEmailAgent.BEAN_TICKET_CONFIG_SERVICE )
     private ITaskConfigService _taskTicketConfigService;
@@ -95,6 +99,12 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     @Inject
     @Named( ITicketingEmailAgentMessageDAO.BEAN_SERVICE )
     private ITicketingEmailAgentMessageDAO _ticketingEmailAgentMessageDAO;
+    @Inject
+    private IResourceHistoryService _resourceHistoryService;
+    @Inject
+    @Named( ActionService.BEAN_SERVICE )
+    private ActionService _actionService;
+    
 
     /**
      * {@inheritDoc}
@@ -175,6 +185,18 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
                 StringUtils.isEmpty( strEMail ) )
         {
             return AdminMessageService.getMessageUrl( request, MESSAGE_EMPTY_EMAIL, AdminMessage.TYPE_STOP );
+        }
+        if ( ( config.getMessageDirection(  ) == MessageDirection.TERRAIN_TO_AGENT ) )
+        {
+        	
+        	Action action = _actionService.findByPrimaryKeyWithoutIcon( task.getAction(  ).getId(  ) );
+        	ResourceHistory history = _resourceHistoryService.getLastHistoryResource( nIdResource, strResourceType, action.getWorkflow(  ).getId(  ) );
+        	TicketEmailAgentHistory ticketFacilFamille = _ticketEmailAgentHistoryDAO.loadByIdHistory( history.getId(  ) );
+            
+        	if( ( ticketFacilFamille == null ) || ( ! _ticketingEmailAgentMessageDAO.isLastQuestion( nIdResource, ticketFacilFamille.getIdMessageAgent(  ) ) ) )
+            {
+            	return AdminMessageService.getMessageUrl( request, MESSAGE_ALREADY_ANSWER, AdminMessage.TYPE_WARNING );
+            }
         }
 
         return StringUtils.EMPTY;
