@@ -41,6 +41,15 @@
     <!-- Portlet parameters -->
     <portlets>
    	</portlets>
+   
+    <!-- servlets -->
+    <servlets>
+        <servlet>
+            <servlet-name>FieldAgentSearchServlet</servlet-name>
+            <url-pattern>/servlet/plugins/workflow/ticketingfacilfamilles/fieldagent</url-pattern>
+            <servlet-class>fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.search.FieldAgentSearchServlet</servlet-class>
+        </servlet>
+    </servlets>
     
     
 	<!-- Specific plugin Javascript files -->

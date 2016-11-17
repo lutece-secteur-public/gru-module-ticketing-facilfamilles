@@ -33,21 +33,12 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.web.task;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.MessageDirection;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketEmailAgentConfig;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.ITicketingEmailAgentMessageDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.TicketingEmailAgentMessage;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.fieldagent.IFieldAgentUserDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.ITicketEmailAgentHistoryDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketEmailAgentHistory;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.task.TaskTicketEmailAgent;
@@ -64,6 +55,17 @@ import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -89,6 +91,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
     // Error message
     private static final String MESSAGE_EMPTY_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.empty";
+    private static final String MESSAGE_INVALID_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.invalid";
     private static final String MESSAGE_ALREADY_ANSWER = "module.workflow.ticketingfacilfamilles.fieldAgentResponse.message.already_answer";
     @Inject
     @Named( TaskTicketEmailAgent.BEAN_TICKET_CONFIG_SERVICE )
@@ -104,7 +107,9 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     @Inject
     @Named( ActionService.BEAN_SERVICE )
     private ActionService _actionService;
-    
+    @Inject
+    @Named( IFieldAgentUserDAO.BEAN_SERVICE )
+    private IFieldAgentUserDAO _fieldAgentUserDAO;
 
     /**
      * {@inheritDoc}
@@ -178,25 +183,44 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
         ITask task )
     {
         TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
-        String strEMail = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL + TaskTicketEmailAgent.UNDERSCORE +
+        String strEmail = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL + TaskTicketEmailAgent.UNDERSCORE +
                 task.getId(  ) );
+        String strError = null;
+        int nLevelError = -1;
 
-        if ( ( config.getMessageDirection(  ) == MessageDirection.AGENT_TO_TERRAIN ) &&
-                StringUtils.isEmpty( strEMail ) )
+        if ( config.getMessageDirection(  ) == MessageDirection.AGENT_TO_TERRAIN )
         {
-            return AdminMessageService.getMessageUrl( request, MESSAGE_EMPTY_EMAIL, AdminMessage.TYPE_STOP );
+            if ( StringUtils.isEmpty( strEmail ) )
+            {
+                strError = MESSAGE_EMPTY_EMAIL;
+                nLevelError = AdminMessage.TYPE_STOP;
+            }
+            else if ( !_fieldAgentUserDAO.isValidEmail( strEmail ) )
+            {
+                strError = MESSAGE_INVALID_EMAIL;
+                nLevelError = AdminMessage.TYPE_STOP;
+            }
         }
+
         if ( ( config.getMessageDirection(  ) == MessageDirection.TERRAIN_TO_AGENT ) )
         {
-        	
-        	Action action = _actionService.findByPrimaryKeyWithoutIcon( task.getAction(  ).getId(  ) );
-        	ResourceHistory history = _resourceHistoryService.getLastHistoryResource( nIdResource, strResourceType, action.getWorkflow(  ).getId(  ) );
-        	TicketEmailAgentHistory ticketFacilFamille = _ticketEmailAgentHistoryDAO.loadByIdHistory( history.getId(  ) );
-            
-        	if( ( ticketFacilFamille == null ) || ( ! _ticketingEmailAgentMessageDAO.isLastQuestion( nIdResource, ticketFacilFamille.getIdMessageAgent(  ) ) ) )
+            Action action = _actionService.findByPrimaryKeyWithoutIcon( task.getAction(  ).getId(  ) );
+            ResourceHistory history = _resourceHistoryService.getLastHistoryResource( nIdResource, strResourceType,
+                    action.getWorkflow(  ).getId(  ) );
+            TicketEmailAgentHistory ticketFacilFamille = _ticketEmailAgentHistoryDAO.loadByIdHistory( history.getId(  ) );
+
+            if ( ( ticketFacilFamille == null ) ||
+                    ( !_ticketingEmailAgentMessageDAO.isLastQuestion( nIdResource,
+                        ticketFacilFamille.getIdMessageAgent(  ) ) ) )
             {
-            	return AdminMessageService.getMessageUrl( request, MESSAGE_ALREADY_ANSWER, AdminMessage.TYPE_WARNING );
+                strError = MESSAGE_ALREADY_ANSWER;
+                nLevelError = AdminMessage.TYPE_WARNING;
             }
+        }
+
+        if ( ( strError != null ) && ( nLevelError >= 0 ) )
+        {
+            return AdminMessageService.getMessageUrl( request, strError, nLevelError );
         }
 
         return StringUtils.EMPTY;

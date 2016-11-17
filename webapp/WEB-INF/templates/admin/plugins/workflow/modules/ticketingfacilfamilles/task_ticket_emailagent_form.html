@@ -2,20 +2,39 @@
     <input name="redirect" id="redirect" value="" type="hidden">
     <#include "/admin/util/editor/editor.html" />
     <#if config.isMessageToFieldAgent(  ) >
-    <@fieldInputText i18nLabelKey="module.workflow.ticketingfacilfamilles.task_ticket_emailagent_form.label_email" inputName="email_${config.idTask}" mandatory=true value="" maxlength=255 i18nHelpBlockKey='' />
-    <div class="form-group">
+	<div class="row form-group">
+		<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label" for="email_${config.idTask}">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent_form.label_email}&nbsp;*&nbsp;:</label>
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+			<input class="form-control" id="email_${config.idTask}" name="email_${config.idTask}" type="text" value="" maxlength=255 />
+		</div>
+		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+			<span id="search_results_button" onclick="showSearchResponse_${config.idTask}()" class="btn btn-primary btn-xs btn-flat">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent.search.button}</span>
+		</div>
+	</div>
+	<div class="row form-group" id="search_results_div_${config.idTask}" style="display:none;">
+		<#assign inputEmail="email_${config.idTask}" >
+		<#include "/admin/plugins/workflow/modules/ticketingfacilfamilles/search_field_agent.html" />
+	</div>
+    <div class="row form-group">
 		<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label" for="message_${config.idTask}">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent_form.label_message} : </label>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<textarea name="message_${config.idTask}" id="message_${config.idTask}" rows="5" class="richtext"><p>${user_signature}</p></textarea>
 		</div>
 	</div>
-	<div class="form-group">
+	<div class="row form-group">
 		<div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-9 col-lg-offset-3 col-lg-9">
 			<a href="jsp/admin/plugins/ticketing/UserPreferences.jsp" class="btn btn-primary btn-xs btn-flat" >#i18n{module.workflow.ticketingfacilfamilles.button.manageUserSignature}</a>
 		</div>
 	</div>
+
+	<script>
+		function showSearchResponse_${config.idTask}() {
+ 			$("#search_results_div_${config.idTask}").toggle();
+		}
+	</script>
+	
 	<#else>
-    <div class="form-group">
+    <div class="row form-group">
 		<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label" for="message_${config.idTask}">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent_form.label_message} : </label>
 		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 			<textarea name="message_${config.idTask}" id="message_${config.idTask}" rows="5" class="richtext"></textarea>
