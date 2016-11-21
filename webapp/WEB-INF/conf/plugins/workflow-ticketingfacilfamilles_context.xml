@@ -10,6 +10,14 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
        
+    <!-- Site properties -->    
+    <bean id="workflow-ticketingfacilfamilles.sitePropertiesGroup" class="fr.paris.lutece.portal.service.site.properties.SitePropertiesGroup" >
+        <property name="nameKey"><value>module.workflow.ticketingfacilfamilles.site_properties.name</value></property>
+        <property name="descriptionKey"><value>module.workflow.ticketingfacilfamilles.site_properties.description</value></property>
+        <property name="keysPrefix"><value>module.workflow.ticketingfacilfamilles.site_property.</value></property>
+    </bean>
+       
+       
     <!-- Transaction Manager -->
     <bean id="workflow-ticketingfacilfamilles.transactionManager" class="fr.paris.lutece.portal.service.database.DAOUtilTransactionManager"
         p:pluginName="workflow-ticketingfacilfamilles" />
@@ -21,6 +29,8 @@
         class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketEmailAgentHistoryDAO" />
     <bean id="workflow-ticketingfacilfamilles.ticketingEmailAgentMessageDAO"
         class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.TicketingEmailAgentMessageDAO" />
+    <bean id="workflow-ticketingfacilfamilles.fieldAgentUserDAO"
+        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.fieldagent.FieldAgentUserDAO" />
         
     <!-- Service -->
     <bean id="workflow-ticketingfacilfamilles.taskTicketEmailAgentConfigService"
