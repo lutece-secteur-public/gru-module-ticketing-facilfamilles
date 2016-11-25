@@ -59,6 +59,8 @@ public class FieldAgentUserComparatorTest extends TestCase
         FieldAgentUser user6 = createFieldAgentUser( "z01", "z", "a", "z.z@z.com" );
         FieldAgentUser user7 = createFieldAgentUser( "z01", "z", "z", "a.z@z.com" );
         FieldAgentUser user8 = createFieldAgentUser( "a0z", "z", "z", "z.z@z.com" );
+        FieldAgentUser user9 = createFieldAgentUser( "a10z", "z", "z", "z.z@z.com" );
+        FieldAgentUser user10 = createFieldAgentUser( "a9z", "z", "z", "z.z@z.com" );
         Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user1 ) + " / " +
             fieldAgentUserToString( user2 ) + " / " + comp.compare( user1, user2 ) + ">0",
             comp.compare( user1, user2 ) > 0 );
@@ -80,6 +82,12 @@ public class FieldAgentUserComparatorTest extends TestCase
         Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user3 ) + " / " +
             fieldAgentUserToString( user8 ) + " / " + comp.compare( user3, user8 ) + ">0",
             comp.compare( user3, user8 ) > 0 );
+        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user9 ) + " / " +
+            fieldAgentUserToString( user8 ) + " / " + comp.compare( user9, user8 ) + ">0",
+            comp.compare( user9, user8 ) > 0 );
+        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user9 ) + " / " +
+            fieldAgentUserToString( user10 ) + " / " + comp.compare( user9, user10 ) + ">0",
+            comp.compare( user9, user10 ) > 0 );
     }
 
     /**
