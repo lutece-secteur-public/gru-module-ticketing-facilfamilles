@@ -61,6 +61,7 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
 
     //SQL
     private static final String SQL_SELECT_USER_ADMIN = "SELECT u.last_name, u.first_name, u.email, f.user_field_value FROM core_admin_user u INNER JOIN core_user_right r ON u.id_user = r.id_user LEFT JOIN core_admin_user_field f ON u.id_user = f.id_user AND f.id_attribute = ? WHERE r.id_right = 'TICKETING_ACTEUR_TERRAIN' ";
+    private static final String SQL_VALID_EMAIL_USER_ADMIN = "SELECT u.first_name, u.email FROM core_admin_user u INNER JOIN core_user_right r ON u.id_user = r.id_user LEFT JOIN core_admin_user_field f ON u.id_user = f.id_user AND f.id_attribute = ? WHERE r.id_right = 'TICKETING_ACTEUR_TERRAIN' AND u.email = ?";
     private static final String SQL_WHERE_LASTNAME_CLAUSE = " u.last_name LIKE ? ";
     private static final String SQL_WHERE_EMAIL_CLAUSE = " u.email LIKE ? ";
     private static final String SQL_WHERE_ENTITY_CLAUSE = " f.user_field_value LIKE ? ";
@@ -97,7 +98,21 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
     @Override
     public boolean isValidEmail( String strEmail )
     {
-        return ( findFieldAgentUser( null, strEmail, null ).size(  ) > 0 );
+    	StringBuilder strQuery = new StringBuilder( SQL_VALID_EMAIL_USER_ADMIN );
+
+        DAOUtil daoUtil = new DAOUtil( strQuery.toString(  ),
+                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+
+        int nIndex = 1;
+        daoUtil.setString( nIndex++, getEntiteAttributID(  ) );
+        daoUtil.setString( nIndex++, strEmail );
+        daoUtil.executeQuery(  );
+        
+        boolean bEmailOk = daoUtil.next(  );
+                
+        daoUtil.free(  );
+
+        return bEmailOk;
     }
 
     /**
@@ -160,6 +175,8 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
             fieldAgent.setEntite( daoUtil.getString( 4 ) );
             lstFieldAgent.add( fieldAgent );
         }
+                
+        daoUtil.free(  );
 
         return ( new ArrayList<FieldAgentUser>( lstFieldAgent ) );
     }
