@@ -98,7 +98,7 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
     @Override
     public boolean isValidEmail( String strEmail )
     {
-    	StringBuilder strQuery = new StringBuilder( SQL_VALID_EMAIL_USER_ADMIN );
+        StringBuilder strQuery = new StringBuilder( SQL_VALID_EMAIL_USER_ADMIN );
 
         DAOUtil daoUtil = new DAOUtil( strQuery.toString(  ),
                 PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
@@ -107,9 +107,9 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
         daoUtil.setString( nIndex++, getEntiteAttributID(  ) );
         daoUtil.setString( nIndex++, strEmail );
         daoUtil.executeQuery(  );
-        
+
         boolean bEmailOk = daoUtil.next(  );
-                
+
         daoUtil.free(  );
 
         return bEmailOk;
@@ -175,7 +175,7 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
             fieldAgent.setEntite( daoUtil.getString( 4 ) );
             lstFieldAgent.add( fieldAgent );
         }
-                
+
         daoUtil.free(  );
 
         return ( new ArrayList<FieldAgentUser>( lstFieldAgent ) );

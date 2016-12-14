@@ -100,12 +100,14 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
     private static final String PROPERTY_PAGE_TITLE_FIELD_AGENT_RESPONSE = "module.workflow.ticketingfacilfamilles.fieldAgentResponse.pageTitle";
     private static final String PROPERTY_FIELD_AGENT_MESSAGE_OK = "module.workflow.ticketingfacilfamilles.fieldAgentResponse.message.ok";
     private static final String PROPERTY_FIELD_AGENT_MESSAGE_ALREADY_ANSWER = "module.workflow.ticketingfacilfamilles.fieldAgentResponse.message.already_answer";
+    private static final String PROPERTY_FIELD_AGENT_MESSAGE_NOT_DONE = "module.workflow.ticketingfacilfamilles.fieldAgentResponse.message.not_respond";
 
     // Markers
     private static final String MARK_REFERENCE = "reference";
     private static final String MARK_AGENT_MESSAGE = "agent_message";
     private static final String MARK_ID_ACTION = "id_action";
     private static final String MARK_ID_TICKET = "id_ticket";
+    private static final String MARK_ID_MESSAGE_AGENT = "id_message_agent";
     private static final String MARK_LIST_FILE_UPLOAD = "list_file_uploaded";
     private static final String MARK_MAP_FILE_URL = "list_url";
     private static final String MARK_USER_FACTORY = "user_factory";
@@ -240,6 +242,7 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
             getActionUrl( TicketingConstants.ACTION_DO_PROCESS_WORKFLOW_ACTION ) );
         model.put( MARK_ID_ACTION, config.getIdFollowingAction(  ) );
         model.put( MARK_ID_TICKET, ticket.getId(  ) );
+        model.put( MARK_ID_MESSAGE_AGENT, strIdEmailAgent );
 
         return getPage( PROPERTY_PAGE_TITLE_FIELD_AGENT_RESPONSE, TEMPLATE_FIELD_AGENT_RESPONSE, model );
     }
@@ -250,6 +253,24 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
     @Override
     public String redirectAfterWorkflowAction( HttpServletRequest request )
     {
+        try
+        {
+            String strIdEmailAgent = request.getParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_MESSAGE_AGENT );
+            int nIdEmailAgent = -1;
+            TicketingEmailAgentMessage emailAgentMessage = null;
+            nIdEmailAgent = Integer.parseInt( strIdEmailAgent );
+            emailAgentMessage = _ticketingEmailAgentDemandDAO.loadByIdMessageAgent( nIdEmailAgent );
+
+            if ( !emailAgentMessage.getIsAnswered(  ) )
+            {
+                return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_NOT_DONE, SiteMessage.TYPE_WARNING );
+            }
+        }
+        catch ( Exception e )
+        {
+            return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_ALREADY_ANSWER, SiteMessage.TYPE_WARNING );
+        }
+
         return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_OK, SiteMessage.TYPE_INFO );
     }
 

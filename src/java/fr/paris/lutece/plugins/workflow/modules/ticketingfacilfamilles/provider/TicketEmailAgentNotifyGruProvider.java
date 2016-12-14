@@ -322,7 +322,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
         model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_DOMAINS,
             ( ticket.getTicketDomain(  ) != null ) ? ticket.getTicketDomain(  ) : "" );
         model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_CATEGORIES,
-            ( ticket.getTicketCategory(  ) != null ) ? ticket.getTicketCategory(  ) : "" );
+            ( ticket.getTicketCategory(  ) != null ) ? ticket.getTicketCategory(  ).getLabel(  ) : "" );
         model.put( TicketEmailAgentNotifyGruConstants.MARK_CONTACT_MODES,
             ( ticket.getContactMode(  ) != null ) ? ticket.getContactMode(  ) : "" );
         model.put( TicketEmailAgentNotifyGruConstants.MARK_COMMENT,
