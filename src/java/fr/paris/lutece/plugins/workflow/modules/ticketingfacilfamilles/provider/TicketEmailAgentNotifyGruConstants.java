@@ -40,7 +40,6 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider
 public final class TicketEmailAgentNotifyGruConstants
 {
     // DEFAULT PROVIDER IMPL
-    public static final String STR_NO_CUSTOMER_ID = "0";
     public static final int EMPTY_OPTIONAL_DEMAND_ID_TYPE = 0;
 
     // GENERIC GRU

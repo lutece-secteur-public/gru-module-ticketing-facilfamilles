@@ -203,7 +203,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     @Override
     public String getCustomerId( int nIdResourceHistory )
     {
-        return TicketEmailAgentNotifyGruConstants.STR_NO_CUSTOMER_ID;
+        return StringUtils.EMPTY;
     }
 
     /**
