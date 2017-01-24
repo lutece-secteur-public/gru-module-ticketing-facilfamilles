@@ -6,7 +6,8 @@
   <div id="customer-panel" class="row ticket-head bg-gru-light">
     <div class="col-xs-12 col-sm-offset-1 col-sm-10">
       <h2>#i18n{module.workflow.ticketingfacilfamilles.fieldAgentResponse.pageTitle}</h2>
-      <h3>#i18n{module.workflow.ticketingfacilfamilles.fieldAgentResponse.title}</h3>
+      <br/>
+      <h4>#i18n{module.workflow.ticketingfacilfamilles.fieldAgentResponse.title}&nbsp;${reference!}</h4>
     </div>
   </div>
   <br/>
@@ -19,10 +20,15 @@
 	<input id="page" name="page" value="" type="hidden">
 	<input id="redirect" name="redirect" value="" type="hidden">
     <div class="col-xs-12 col-sm-offset-1 col-sm-10">
+    <#if list_agent_message?has_content >
+      <#list list_agent_message as agent_message>
+	    <#if agent_message?has_content >
     	<div class="row form-group">
     	<#-- admin user -->
           <#assign info_offset="col-md-offset-3 col-lg-offset-3">
-		  <#if user_admin?exists && user_factory?exists>
+         <#if agent_message.adminUser?exists && user_factory?exists>
+		  <#assign user_admin=agent_message.adminUser>
+		   <#if user_admin?exists && user_factory?exists>
 			<#assign user=user_factory.create(user_admin.userId)>
 			<#if user?has_content>
             <div class="info_user col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label right" data-key-id="${user.idUser}" data-container="body" data-toggle="popover" data-placement="top">
@@ -39,12 +45,12 @@
           	</#if>
           	<#assign info_offset="">
 	  	  </#if> 
+	  	 </#if> 
     	<#-- infos question -->	
 			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 ${info_offset} form-control-static">
-				<b>${reference!}</b><br/><br/>
-				${agent_message!}<br/><br/>
-		      <#if list_file_uploaded?has_content >
-		      <#list list_file_uploaded as file_uploaded>
+				${agent_message.messageQuestion!}<br/><br/>
+		      <#if agent_message.uploadedFiles?has_content >
+		      <#list agent_message.uploadedFiles as file_uploaded>
 			    <#if file_uploaded?has_content >
 			    <div class="clearfix">
 			        <a class="pull-left" href="${list_url[file_uploaded.idUploadFile?string]}">${file_uploaded.file.title}</a>    
@@ -53,7 +59,10 @@
 			  </#list>		
 		      </#if>
 			</div>
-		</div>		
+		</div>	
+		</#if>
+	  </#list>		
+      </#if>	
 		<br/>
 		<div class="row form-group">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

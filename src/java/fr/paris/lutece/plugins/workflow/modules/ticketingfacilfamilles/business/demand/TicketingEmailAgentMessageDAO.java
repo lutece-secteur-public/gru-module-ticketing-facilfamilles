@@ -37,6 +37,9 @@ import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.W
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -53,6 +56,8 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
         " VALUES ( ?,?,?,? ) ";
     private static final String SQL_QUERY_ADD_ANSWER = " UPDATE ticketing_facilfamilles_emailagent SET message_response = ?, is_answered = 1 WHERE id_message_agent = ? ";
     private static final String SQL_QUERY_DELETE = " DELETE FROM ticketing_facilfamilles_emailagent WHERE id_message_agent = ? ";
+    private static final String SQL_QUERY_FIND_BY_ID_TICKET_NOT_CLOSED = " SELECT id_message_agent, id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent " +
+            " WHERE id_ticket = ? AND is_answered = 0 ORDER BY id_message_agent DESC ";
 
     /**
      * Generates a new primary key
@@ -190,6 +195,41 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
         daoUtil.free(  );
 
         return emailAgentDemand;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<TicketingEmailAgentMessage> loadByIdTicketNotClosed( int nIdTicket )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_TICKET_NOT_CLOSED,
+                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+
+        daoUtil.setInt( 1, nIdTicket );
+
+        daoUtil.executeQuery(  );
+
+        int nIndex = 1;
+        List<TicketingEmailAgentMessage> listEmailAgentDemand = new ArrayList<TicketingEmailAgentMessage>();
+        TicketingEmailAgentMessage emailAgentDemand = null;
+
+        while ( daoUtil.next(  ) )
+        {
+        	nIndex = 1;
+            emailAgentDemand = new TicketingEmailAgentMessage(  );
+            emailAgentDemand.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );
+            emailAgentDemand.setIdTicket( daoUtil.getInt( nIndex++ ) );
+            emailAgentDemand.setEmailAgent( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setMessageQuestion( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setMessageResponse( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setIsAnswered( daoUtil.getBoolean( nIndex++ ) );
+            listEmailAgentDemand.add(emailAgentDemand);
+        }
+
+        daoUtil.free(  );
+
+        return listEmailAgentDemand;
     }
 
     /**

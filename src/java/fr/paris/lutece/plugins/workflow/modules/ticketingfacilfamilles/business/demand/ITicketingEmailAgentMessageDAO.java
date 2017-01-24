@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand;
 
+import java.util.List;
 
 /**
  * TicketingEmailAgentDemand DAO interface
@@ -73,6 +74,14 @@ public interface ITicketingEmailAgentMessageDAO
      * @return the TicketingEmailAgentMessage element
      */
     TicketingEmailAgentMessage loadByIdMessageAgent( int nIdMessageAgent );
+    
+    /**
+     * Load list of TicketingEmailAgentMessage by given nIdTicket
+     *
+     * @param nIdTicket the id of message
+     * @return the list of TicketingEmailAgentMessage 
+     */
+    List<TicketingEmailAgentMessage> loadByIdTicketNotClosed( int nIdTicket );
 
     /**
      * Delete by idMessageAgent.
