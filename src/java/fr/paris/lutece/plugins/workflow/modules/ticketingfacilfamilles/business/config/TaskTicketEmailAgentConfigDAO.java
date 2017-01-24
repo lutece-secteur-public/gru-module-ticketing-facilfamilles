@@ -40,7 +40,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 
 import org.apache.commons.lang.StringUtils;
 
-
 /**
  *
  */
@@ -57,25 +56,24 @@ public class TaskTicketEmailAgentConfigDAO implements ITaskConfigDAO<TaskTicketE
     @Override
     public synchronized void insert( TaskTicketEmailAgentConfig config )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT,
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, config.getIdTask(  ) );
-        daoUtil.setInt( nIndex++, config.getMessageDirection(  ).ordinal(  ) );
+        daoUtil.setInt( nIndex++, config.getIdTask( ) );
+        daoUtil.setInt( nIndex++, config.getMessageDirection( ).ordinal( ) );
 
-        if ( config.getIdFollowingAction(  ) == null )
+        if ( config.getIdFollowingAction( ) == null )
         {
             daoUtil.setIntNull( nIndex++ );
         }
         else
         {
-            daoUtil.setInt( nIndex++, config.getIdFollowingAction(  ) );
+            daoUtil.setInt( nIndex++, config.getIdFollowingAction( ) );
         }
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -84,25 +82,24 @@ public class TaskTicketEmailAgentConfigDAO implements ITaskConfigDAO<TaskTicketE
     @Override
     public void store( TaskTicketEmailAgentConfig config )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE,
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, config.getMessageDirection(  ).ordinal(  ) );
+        daoUtil.setInt( nIndex++, config.getMessageDirection( ).ordinal( ) );
 
-        if ( config.getIdFollowingAction(  ) == null )
+        if ( config.getIdFollowingAction( ) == null )
         {
             daoUtil.setIntNull( nIndex++ );
         }
         else
         {
-            daoUtil.setInt( nIndex++, config.getIdFollowingAction(  ) );
+            daoUtil.setInt( nIndex++, config.getIdFollowingAction( ) );
         }
 
-        daoUtil.setInt( nIndex++, config.getIdTask(  ) );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.setInt( nIndex++, config.getIdTask( ) );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -112,18 +109,17 @@ public class TaskTicketEmailAgentConfigDAO implements ITaskConfigDAO<TaskTicketE
     public TaskTicketEmailAgentConfig load( int nIdTask )
     {
         TaskTicketEmailAgentConfig config = null;
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY,
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_PRIMARY_KEY, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdTask );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nIndex = 1;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            config = new TaskTicketEmailAgentConfig(  );
+            config = new TaskTicketEmailAgentConfig( );
             config.setIdTask( daoUtil.getInt( nIndex++ ) );
             config.setMessageDirection( MessageDirection.valueOf( daoUtil.getInt( nIndex++ ) ) );
 
@@ -135,7 +131,7 @@ public class TaskTicketEmailAgentConfigDAO implements ITaskConfigDAO<TaskTicketE
             }
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return config;
     }
@@ -146,11 +142,10 @@ public class TaskTicketEmailAgentConfigDAO implements ITaskConfigDAO<TaskTicketE
     @Override
     public void delete( int nIdTask )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE,
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdTask );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }

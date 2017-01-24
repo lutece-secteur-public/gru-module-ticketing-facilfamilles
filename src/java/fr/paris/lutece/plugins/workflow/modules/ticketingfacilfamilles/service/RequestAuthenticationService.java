@@ -36,7 +36,6 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.util.signrequest.AbstractAuthenticator;
 
-
 /**
  *
  * RequestAuthenticationService
@@ -49,15 +48,16 @@ public final class RequestAuthenticationService
     /**
      * Private constructor
      */
-    private RequestAuthenticationService(  )
+    private RequestAuthenticationService( )
     {
     }
 
     /**
      * Get the instance of {@link AbstractAuthenticator} defined in the context.xml
+     * 
      * @return the instance of {@link AbstractAuthenticator}
      */
-    public static AbstractAuthenticator getRequestAuthenticator(  )
+    public static AbstractAuthenticator getRequestAuthenticator( )
     {
         return (AbstractAuthenticator) SpringContextService.getBean( BEAN_REQUEST_AUTHENTICATION );
     }

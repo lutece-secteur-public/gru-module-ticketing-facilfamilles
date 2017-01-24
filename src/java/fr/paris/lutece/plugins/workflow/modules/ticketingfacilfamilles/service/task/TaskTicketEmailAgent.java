@@ -54,7 +54,6 @@ import javax.inject.Named;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  */
@@ -93,13 +92,13 @@ public class TaskTicketEmailAgent extends SimpleTask
     public void processTask( int nIdResourceHistory, HttpServletRequest request, Locale locale )
     {
         ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
-        Ticket ticket = TicketHome.findByPrimaryKey( resourceHistory.getIdResource(  ) );
+        Ticket ticket = TicketHome.findByPrimaryKey( resourceHistory.getIdResource( ) );
 
-        TaskTicketEmailAgentConfig config = _taskTicketConfigService.findByPrimaryKey( getId(  ) );
+        TaskTicketEmailAgentConfig config = _taskTicketConfigService.findByPrimaryKey( getId( ) );
 
         if ( config != null )
         {
-            MessageDirection messageDirection = config.getMessageDirection(  );
+            MessageDirection messageDirection = config.getMessageDirection( );
 
             if ( messageDirection == MessageDirection.AGENT_TO_TERRAIN )
             {
@@ -114,57 +113,67 @@ public class TaskTicketEmailAgent extends SimpleTask
 
     /**
      * Process agent to agent terrain task
-     * @param nIdResourceHistory resourceHistory ID
-     * @param ticket the current ticket
-     * @param request HttpRequest from doAction
-     * @param locale current Locale
-     * @param config configuration of the current task
+     * 
+     * @param nIdResourceHistory
+     *            resourceHistory ID
+     * @param ticket
+     *            the current ticket
+     * @param request
+     *            HttpRequest from doAction
+     * @param locale
+     *            current Locale
+     * @param config
+     *            configuration of the current task
      */
-    private void processAgentTask( int nIdResourceHistory, Ticket ticket, HttpServletRequest request, Locale locale,
-        TaskTicketEmailAgentConfig config )
+    private void processAgentTask( int nIdResourceHistory, Ticket ticket, HttpServletRequest request, Locale locale, TaskTicketEmailAgentConfig config )
     {
-        String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId(  ) );
-        String strEmail = request.getParameter( PARAMETER_EMAIL + UNDERSCORE + getId(  ) );
+        String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId( ) );
+        String strEmail = request.getParameter( PARAMETER_EMAIL + UNDERSCORE + getId( ) );
 
-        //create demand item
-        TicketingEmailAgentMessage emailAgentDemand = new TicketingEmailAgentMessage(  );
-        emailAgentDemand.setIdTicket( ticket.getId(  ) );
+        // create demand item
+        TicketingEmailAgentMessage emailAgentDemand = new TicketingEmailAgentMessage( );
+        emailAgentDemand.setIdTicket( ticket.getId( ) );
         emailAgentDemand.setMessageQuestion( strAgentMessage );
         emailAgentDemand.setEmailAgent( strEmail );
         _ticketingEmailAgentDemandDAO.createQuestion( emailAgentDemand );
 
-        //create resource item
-        TicketEmailAgentHistory emailAgent = new TicketEmailAgentHistory(  );
+        // create resource item
+        TicketEmailAgentHistory emailAgent = new TicketEmailAgentHistory( );
         emailAgent.setIdResourceHistory( nIdResourceHistory );
-        emailAgent.setIdTask( getId(  ) );
-        emailAgent.setIdMessageAgent( emailAgentDemand.getIdMessageAgent(  ) );
+        emailAgent.setIdTask( getId( ) );
+        emailAgent.setIdMessageAgent( emailAgentDemand.getIdMessageAgent( ) );
         _ticketEmailAgentHistoryDAO.insert( emailAgent );
     }
 
     /**
      * Process agent terrain to agent task (response)
-     * @param nIdResourceHistory resourceHistory ID
-     * @param ticket the current ticket
-     * @param request HttpRequest from doAction
-     * @param locale current Locale
-     * @param config configuration of the current task
+     * 
+     * @param nIdResourceHistory
+     *            resourceHistory ID
+     * @param ticket
+     *            the current ticket
+     * @param request
+     *            HttpRequest from doAction
+     * @param locale
+     *            current Locale
+     * @param config
+     *            configuration of the current task
      */
-    private void processTerrainTask( int nIdResourceHistory, Ticket ticket, HttpServletRequest request, Locale locale,
-        TaskTicketEmailAgentConfig config )
+    private void processTerrainTask( int nIdResourceHistory, Ticket ticket, HttpServletRequest request, Locale locale, TaskTicketEmailAgentConfig config )
     {
-        String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId(  ) );
+        String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId( ) );
 
-        //create demand item
-        int nIdMessageAgent = _ticketingEmailAgentDemandDAO.addAnswer( ticket.getId(  ), strAgentMessage );
+        // create demand item
+        int nIdMessageAgent = _ticketingEmailAgentDemandDAO.addAnswer( ticket.getId( ), strAgentMessage );
 
-        //create resource item
-        TicketEmailAgentHistory emailAgent = new TicketEmailAgentHistory(  );
+        // create resource item
+        TicketEmailAgentHistory emailAgent = new TicketEmailAgentHistory( );
         emailAgent.setIdResourceHistory( nIdResourceHistory );
-        emailAgent.setIdTask( getId(  ) );
+        emailAgent.setIdTask( getId( ) );
         emailAgent.setIdMessageAgent( nIdMessageAgent );
         _ticketEmailAgentHistoryDAO.insert( emailAgent );
 
-        //no email for this process
+        // no email for this process
     }
 
     /**

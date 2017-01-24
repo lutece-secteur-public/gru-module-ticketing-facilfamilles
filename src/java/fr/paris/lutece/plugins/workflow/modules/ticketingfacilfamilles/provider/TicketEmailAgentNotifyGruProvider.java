@@ -66,7 +66,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-
 /**
  *
  */
@@ -99,7 +98,8 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     /**
      * Get ticket fot the given id resource
      *
-     * @param nIdResourceHistory the n id resource history
+     * @param nIdResourceHistory
+     *            the n id resource history
      * @return the ticket
      */
     private Ticket getTicket( int nIdResourceHistory )
@@ -107,7 +107,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
         if ( _ticket == null )
         {
             ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
-            _ticket = TicketHome.findByPrimaryKey( resourceHistory.getIdResource(  ) );
+            _ticket = TicketHome.findByPrimaryKey( resourceHistory.getIdResource( ) );
 
             if ( _ticket == null )
             {
@@ -121,7 +121,8 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     /**
      * Get ticketEmailAgentHistory fot the given id resource
      *
-     * @param nIdResourceHistory the n id resource history
+     * @param nIdResourceHistory
+     *            the n id resource history
      * @return the ticket
      */
     private TicketEmailAgentHistory getTicketEmailAgentHistory( int nIdResourceHistory )
@@ -132,8 +133,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
 
             if ( _ticketEmailAgentHistory == null )
             {
-                throw new AppException( "No ticketEmailAgentHistory found for resource history Id : " +
-                    nIdResourceHistory );
+                throw new AppException( "No ticketEmailAgentHistory found for resource history Id : " + nIdResourceHistory );
             }
         }
 
@@ -143,7 +143,8 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     /**
      * Get TicketingEmailAgentMessage fot the given id demand
      *
-     * @param nIdMessageAgent the id MessageAgent
+     * @param nIdMessageAgent
+     *            the id MessageAgent
      * @return the ticketingEmailAgentMessage
      */
     private TicketingEmailAgentMessage getTicketingEmailAgentMessage( int nIdMessageAgent )
@@ -176,7 +177,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     @Override
     public String getUserEmail( int nIdResourceHistory )
     {
-        return getTicket( nIdResourceHistory ).getEmail(  );
+        return getTicket( nIdResourceHistory ).getEmail( );
     }
 
     /**
@@ -185,7 +186,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     @Override
     public int getOptionalDemandId( int nIdResourceHistory )
     {
-        return getTicket( nIdResourceHistory ).getId(  );
+        return getTicket( nIdResourceHistory ).getId( );
     }
 
     /**
@@ -194,7 +195,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     @Override
     public String getDemandReference( int nIdResourceHistory )
     {
-        return getTicket( nIdResourceHistory ).getReference(  );
+        return getTicket( nIdResourceHistory ).getReference( );
     }
 
     /**
@@ -212,7 +213,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     @Override
     public int getOptionalDemandIdType( int nIdResourceHistory )
     {
-        //NOT USED FOR THE MOMENT
+        // NOT USED FOR THE MOMENT
         return TicketEmailAgentNotifyGruConstants.EMPTY_OPTIONAL_DEMAND_ID_TYPE;
     }
 
@@ -231,8 +232,8 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     @Override
     public String getInfosHelp( Locale local )
     {
-        List<String> lstEntries = new ArrayList<String>(  );
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        List<String> lstEntries = new ArrayList<String>( );
+        Map<String, Object> model = new HashMap<String, Object>( );
         // GENERIC GRU
         lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_FIRSTNAME );
         lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_LASTNAME );
@@ -249,7 +250,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
         lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_COMMENT );
         lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_CHANNEL );
         lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_URL_COMPLETED );
-        //SPECIFIC EMAIL AGENT;
+        // SPECIFIC EMAIL AGENT;
         lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL );
         lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE );
         lstEntries.add( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_LINK );
@@ -257,9 +258,8 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
         model.put( LIST_ENTRIES, lstEntries );
 
         @SuppressWarnings( "deprecation" )
-        HtmlTemplate t = AppTemplateService.getTemplateFromStringFtl( AppTemplateService.getTemplate( FORM_HELPER,
-                    local, model ).getHtml(  ), local, model );
-        String strResourceInfo = t.getHtml(  );
+        HtmlTemplate t = AppTemplateService.getTemplateFromStringFtl( AppTemplateService.getTemplate( FORM_HELPER, local, model ).getHtml( ), local, model );
+        String strResourceInfo = t.getHtml( );
 
         return strResourceInfo;
     }
@@ -270,17 +270,16 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     @Override
     public Map<String, Object> getInfos( int nIdResourceHistory )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
         if ( nIdResourceHistory > 0 )
         {
             TicketEmailAgentHistory ticketEmailAgentHistory = getTicketEmailAgentHistory( nIdResourceHistory );
-            model = buildModelNotifyGruTicketing( getTicket( nIdResourceHistory ),
-                    getTicketingEmailAgentMessage( ticketEmailAgentHistory.getIdMessageAgent(  ) ) );
+            model = buildModelNotifyGruTicketing( getTicket( nIdResourceHistory ), getTicketingEmailAgentMessage( ticketEmailAgentHistory.getIdMessageAgent( ) ) );
         }
         else
         {
-            model = buildModelNotifyGruTicketing( new Ticket(  ), new TicketingEmailAgentMessage(  ) );
+            model = buildModelNotifyGruTicketing( new Ticket( ), new TicketingEmailAgentMessage( ) );
         }
 
         return model;
@@ -289,86 +288,70 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     /**
      * Builds the model notify gru ticketing.
      *
-     * @param ticket the ticket
-     * @param emailAgentDemand the TicketingEmailAgentDemand
+     * @param ticket
+     *            the ticket
+     * @param emailAgentDemand
+     *            the TicketingEmailAgentDemand
      * @return the map
      */
     private Map<String, Object> buildModelNotifyGruTicketing( Ticket ticket, TicketingEmailAgentMessage emailAgentDemand )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         // GENERIC GRU
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_GUID,
-            ( ticket.getGuid(  ) != null ) ? ticket.getGuid(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_FIRSTNAME,
-            ( ticket.getFirstname(  ) != null ) ? ticket.getFirstname(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_LASTNAME,
-            ( ticket.getLastname(  ) != null ) ? ticket.getLastname(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_FIXED_PHONE,
-            ( ticket.getFixedPhoneNumber(  ) != null ) ? ticket.getFixedPhoneNumber(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_MOBILE_PHONE,
-            ( ticket.getMobilePhoneNumber(  ) != null ) ? ticket.getMobilePhoneNumber(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_EMAIL,
-            ( ticket.getEmail(  ) != null ) ? ticket.getEmail(  ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_GUID, ( ticket.getGuid( ) != null ) ? ticket.getGuid( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_FIRSTNAME, ( ticket.getFirstname( ) != null ) ? ticket.getFirstname( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_LASTNAME, ( ticket.getLastname( ) != null ) ? ticket.getLastname( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_FIXED_PHONE, ( ticket.getFixedPhoneNumber( ) != null ) ? ticket.getFixedPhoneNumber( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_MOBILE_PHONE, ( ticket.getMobilePhoneNumber( ) != null ) ? ticket.getMobilePhoneNumber( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_EMAIL, ( ticket.getEmail( ) != null ) ? ticket.getEmail( ) : "" );
         model.put( TicketEmailAgentNotifyGruConstants.MARK_UNIT_NAME,
-            ( ( ticket.getAssigneeUnit(  ) != null ) && ( ticket.getAssigneeUnit(  ).getName(  ) != null ) )
-            ? ticket.getAssigneeUnit(  ).getName(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_REFERENCE,
-            ( ticket.getReference(  ) != null ) ? ticket.getReference(  ) : "" );
+                ( ( ticket.getAssigneeUnit( ) != null ) && ( ticket.getAssigneeUnit( ).getName( ) != null ) ) ? ticket.getAssigneeUnit( ).getName( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_REFERENCE, ( ticket.getReference( ) != null ) ? ticket.getReference( ) : "" );
         model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET, ticket );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_USER_TITLES,
-            ( ticket.getUserTitle(  ) != null ) ? ticket.getUserTitle(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_TYPES,
-            ( ticket.getTicketType(  ) != null ) ? ticket.getTicketType(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_DOMAINS,
-            ( ticket.getTicketDomain(  ) != null ) ? ticket.getTicketDomain(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_CATEGORIES,
-            ( ticket.getTicketCategory(  ) != null ) ? ticket.getTicketCategory(  ).getLabel(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_CONTACT_MODES,
-            ( ticket.getContactMode(  ) != null ) ? ticket.getContactMode(  ) : "" );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_COMMENT,
-            ( ticket.getTicketComment(  ) != null ) ? ticket.getTicketComment(  ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_USER_TITLES, ( ticket.getUserTitle( ) != null ) ? ticket.getUserTitle( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_TYPES, ( ticket.getTicketType( ) != null ) ? ticket.getTicketType( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_DOMAINS, ( ticket.getTicketDomain( ) != null ) ? ticket.getTicketDomain( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_TICKET_CATEGORIES, ( ticket.getTicketCategory( ) != null ) ? ticket.getTicketCategory( ).getLabel( )
+                : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_CONTACT_MODES, ( ticket.getContactMode( ) != null ) ? ticket.getContactMode( ) : "" );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_COMMENT, ( ticket.getTicketComment( ) != null ) ? ticket.getTicketComment( ) : "" );
 
         model.put( TicketEmailAgentNotifyGruConstants.MARK_CHANNEL,
-            ( ( ticket.getChannel(  ) != null ) && ( ticket.getChannel(  ).getLabel(  ) != null ) )
-            ? ticket.getChannel(  ).getLabel(  ) : "" );
+                ( ( ticket.getChannel( ) != null ) && ( ticket.getChannel( ).getLabel( ) != null ) ) ? ticket.getChannel( ).getLabel( ) : "" );
 
-        String strUrlCompleted = ( ticket.getUrl(  ) != null ) ? ticket.getUrl(  ) : "";
+        String strUrlCompleted = ( ticket.getUrl( ) != null ) ? ticket.getUrl( ) : "";
 
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_URL_COMPLETED,
-            StringEscapeUtils.escapeHtml( strUrlCompleted ) );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_URL_COMPLETED, StringEscapeUtils.escapeHtml( strUrlCompleted ) );
 
-        //SPECIFIC EMAIL AGENT
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL,
-            ( emailAgentDemand.getEmailAgent(  ) != null ) ? emailAgentDemand.getEmailAgent(  ) : StringUtils.EMPTY );
+        // SPECIFIC EMAIL AGENT
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL, ( emailAgentDemand.getEmailAgent( ) != null ) ? emailAgentDemand.getEmailAgent( )
+                : StringUtils.EMPTY );
         model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE,
-            ( emailAgentDemand.getMessageQuestion(  ) != null ) ? emailAgentDemand.getMessageQuestion(  )
-                                                                : StringUtils.EMPTY );
-        model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_LINK,
-            buildTicketLink( emailAgentDemand.getIdMessageAgent(  ) ) );
+                ( emailAgentDemand.getMessageQuestion( ) != null ) ? emailAgentDemand.getMessageQuestion( ) : StringUtils.EMPTY );
+        model.put( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_LINK, buildTicketLink( emailAgentDemand.getIdMessageAgent( ) ) );
 
         return model;
     }
 
     /**
-     * @param nIdMessageAgent the MessageAgent id
+     * @param nIdMessageAgent
+     *            the MessageAgent id
      * @return build url
      */
     private String buildTicketLink( int nIdMessageAgent )
     {
-        List<String> listElements = new ArrayList<String>(  );
+        List<String> listElements = new ArrayList<String>( );
         listElements.add( Integer.toString( nIdMessageAgent ) );
 
-        String strTimestamp = Long.toString( new Date(  ).getTime(  ) );
-        String strSignature = RequestAuthenticationService.getRequestAuthenticator(  )
-                                                          .buildSignature( listElements, strTimestamp );
+        String strTimestamp = Long.toString( new Date( ).getTime( ) );
+        String strSignature = RequestAuthenticationService.getRequestAuthenticator( ).buildSignature( listElements, strTimestamp );
 
-        UrlItem urlTicketLink = new UrlItem( AppPathService.getProdUrl( LocalVariables.getRequest(  ) ) +
-                AppPropertiesService.getProperty( RESPONSE_URL ) );
+        UrlItem urlTicketLink = new UrlItem( AppPathService.getProdUrl( LocalVariables.getRequest( ) ) + AppPropertiesService.getProperty( RESPONSE_URL ) );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_MESSAGE_AGENT, nIdMessageAgent );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_SIGNATURE, strSignature );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_TIMETAMP, strTimestamp );
 
-        return StringEscapeUtils.escapeHtml( urlTicketLink.getUrl(  ) );
+        return StringEscapeUtils.escapeHtml( urlTicketLink.getUrl( ) );
     }
 
     /**
@@ -384,7 +367,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
      * {@inheritDoc}
      */
     @Override
-    public void updateListProvider(  )
+    public void updateListProvider( )
     {
         throw new UnsupportedOperationException( "Not supported yet." );
     }
@@ -393,7 +376,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
      * {@inheritDoc}
      */
     @Override
-    public ReferenceList buildReferenteListProvider(  )
+    public ReferenceList buildReferenteListProvider( )
     {
         throw new UnsupportedOperationException( "Not supported yet." );
     }
@@ -402,7 +385,7 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
      * {@inheritDoc}
      */
     @Override
-    public ReferenceList getReferenteListEntityProvider(  )
+    public ReferenceList getReferenteListEntityProvider( )
     {
         throw new UnsupportedOperationException( "Not supported yet." );
     }

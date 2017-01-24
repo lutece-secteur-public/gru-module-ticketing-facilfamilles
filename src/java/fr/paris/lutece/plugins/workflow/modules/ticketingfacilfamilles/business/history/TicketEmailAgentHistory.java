@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history;
 
-
 /**
  *
  */
@@ -51,13 +50,14 @@ public class TicketEmailAgentHistory
     /**
      * @return the _nIdTask
      */
-    public int getIdTask(  )
+    public int getIdTask( )
     {
         return _nIdTask;
     }
 
     /**
-     * @param nIdTask the nIdTask to set
+     * @param nIdTask
+     *            the nIdTask to set
      */
     public void setIdTask( int nIdTask )
     {
@@ -67,13 +67,14 @@ public class TicketEmailAgentHistory
     /**
      * @return the _nIdResourceHistory
      */
-    public int getIdResourceHistory(  )
+    public int getIdResourceHistory( )
     {
         return _nIdResourceHistory;
     }
 
     /**
-     * @param nIdResourceHistory the nIdResourceHistory to set
+     * @param nIdResourceHistory
+     *            the nIdResourceHistory to set
      */
     public void setIdResourceHistory( int nIdResourceHistory )
     {
@@ -83,13 +84,14 @@ public class TicketEmailAgentHistory
     /**
      * @return the idMessageAgent
      */
-    public int getIdMessageAgent(  )
+    public int getIdMessageAgent( )
     {
         return _nIdMessageAgent;
     }
 
     /**
-     * @param nIdMessageAgent the idMessageAgent to set
+     * @param nIdMessageAgent
+     *            the idMessageAgent to set
      */
     public void setIdMessageAgent( int nIdMessageAgent )
     {

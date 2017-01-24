@@ -74,7 +74,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * TicketFieldAgentResponse JSP Bean abstract class for JSP Bean
  */
@@ -82,15 +81,14 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This class provides the user interface to manage Ticket features
  */
-@Controller( controllerJsp = "TicketFieldAgentResponse.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH +
-"modules/ticketingfacilfamilles/", right = "TICKETING_ACTEUR_TERRAIN" )
+@Controller( controllerJsp = "TicketFieldAgentResponse.jsp", controllerPath = TicketingConstants.ADMIN_CONTROLLLER_PATH + "modules/ticketingfacilfamilles/", right = "TICKETING_ACTEUR_TERRAIN" )
 public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
 {
     // Right
     public static final String RIGHT_FIELD_AGENT = "TICKETING_ACTEUR_TERRAIN";
     private static final long serialVersionUID = 1L;
 
-    ////////////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////////////
     // Constants
 
     // templates
@@ -132,9 +130,9 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
     /**
      *
      */
-    public TicketFieldAgentResponseJspBean(  )
+    public TicketFieldAgentResponseJspBean( )
     {
-        super(  );
+        super( );
         _ticketEmailAgentHistoryDAO = SpringContextService.getBean( ITicketEmailAgentHistoryDAO.BEAN_SERVICE );
         _ticketingEmailAgentDemandDAO = SpringContextService.getBean( ITicketingEmailAgentMessageDAO.BEAN_SERVICE );
         _taskTicketConfigService = SpringContextService.getBean( TaskTicketEmailAgent.BEAN_TICKET_CONFIG_SERVICE );
@@ -145,121 +143,120 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
     /**
      * Returns the form using by field a to answer to agent
      *
-     * @param request The Http request
+     * @param request
+     *            The Http request
      * @return the html code of the form
      */
     @View( value = VIEW_TICKET_FIELD_AGENT_RESPONSE, defaultView = true )
     public String getFieldAgentResponseView( HttpServletRequest request )
     {
-        //Check sign request
-        if ( !RequestAuthenticationService.getRequestAuthenticator(  ).isRequestAuthenticated( request ) )
+        // Check sign request
+        if ( !RequestAuthenticationService.getRequestAuthenticator( ).isRequestAuthenticated( request ) )
         {
-            return redirect( request,
-                AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
+            return redirect( request, AdminMessageService.getMessageUrl( request, Messages.USER_ACCESS_DENIED, AdminMessage.TYPE_STOP ) );
         }
 
-        //retrieve objects
+        // retrieve objects
         String strIdEmailAgent = request.getParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_MESSAGE_AGENT );
         int nIdEmailAgent = -1;
-        List<TicketingEmailAgentMessage> listEmailAgentMessage = new ArrayList<TicketingEmailAgentMessage>();
-        List<TicketingEmailAgentMessageDisplay> listEmailAgentMessageDisplay = new ArrayList<TicketingEmailAgentMessageDisplay>();
+        List<TicketingEmailAgentMessage> listEmailAgentMessage = new ArrayList<TicketingEmailAgentMessage>( );
+        List<TicketingEmailAgentMessageDisplay> listEmailAgentMessageDisplay = new ArrayList<TicketingEmailAgentMessageDisplay>( );
         TicketingEmailAgentMessage requiredEmailAgentMessage = null;
         TicketEmailAgentHistory facilFamilesHistory = null;
         Ticket ticket = null;
         TaskTicketEmailAgentConfig config = null;
-        List<UploadFile> listFileUpload = new ArrayList<UploadFile>() ;
-        List<UploadFile> listFileUploadTemp = null ;
-        Map<String, Object> mapFileUrl = new HashMap<String, Object>(  );
+        List<UploadFile> listFileUpload = new ArrayList<UploadFile>( );
+        List<UploadFile> listFileUploadTemp = null;
+        Map<String, Object> mapFileUrl = new HashMap<String, Object>( );
         AdminUser userAdmin = null;
         boolean hasExcep = false;
-        
+
         try
         {
             nIdEmailAgent = Integer.parseInt( strIdEmailAgent );
             requiredEmailAgentMessage = _ticketingEmailAgentDemandDAO.loadByIdMessageAgent( nIdEmailAgent );
 
-            //ticket status
-            if ( requiredEmailAgentMessage.getIsAnswered(  ) )
+            // ticket status
+            if ( requiredEmailAgentMessage.getIsAnswered( ) )
             {
                 return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_ALREADY_ANSWER, SiteMessage.TYPE_WARNING );
             }
-            
-            listEmailAgentMessage = _ticketingEmailAgentDemandDAO.loadByIdTicketNotClosed( requiredEmailAgentMessage.getIdTicket(  ) );
-            TicketingEmailAgentMessageDisplay emailAgentMessageDisplay = null;
-            
-            for(TicketingEmailAgentMessage emailAgentMessage : listEmailAgentMessage)
-            {
-            	emailAgentMessageDisplay = new TicketingEmailAgentMessageDisplay();
-            	emailAgentMessageDisplay.setMessageQuestion(emailAgentMessage.getMessageQuestion());
-            	
-            	List<TicketEmailAgentHistory> lstFFemailAgentHistory = _ticketEmailAgentHistoryDAO.loadByIdMessageAgent( emailAgentMessage.getIdMessageAgent() );
 
-                //The size has to be at 1 because it the action of answer a question, so we should only have the history line of the question for the nIdEmailAgent
-                if ( lstFFemailAgentHistory.size(  ) == 1 )
+            listEmailAgentMessage = _ticketingEmailAgentDemandDAO.loadByIdTicketNotClosed( requiredEmailAgentMessage.getIdTicket( ) );
+            TicketingEmailAgentMessageDisplay emailAgentMessageDisplay = null;
+
+            for ( TicketingEmailAgentMessage emailAgentMessage : listEmailAgentMessage )
+            {
+                emailAgentMessageDisplay = new TicketingEmailAgentMessageDisplay( );
+                emailAgentMessageDisplay.setMessageQuestion( emailAgentMessage.getMessageQuestion( ) );
+
+                List<TicketEmailAgentHistory> lstFFemailAgentHistory = _ticketEmailAgentHistoryDAO
+                        .loadByIdMessageAgent( emailAgentMessage.getIdMessageAgent( ) );
+
+                // The size has to be at 1 because it the action of answer a question, so we should only have the history line of the question for the
+                // nIdEmailAgent
+                if ( lstFFemailAgentHistory.size( ) == 1 )
                 {
                     facilFamilesHistory = lstFFemailAgentHistory.get( 0 );
                 }
 
-                //if the size is not 1, facilFamilesHistory is null, so NPE will be throw
-                config = _taskTicketConfigService.findByPrimaryKey( facilFamilesHistory.getIdTask(  ) );
-                listFileUploadTemp = FactoryDOA.getUploadFileDAO(  )
-                        .load( facilFamilesHistory.getIdResourceHistory(  ), WorkflowUtils.getPlugin(  ) );
-                
-                emailAgentMessageDisplay.setUploadedFiles(listFileUploadTemp);
-                listFileUpload.addAll(listFileUploadTemp);
-                
-                ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( facilFamilesHistory.getIdResourceHistory(  ) );
-                userAdmin = AdminUserHome.findUserByLogin( resourceHistory.getUserAccessCode(  ) );
-                emailAgentMessageDisplay.setAdminUser(userAdmin);
-                listEmailAgentMessageDisplay.add(emailAgentMessageDisplay);
+                // if the size is not 1, facilFamilesHistory is null, so NPE will be throw
+                config = _taskTicketConfigService.findByPrimaryKey( facilFamilesHistory.getIdTask( ) );
+                listFileUploadTemp = FactoryDOA.getUploadFileDAO( ).load( facilFamilesHistory.getIdResourceHistory( ), WorkflowUtils.getPlugin( ) );
+
+                emailAgentMessageDisplay.setUploadedFiles( listFileUploadTemp );
+                listFileUpload.addAll( listFileUploadTemp );
+
+                ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( facilFamilesHistory.getIdResourceHistory( ) );
+                userAdmin = AdminUserHome.findUserByLogin( resourceHistory.getUserAccessCode( ) );
+                emailAgentMessageDisplay.setAdminUser( userAdmin );
+                listEmailAgentMessageDisplay.add( emailAgentMessageDisplay );
             }
 
-            if ( ( listFileUpload != null ) && !listFileUpload.isEmpty(  ) )
+            if ( ( listFileUpload != null ) && !listFileUpload.isEmpty( ) )
             {
 
                 String strBaseUrl = AppPathService.getBaseUrl( request );
 
-                for ( int i = 0; i < listFileUpload.size(  ); i++ )
+                for ( int i = 0; i < listFileUpload.size( ); i++ )
                 {
-                    mapFileUrl.put( Integer.toString( listFileUpload.get( i ).getIdUploadFile(  ) ),
-                        DownloadFileService.getUrlDownloadFile( listFileUpload.get( i ).getIdFile(  ), strBaseUrl ) );
+                    mapFileUrl.put( Integer.toString( listFileUpload.get( i ).getIdUploadFile( ) ),
+                            DownloadFileService.getUrlDownloadFile( listFileUpload.get( i ).getIdFile( ), strBaseUrl ) );
                 }
             }
-            
+
         }
-        catch ( NumberFormatException e1 )
+        catch( NumberFormatException e1 )
         {
             hasExcep = true;
         }
-        catch ( NullPointerException e2 )
+        catch( NullPointerException e2 )
         {
             hasExcep = true;
         }
 
         if ( hasExcep )
         {
-            return redirect( request,
-                AdminMessageService.getMessageUrl( request, Messages.MESSAGE_INVALID_ENTRY, AdminMessage.TYPE_STOP ) );
+            return redirect( request, AdminMessageService.getMessageUrl( request, Messages.MESSAGE_INVALID_ENTRY, AdminMessage.TYPE_STOP ) );
         }
-        
-        ticket = TicketHome.findByPrimaryKey( requiredEmailAgentMessage.getIdTicket(  ) );
-        
-        Map<String, Object> model = getModel(  );
-        model.put( MARK_REFERENCE, ticket.getReference(  ) );
+
+        ticket = TicketHome.findByPrimaryKey( requiredEmailAgentMessage.getIdTicket( ) );
+
+        Map<String, Object> model = getModel( );
+        model.put( MARK_REFERENCE, ticket.getReference( ) );
         model.put( MARK_LIST_AGENT_MESSAGE, listEmailAgentMessageDisplay );
         model.put( MARK_LIST_FILE_UPLOAD, listFileUpload );
         model.put( MARK_MAP_FILE_URL, mapFileUrl );
-        model.put( MARK_USER_FACTORY, UserFactory.getInstance(  ) );
+        model.put( MARK_USER_FACTORY, UserFactory.getInstance( ) );
         model.put( TicketingConstants.MARK_AVATAR_AVAILABLE, _bAvatarAvailable );
         model.put( MARK_USER_ADMIN, userAdmin );
-        model.put( MARK_TASK_TICKET_EMAILAGENT_FORM,
-            WorkflowService.getInstance(  )
-                           .getDisplayTasksForm( ticket.getId(  ), Ticket.TICKET_RESOURCE_TYPE,
-                config.getIdFollowingAction(  ), request, getLocale(  ) ) );
-        model.put( TicketingConstants.MARK_FORM_ACTION,
-            getActionUrl( TicketingConstants.ACTION_DO_PROCESS_WORKFLOW_ACTION ) );
-        model.put( MARK_ID_ACTION, config.getIdFollowingAction(  ) );
-        model.put( MARK_ID_TICKET, ticket.getId(  ) );
+        model.put(
+                MARK_TASK_TICKET_EMAILAGENT_FORM,
+                WorkflowService.getInstance( ).getDisplayTasksForm( ticket.getId( ), Ticket.TICKET_RESOURCE_TYPE, config.getIdFollowingAction( ), request,
+                        getLocale( ) ) );
+        model.put( TicketingConstants.MARK_FORM_ACTION, getActionUrl( TicketingConstants.ACTION_DO_PROCESS_WORKFLOW_ACTION ) );
+        model.put( MARK_ID_ACTION, config.getIdFollowingAction( ) );
+        model.put( MARK_ID_TICKET, ticket.getId( ) );
         model.put( MARK_ID_MESSAGE_AGENT, strIdEmailAgent );
 
         return getPage( PROPERTY_PAGE_TITLE_FIELD_AGENT_RESPONSE, TEMPLATE_FIELD_AGENT_RESPONSE, model );
@@ -279,12 +276,12 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
             nIdEmailAgent = Integer.parseInt( strIdEmailAgent );
             emailAgentMessage = _ticketingEmailAgentDemandDAO.loadByIdMessageAgent( nIdEmailAgent );
 
-            if ( !emailAgentMessage.getIsAnswered(  ) )
+            if ( !emailAgentMessage.getIsAnswered( ) )
             {
                 return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_NOT_DONE, SiteMessage.TYPE_WARNING );
             }
         }
-        catch ( Exception e )
+        catch( Exception e )
         {
             return getMessagePage( PROPERTY_FIELD_AGENT_MESSAGE_ALREADY_ANSWER, SiteMessage.TYPE_WARNING );
         }
@@ -312,13 +309,16 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
 
     /**
      * call TEMPLATE_FIELD_AGENT_MESSAGE template for the given message key
-     * @param strKeyMessage the key of the message
-     * @param nMessageType the message type
+     * 
+     * @param strKeyMessage
+     *            the key of the message
+     * @param nMessageType
+     *            the message type
      * @return the content of the page
      */
     private String getMessagePage( String strKeyMessage, int nMessageType )
     {
-        Map<String, Object> model = getModel(  );
+        Map<String, Object> model = getModel( );
         model.put( MARK_KEY_MESSAGE, strKeyMessage );
         model.put( MARK_TYPE_MESSAGE, nMessageType );
 

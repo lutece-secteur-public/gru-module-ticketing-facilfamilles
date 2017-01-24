@@ -46,20 +46,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-
 /**
  *
  */
 public class FieldAgentUserDAO implements IFieldAgentUserDAO
 {
-    //PROPERTIES
+    // PROPERTIES
     private static final String DSKEY_ENTITEATTRIBUT_ID = "module.workflow.ticketingfacilfamilles.site_property.fieldagent.entiteattribut";
     private static final String PROP_SEARCH_LIMIT = "module.workflow.ticketingfacilfamilles.fieldagent.search.limit";
 
     // constants
     private static final String CONSTANT_PERCENT = "%";
 
-    //SQL
+    // SQL
     private static final String SQL_SELECT_USER_ADMIN = "SELECT u.last_name, u.first_name, u.email, f.user_field_value FROM core_admin_user u INNER JOIN core_user_right r ON u.id_user = r.id_user LEFT JOIN core_admin_user_field f ON u.id_user = f.id_user AND f.id_attribute = ? WHERE r.id_right = 'TICKETING_ACTEUR_TERRAIN' ";
     private static final String SQL_VALID_EMAIL_USER_ADMIN = "SELECT u.first_name, u.email FROM core_admin_user u INNER JOIN core_user_right r ON u.id_user = r.id_user LEFT JOIN core_admin_user_field f ON u.id_user = f.id_user AND f.id_attribute = ? WHERE r.id_right = 'TICKETING_ACTEUR_TERRAIN' AND u.email = ?";
     private static final String SQL_WHERE_LASTNAME_CLAUSE = " u.last_name LIKE ? ";
@@ -70,16 +69,16 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
     /**
      * @return the value store in properties or empty string
      */
-    private String getEntiteAttributID(  )
+    private String getEntiteAttributID( )
     {
         return DatastoreService.getDataValue( DSKEY_ENTITEATTRIBUT_ID, StringUtils.EMPTY );
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public int getSearchLimit(  )
+    public int getSearchLimit( )
     {
         String strLimit = AppPropertiesService.getProperty( PROP_SEARCH_LIMIT );
         int nLimit = 0;
@@ -100,17 +99,16 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
     {
         StringBuilder strQuery = new StringBuilder( SQL_VALID_EMAIL_USER_ADMIN );
 
-        DAOUtil daoUtil = new DAOUtil( strQuery.toString(  ),
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( strQuery.toString( ), PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         int nIndex = 1;
-        daoUtil.setString( nIndex++, getEntiteAttributID(  ) );
+        daoUtil.setString( nIndex++, getEntiteAttributID( ) );
         daoUtil.setString( nIndex++, strEmail );
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        boolean bEmailOk = daoUtil.next(  );
+        boolean bEmailOk = daoUtil.next( );
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return bEmailOk;
     }
@@ -141,11 +139,10 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
             strQuery.append( SQL_WHERE_ENTITY_CLAUSE );
         }
 
-        DAOUtil daoUtil = new DAOUtil( strQuery.toString(  ),
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( strQuery.toString( ), PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         int nIndex = 1;
-        daoUtil.setString( nIndex++, getEntiteAttributID(  ) );
+        daoUtil.setString( nIndex++, getEntiteAttributID( ) );
 
         if ( StringUtils.isNotEmpty( strLastname ) )
         {
@@ -162,13 +159,13 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
             daoUtil.setString( nIndex++, CONSTANT_PERCENT + strEntity + CONSTANT_PERCENT );
         }
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
-        Set<FieldAgentUser> lstFieldAgent = new TreeSet<FieldAgentUser>( new FieldAgentUserComparator(  ) );
+        Set<FieldAgentUser> lstFieldAgent = new TreeSet<FieldAgentUser>( new FieldAgentUserComparator( ) );
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            FieldAgentUser fieldAgent = new FieldAgentUser(  );
+            FieldAgentUser fieldAgent = new FieldAgentUser( );
             fieldAgent.setLastname( daoUtil.getString( 1 ) );
             fieldAgent.setFirstname( daoUtil.getString( 2 ) );
             fieldAgent.setEmail( daoUtil.getString( 3 ) );
@@ -176,7 +173,7 @@ public class FieldAgentUserDAO implements IFieldAgentUserDAO
             lstFieldAgent.add( fieldAgent );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return ( new ArrayList<FieldAgentUser>( lstFieldAgent ) );
     }

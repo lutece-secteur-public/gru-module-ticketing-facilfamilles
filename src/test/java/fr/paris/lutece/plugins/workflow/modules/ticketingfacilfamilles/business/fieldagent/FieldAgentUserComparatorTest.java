@@ -38,7 +38,6 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
-
 /**
  * test FieldAgentUserComparator
  */
@@ -48,9 +47,9 @@ public class FieldAgentUserComparatorTest extends TestCase
      * one to one test
      */
     @Test
-    public void testOneToOneComparator(  )
+    public void testOneToOneComparator( )
     {
-        FieldAgentUserComparator comp = new FieldAgentUserComparator(  );
+        FieldAgentUserComparator comp = new FieldAgentUserComparator( );
         FieldAgentUser user1 = createFieldAgentUser( "3z", "z", "z", "z.z@z.com" );
         FieldAgentUser user2 = createFieldAgentUser( "ppp", "z", "z", "z.z@z.com" );
         FieldAgentUser user3 = createFieldAgentUser( "z0z", "z", "z", "z.z@z.com" );
@@ -61,47 +60,51 @@ public class FieldAgentUserComparatorTest extends TestCase
         FieldAgentUser user8 = createFieldAgentUser( "a0z", "z", "z", "z.z@z.com" );
         FieldAgentUser user9 = createFieldAgentUser( "a10z", "z", "z", "z.z@z.com" );
         FieldAgentUser user10 = createFieldAgentUser( "a9z", "z", "z", "z.z@z.com" );
-        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user1 ) + " / " +
-            fieldAgentUserToString( user2 ) + " / " + comp.compare( user1, user2 ) + ">0",
-            comp.compare( user1, user2 ) > 0 );
-        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user1 ) + " / " +
-            fieldAgentUserToString( user3 ) + " / " + comp.compare( user1, user3 ) + ">0",
-            comp.compare( user1, user3 ) > 0 );
-        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user4 ) + " / " +
-            fieldAgentUserToString( user3 ) + " / " + comp.compare( user4, user3 ) + ">0",
-            comp.compare( user4, user3 ) > 0 );
-        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user4 ) + " / " +
-            fieldAgentUserToString( user5 ) + " / " + comp.compare( user4, user5 ) + ">0",
-            comp.compare( user4, user5 ) > 0 );
-        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user4 ) + " / " +
-            fieldAgentUserToString( user6 ) + " / " + comp.compare( user4, user6 ) + ">0",
-            comp.compare( user4, user6 ) > 0 );
-        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user4 ) + " / " +
-            fieldAgentUserToString( user7 ) + " / " + comp.compare( user4, user7 ) + ">0",
-            comp.compare( user4, user7 ) > 0 );
-        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user3 ) + " / " +
-            fieldAgentUserToString( user8 ) + " / " + comp.compare( user3, user8 ) + ">0",
-            comp.compare( user3, user8 ) > 0 );
-        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user9 ) + " / " +
-            fieldAgentUserToString( user8 ) + " / " + comp.compare( user9, user8 ) + ">0",
-            comp.compare( user9, user8 ) > 0 );
-        Assert.assertTrue( "erreur comparaison " + fieldAgentUserToString( user9 ) + " / " +
-            fieldAgentUserToString( user10 ) + " / " + comp.compare( user9, user10 ) + ">0",
-            comp.compare( user9, user10 ) > 0 );
+        Assert.assertTrue(
+                "erreur comparaison " + fieldAgentUserToString( user1 ) + " / " + fieldAgentUserToString( user2 ) + " / " + comp.compare( user1, user2 ) + ">0",
+                comp.compare( user1, user2 ) > 0 );
+        Assert.assertTrue(
+                "erreur comparaison " + fieldAgentUserToString( user1 ) + " / " + fieldAgentUserToString( user3 ) + " / " + comp.compare( user1, user3 ) + ">0",
+                comp.compare( user1, user3 ) > 0 );
+        Assert.assertTrue(
+                "erreur comparaison " + fieldAgentUserToString( user4 ) + " / " + fieldAgentUserToString( user3 ) + " / " + comp.compare( user4, user3 ) + ">0",
+                comp.compare( user4, user3 ) > 0 );
+        Assert.assertTrue(
+                "erreur comparaison " + fieldAgentUserToString( user4 ) + " / " + fieldAgentUserToString( user5 ) + " / " + comp.compare( user4, user5 ) + ">0",
+                comp.compare( user4, user5 ) > 0 );
+        Assert.assertTrue(
+                "erreur comparaison " + fieldAgentUserToString( user4 ) + " / " + fieldAgentUserToString( user6 ) + " / " + comp.compare( user4, user6 ) + ">0",
+                comp.compare( user4, user6 ) > 0 );
+        Assert.assertTrue(
+                "erreur comparaison " + fieldAgentUserToString( user4 ) + " / " + fieldAgentUserToString( user7 ) + " / " + comp.compare( user4, user7 ) + ">0",
+                comp.compare( user4, user7 ) > 0 );
+        Assert.assertTrue(
+                "erreur comparaison " + fieldAgentUserToString( user3 ) + " / " + fieldAgentUserToString( user8 ) + " / " + comp.compare( user3, user8 ) + ">0",
+                comp.compare( user3, user8 ) > 0 );
+        Assert.assertTrue(
+                "erreur comparaison " + fieldAgentUserToString( user9 ) + " / " + fieldAgentUserToString( user8 ) + " / " + comp.compare( user9, user8 ) + ">0",
+                comp.compare( user9, user8 ) > 0 );
+        Assert.assertTrue(
+                "erreur comparaison " + fieldAgentUserToString( user9 ) + " / " + fieldAgentUserToString( user10 ) + " / " + comp.compare( user9, user10 )
+                        + ">0", comp.compare( user9, user10 ) > 0 );
     }
 
     /**
      * create FieldAgentUser
-     * @param strEntite , entite
-     * @param strLastname , lastName
-     * @param strFirstname , firstName
-     * @param strEmail , email
+     * 
+     * @param strEntite
+     *            , entite
+     * @param strLastname
+     *            , lastName
+     * @param strFirstname
+     *            , firstName
+     * @param strEmail
+     *            , email
      * @return created FieldAgentUser
      */
-    private FieldAgentUser createFieldAgentUser( String strEntite, String strLastname, String strFirstname,
-        String strEmail )
+    private FieldAgentUser createFieldAgentUser( String strEntite, String strLastname, String strFirstname, String strEmail )
     {
-        FieldAgentUser agentUser = new FieldAgentUser(  );
+        FieldAgentUser agentUser = new FieldAgentUser( );
         agentUser.setEntite( strEntite );
         agentUser.setLastname( strLastname );
         agentUser.setFirstname( strFirstname );
@@ -112,20 +115,21 @@ public class FieldAgentUserComparatorTest extends TestCase
 
     /**
      *
-     * @param agentUser FieldAgentUser
+     * @param agentUser
+     *            FieldAgentUser
      * @return agentUser to String
      */
     private String fieldAgentUserToString( FieldAgentUser agentUser )
     {
-        StringBuilder strLog = new StringBuilder(  );
-        strLog.append( agentUser.getEntite(  ) );
+        StringBuilder strLog = new StringBuilder( );
+        strLog.append( agentUser.getEntite( ) );
         strLog.append( ";" );
-        strLog.append( agentUser.getLastname(  ) );
+        strLog.append( agentUser.getLastname( ) );
         strLog.append( ";" );
-        strLog.append( agentUser.getFirstname(  ) );
+        strLog.append( agentUser.getFirstname( ) );
         strLog.append( ";" );
-        strLog.append( agentUser.getEmail(  ) );
+        strLog.append( agentUser.getEmail( ) );
 
-        return strLog.toString(  );
+        return strLog.toString( );
     }
 }

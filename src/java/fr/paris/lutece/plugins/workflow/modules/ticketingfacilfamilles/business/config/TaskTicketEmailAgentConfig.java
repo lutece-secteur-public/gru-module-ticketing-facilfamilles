@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business
 
 import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
 
-
 /**
  * configuration for the task TaskTicket
  */
@@ -46,16 +45,19 @@ public class TaskTicketEmailAgentConfig extends TaskConfig
 
     /**
      * Gives the message direction
+     * 
      * @return the message direction
      */
-    public MessageDirection getMessageDirection(  )
+    public MessageDirection getMessageDirection( )
     {
         return _messageDirection;
     }
 
     /**
      * Sets the message direction
-     * @param messageDirection the message direction to set
+     * 
+     * @param messageDirection
+     *            the message direction to set
      */
     public void setMessageDirection( MessageDirection messageDirection )
     {
@@ -65,13 +67,14 @@ public class TaskTicketEmailAgentConfig extends TaskConfig
     /**
      * @return the idFollowingAction
      */
-    public Integer getIdFollowingAction(  )
+    public Integer getIdFollowingAction( )
     {
         return _nIdFollowingAction;
     }
 
     /**
-     * @param nIdFollowingAction the idFollowingAction to set
+     * @param nIdFollowingAction
+     *            the idFollowingAction to set
      */
     public void setIdFollowingAction( Integer nIdFollowingAction )
     {
@@ -81,7 +84,7 @@ public class TaskTicketEmailAgentConfig extends TaskConfig
     /**
      * @return true if the direction is agent to terrain
      */
-    public boolean isMessageToFieldAgent(  )
+    public boolean isMessageToFieldAgent( )
     {
         return MessageDirection.AGENT_TO_TERRAIN.equals( this._messageDirection );
     }

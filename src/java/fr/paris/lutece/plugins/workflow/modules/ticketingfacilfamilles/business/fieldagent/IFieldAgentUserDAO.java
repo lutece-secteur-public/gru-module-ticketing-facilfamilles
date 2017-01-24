@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business
 
 import java.util.List;
 
-
 /**
  *
  */
@@ -47,20 +46,26 @@ public interface IFieldAgentUserDAO
     /**
      * @return the value store in properties or null
      */
-    int getSearchLimit(  );
+    int getSearchLimit( );
 
     /**
      * Check if email is a valid email for FieldAgent
-     * @param strEmail the email to check
+     * 
+     * @param strEmail
+     *            the email to check
      * @return true if the email is ok
      */
     boolean isValidEmail( String strEmail );
 
     /**
      * return list of FieldAgentUser which match the filter
-     * @param strLastname lastname to search
-     * @param strEmail email  to search
-     * @param strEntity entity attribut to search
+     * 
+     * @param strLastname
+     *            lastname to search
+     * @param strEmail
+     *            email to search
+     * @param strEntity
+     *            entity attribut to search
      * @return list of FieldAgentUser
      */
     List<FieldAgentUser> findFieldAgentUser( String strLastname, String strEmail, String strEntity );

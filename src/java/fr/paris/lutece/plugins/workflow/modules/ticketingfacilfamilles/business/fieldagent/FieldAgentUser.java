@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.fieldagent;
 
-
 /**
  *
  */
@@ -47,13 +46,14 @@ public class FieldAgentUser
     /**
      * @return the strFirstname
      */
-    public String getFirstname(  )
+    public String getFirstname( )
     {
         return _strFirstname;
     }
 
     /**
-     * @param strFirstname the firstname to set
+     * @param strFirstname
+     *            the firstname to set
      */
     public void setFirstname( String strFirstname )
     {
@@ -63,13 +63,14 @@ public class FieldAgentUser
     /**
      * @return the lastname
      */
-    public String getLastname(  )
+    public String getLastname( )
     {
         return _strLastname;
     }
 
     /**
-     * @param strLastname the lastname to set
+     * @param strLastname
+     *            the lastname to set
      */
     public void setLastname( String strLastname )
     {
@@ -79,13 +80,14 @@ public class FieldAgentUser
     /**
      * @return the email
      */
-    public String getEmail(  )
+    public String getEmail( )
     {
         return _strEmail;
     }
 
     /**
-     * @param strEmail the email to set
+     * @param strEmail
+     *            the email to set
      */
     public void setEmail( String strEmail )
     {
@@ -95,13 +97,14 @@ public class FieldAgentUser
     /**
      * @return the entite
      */
-    public String getEntite(  )
+    public String getEntite( )
     {
         return _strEntite;
     }
 
     /**
-     * @param strEntite the entite to set
+     * @param strEntite
+     *            the entite to set
      */
     public void setEntite( String strEntite )
     {

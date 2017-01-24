@@ -40,54 +40,63 @@ import fr.paris.lutece.plugins.workflow.modules.upload.business.file.UploadFile;
 import fr.paris.lutece.portal.business.user.AdminUser;
 
 /*** Class to display ticket email agent message and associated objects ***/
-public class TicketingEmailAgentMessageDisplay {
-	 private String _strMessageQuestion;
-	 
-	 private AdminUser _adminUser;
-	 
-	 private List<UploadFile> _listUploadedFiles;
+public class TicketingEmailAgentMessageDisplay
+{
+    private String _strMessageQuestion;
 
-	/**
-	 * @return the _strMessageQuestion
-	 */
-	public String getMessageQuestion() {
-		return _strMessageQuestion;
-	}
+    private AdminUser _adminUser;
 
-	/**
-	 * @param _strMessageQuestion the _strMessageQuestion to set
-	 */
-	public void setMessageQuestion(String strMessageQuestion) {
-		this._strMessageQuestion = strMessageQuestion;
-	}
+    private List<UploadFile> _listUploadedFiles;
 
-	/**
-	 * @return the _adminUser
-	 */
-	public AdminUser getAdminUser() {
-		return _adminUser;
-	}
+    /**
+     * @return the _strMessageQuestion
+     */
+    public String getMessageQuestion( )
+    {
+        return _strMessageQuestion;
+    }
 
-	/**
-	 * @param _adminUser the _adminUser to set
-	 */
-	public void setAdminUser(AdminUser adminUser) {
-		this._adminUser = adminUser;
-	}
+    /**
+     * @param _strMessageQuestion
+     *            the _strMessageQuestion to set
+     */
+    public void setMessageQuestion( String strMessageQuestion )
+    {
+        this._strMessageQuestion = strMessageQuestion;
+    }
 
-	/**
-	 * @return the _listUploadedFiles
-	 */
-	public List<UploadFile> getUploadedFiles() {
-		return _listUploadedFiles;
-	}
+    /**
+     * @return the _adminUser
+     */
+    public AdminUser getAdminUser( )
+    {
+        return _adminUser;
+    }
 
-	/**
-	 * @param _listUploadedFiles the _listUploadedFiles to set
-	 */
-	public void setUploadedFiles(List<UploadFile> listUploadedFiles) {
-		this._listUploadedFiles = listUploadedFiles;
-	}
-	 
-	 
+    /**
+     * @param _adminUser
+     *            the _adminUser to set
+     */
+    public void setAdminUser( AdminUser adminUser )
+    {
+        this._adminUser = adminUser;
+    }
+
+    /**
+     * @return the _listUploadedFiles
+     */
+    public List<UploadFile> getUploadedFiles( )
+    {
+        return _listUploadedFiles;
+    }
+
+    /**
+     * @param _listUploadedFiles
+     *            the _listUploadedFiles to set
+     */
+    public void setUploadedFiles( List<UploadFile> listUploadedFiles )
+    {
+        this._listUploadedFiles = listUploadedFiles;
+    }
+
 }

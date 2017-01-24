@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business
 
 import java.util.List;
 
-
 /**
  *
  */
@@ -47,14 +46,16 @@ public interface ITicketEmailAgentHistoryDAO
     /**
      * Insert.
      *
-     * @param emailAgent the TicketEmailAgentHistory
+     * @param emailAgent
+     *            the TicketEmailAgentHistory
      */
     void insert( TicketEmailAgentHistory emailAgent );
 
     /**
      * Load.
      *
-     * @param nIdHistory the id of history resource
+     * @param nIdHistory
+     *            the id of history resource
      * @return the TicketEmailAgentHistory element
      */
     TicketEmailAgentHistory loadByIdHistory( int nIdHistory );
@@ -62,7 +63,8 @@ public interface ITicketEmailAgentHistoryDAO
     /**
      * Load.
      *
-     * @param nIdMessageAgent the id of demand
+     * @param nIdMessageAgent
+     *            the id of demand
      * @return list of TicketEmailAgentHistory for the nIdMessageAgent
      */
     List<TicketEmailAgentHistory> loadByIdMessageAgent( int nIdMessageAgent );
@@ -70,8 +72,10 @@ public interface ITicketEmailAgentHistoryDAO
     /**
      * Delete by history.
      *
-     * @param nIdHistory the n id emailAgent
-     * @param nIdTask the n id of the task
+     * @param nIdHistory
+     *            the n id emailAgent
+     * @param nIdTask
+     *            the n id of the task
      */
     void deleteByHistory( int nIdHistory, int nIdTask );
 }

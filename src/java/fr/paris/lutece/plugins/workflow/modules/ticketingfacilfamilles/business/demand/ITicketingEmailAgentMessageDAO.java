@@ -46,14 +46,18 @@ public interface ITicketingEmailAgentMessageDAO
     /**
      * Create Question.
      *
-     * @param emailAgentMessage the TicketingEmailAgentMessage
+     * @param emailAgentMessage
+     *            the TicketingEmailAgentMessage
      */
     void createQuestion( TicketingEmailAgentMessage emailAgentMessage );
 
     /**
      * Test if the id given is the last question of a ticket
-     * @param nIdTicket ticket ID
-     * @param nIdMessageAgent message ID
+     * 
+     * @param nIdTicket
+     *            ticket ID
+     * @param nIdMessageAgent
+     *            message ID
      * @return true if the nIdMessageAgent is the last question of nIdTicket
      */
     boolean isLastQuestion( int nIdTicket, int nIdMessageAgent );
@@ -61,8 +65,10 @@ public interface ITicketingEmailAgentMessageDAO
     /**
      * add Answer.
      *
-     * @param nIdTicket the id of the ticket
-     * @param strReponse the response to the question
+     * @param nIdTicket
+     *            the id of the ticket
+     * @param strReponse
+     *            the response to the question
      * @return the id of the TicketingEmailAgentMessage
      */
     int addAnswer( int nIdTicket, String strReponse );
@@ -70,23 +76,26 @@ public interface ITicketingEmailAgentMessageDAO
     /**
      * Load.
      *
-     * @param nIdMessageAgent the id of message
+     * @param nIdMessageAgent
+     *            the id of message
      * @return the TicketingEmailAgentMessage element
      */
     TicketingEmailAgentMessage loadByIdMessageAgent( int nIdMessageAgent );
-    
+
     /**
      * Load list of TicketingEmailAgentMessage by given nIdTicket
      *
-     * @param nIdTicket the id of message
-     * @return the list of TicketingEmailAgentMessage 
+     * @param nIdTicket
+     *            the id of message
+     * @return the list of TicketingEmailAgentMessage
      */
     List<TicketingEmailAgentMessage> loadByIdTicketNotClosed( int nIdTicket );
 
     /**
      * Delete by idMessageAgent.
      *
-     * @param nIdMessageAgent the n id of message
+     * @param nIdMessageAgent
+     *            the n id of message
      */
     void deleteByIdMessageAgent( int nIdMessageAgent );
 }

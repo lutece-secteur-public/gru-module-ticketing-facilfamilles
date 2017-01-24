@@ -60,7 +60,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
  */
@@ -102,17 +101,20 @@ public class FieldAgentSearchServlet extends HttpServlet
     private IFieldAgentUserDAO _fieldAgentUserDAO = SpringContextService.getBean( IFieldAgentUserDAO.BEAN_SERVICE );
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     * @param request servlet request
-     * @param httpResponse servlet response
-     * @throws ServletException the servlet Exception
-     * @throws IOException the io exception
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * 
+     * @param request
+     *            servlet request
+     * @param httpResponse
+     *            servlet response
+     * @throws ServletException
+     *             the servlet Exception
+     * @throws IOException
+     *             the io exception
      */
-    protected void processRequest( HttpServletRequest request, HttpServletResponse httpResponse )
-        throws ServletException, IOException
+    protected void processRequest( HttpServletRequest request, HttpServletResponse httpResponse ) throws ServletException, IOException
     {
-        AdminUser user = AdminAuthenticationService.getInstance(  ).getRegisteredUser( request );
+        AdminUser user = AdminAuthenticationService.getInstance( ).getRegisteredUser( request );
 
         if ( user == null )
         {
@@ -120,31 +122,32 @@ public class FieldAgentSearchServlet extends HttpServlet
             throw new ServletException( LOG_UNAUTHENTICATED_USER );
         }
 
-        //request param
+        // request param
         String strInputEmail = request.getParameter( PARAM_INPUT_EMAIL );
         String strIdTask = request.getParameter( PARAM_ID_TASK );
         String strLastname = request.getParameter( PARAM_LASTNAME );
         String strEntity = request.getParameter( PARAM_ENTITY );
 
-        Locale locale = user.getLocale(  );
-        int searchLimit = _fieldAgentUserDAO.getSearchLimit(  );
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        List<ErrorMessage> listErrors = new ArrayList<ErrorMessage>(  );
-        List<ErrorMessage> listInfos = new ArrayList<ErrorMessage>(  );
+        Locale locale = user.getLocale( );
+        int searchLimit = _fieldAgentUserDAO.getSearchLimit( );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        List<ErrorMessage> listErrors = new ArrayList<ErrorMessage>( );
+        List<ErrorMessage> listInfos = new ArrayList<ErrorMessage>( );
 
-        //TMP        
+        // TMP
         List<FieldAgentUser> listUsers = _fieldAgentUserDAO.findFieldAgentUser( strLastname, null, strEntity );
 
-        //error no result
-        if ( listUsers.isEmpty(  ) )
+        // error no result
+        if ( listUsers.isEmpty( ) )
         {
             listErrors.add( new MVCMessage( I18nService.getLocalizedString( KEY_ERROR_NO_RESULT, locale ) ) );
         }
 
-        if ( ( searchLimit > 0 ) && ( listUsers.size(  ) > searchLimit ) )
+        if ( ( searchLimit > 0 ) && ( listUsers.size( ) > searchLimit ) )
         {
-            listInfos.add( new MVCMessage( I18nService.getLocalizedString( KEY_INFOS_LIMIT_RESULT,
-                        new Object[] { searchLimit, listUsers.size(  ) }, locale ) ) );
+            listInfos.add( new MVCMessage( I18nService.getLocalizedString( KEY_INFOS_LIMIT_RESULT, new Object [ ] {
+                    searchLimit, listUsers.size( )
+            }, locale ) ) );
             listUsers = listUsers.subList( 0, searchLimit );
         }
 
@@ -155,46 +158,55 @@ public class FieldAgentSearchServlet extends HttpServlet
         model.put( MARK_ID_TASK, strIdTask );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_SEARCH_RESULT, locale, model );
-        ServletOutputStream outStream = httpResponse.getOutputStream(  );
-        outStream.write( template.getHtml(  ).getBytes( AppPropertiesService.getProperty( PROPERTY_ENCODING ) ) );
-        outStream.flush(  );
-        outStream.close(  );
+        ServletOutputStream outStream = httpResponse.getOutputStream( );
+        outStream.write( template.getHtml( ).getBytes( AppPropertiesService.getProperty( PROPERTY_ENCODING ) ) );
+        outStream.flush( );
+        outStream.close( );
     }
 
     /**
      * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException the servlet Exception
-     * @throws IOException the io exception
+     * 
+     * @param request
+     *            servlet request
+     * @param response
+     *            servlet response
+     * @throws ServletException
+     *             the servlet Exception
+     * @throws IOException
+     *             the io exception
      */
     @Override
-    protected void doGet( HttpServletRequest request, HttpServletResponse response )
-        throws ServletException, IOException
+    protected void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
         processRequest( request, response );
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException the servlet Exception
-     * @throws IOException the io exception
+     * 
+     * @param request
+     *            servlet request
+     * @param response
+     *            servlet response
+     * @throws ServletException
+     *             the servlet Exception
+     * @throws IOException
+     *             the io exception
      */
     @Override
-    protected void doPost( HttpServletRequest request, HttpServletResponse response )
-        throws ServletException, IOException
+    protected void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException
     {
         processRequest( request, response );
     }
 
     /**
      * Returns a short description of the servlet.
+     * 
      * @return message
      */
     @Override
-    public String getServletInfo(  )
+    public String getServletInfo( )
     {
         return "Servlet serving field agent search result";
     }

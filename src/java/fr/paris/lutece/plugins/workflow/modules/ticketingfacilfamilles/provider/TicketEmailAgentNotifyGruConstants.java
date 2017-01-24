@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider;
 
-
 /**
  *
  */
@@ -64,7 +63,7 @@ public final class TicketEmailAgentNotifyGruConstants
     public static final String MARK_TICKET = "ticket";
     public static final String MARK_LIST_MARKER = "list_markers";
 
-    //SPECIFIC FACILFAMILLE
+    // SPECIFIC FACILFAMILLE
     public static final String MARK_FACILFAMILLE_EMAIL = "agent_email";
     public static final String MARK_FACILFAMILLE_MESSAGE = "message";
     public static final String MARK_FACILFAMILLE_LINK = "ticketing_ticket_link";
@@ -77,7 +76,7 @@ public final class TicketEmailAgentNotifyGruConstants
     /**
      * Private constructor
      */
-    private TicketEmailAgentNotifyGruConstants(  )
+    private TicketEmailAgentNotifyGruConstants( )
     {
     }
 }

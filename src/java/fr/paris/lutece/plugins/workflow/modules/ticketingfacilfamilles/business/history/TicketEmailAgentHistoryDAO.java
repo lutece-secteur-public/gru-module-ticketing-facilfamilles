@@ -42,18 +42,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  */
 public class TicketEmailAgentHistoryDAO implements ITicketEmailAgentHistoryDAO
 {
-    private static final String SQL_QUERY_FIND_BY_ID_HISTORY = " SELECT id_task, id_history, id_message_agent FROM workflow_task_ticketing_facilfamilles_emailagent_history " +
-        " WHERE id_history = ? ";
-    private static final String SQL_QUERY_FIND_BY_ID_MESSAGE = " SELECT id_task, id_history, id_message_agent FROM workflow_task_ticketing_facilfamilles_emailagent_history " +
-        " WHERE id_message_agent = ? ";
-    private static final String SQL_QUERY_INSERT = " INSERT INTO workflow_task_ticketing_facilfamilles_emailagent_history ( id_task, id_history, id_message_agent ) " +
-        " VALUES ( ?,?,? ) ";
+    private static final String SQL_QUERY_FIND_BY_ID_HISTORY = " SELECT id_task, id_history, id_message_agent FROM workflow_task_ticketing_facilfamilles_emailagent_history "
+            + " WHERE id_history = ? ";
+    private static final String SQL_QUERY_FIND_BY_ID_MESSAGE = " SELECT id_task, id_history, id_message_agent FROM workflow_task_ticketing_facilfamilles_emailagent_history "
+            + " WHERE id_message_agent = ? ";
+    private static final String SQL_QUERY_INSERT = " INSERT INTO workflow_task_ticketing_facilfamilles_emailagent_history ( id_task, id_history, id_message_agent ) "
+            + " VALUES ( ?,?,? ) ";
     private static final String SQL_QUERY_DELETE = " DELETE FROM workflow_task_ticketing_facilfamilles_emailagent_history WHERE id_message_agent = ? ";
 
     /**
@@ -63,17 +62,16 @@ public class TicketEmailAgentHistoryDAO implements ITicketEmailAgentHistoryDAO
     @Transactional( "workflow.transactionManager" )
     public synchronized void insert( TicketEmailAgentHistory emailAgent )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT,
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         int nIndex = 1;
 
-        daoUtil.setInt( nIndex++, emailAgent.getIdTask(  ) );
-        daoUtil.setInt( nIndex++, emailAgent.getIdResourceHistory(  ) );
-        daoUtil.setInt( nIndex++, emailAgent.getIdMessageAgent(  ) );
+        daoUtil.setInt( nIndex++, emailAgent.getIdTask( ) );
+        daoUtil.setInt( nIndex++, emailAgent.getIdResourceHistory( ) );
+        daoUtil.setInt( nIndex++, emailAgent.getIdMessageAgent( ) );
 
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**
@@ -82,25 +80,24 @@ public class TicketEmailAgentHistoryDAO implements ITicketEmailAgentHistoryDAO
     @Override
     public TicketEmailAgentHistory loadByIdHistory( int nIdHistory )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_HISTORY,
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_HISTORY, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdHistory );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nIndex = 1;
         TicketEmailAgentHistory emailAgent = null;
 
-        if ( daoUtil.next(  ) )
+        if ( daoUtil.next( ) )
         {
-            emailAgent = new TicketEmailAgentHistory(  );
+            emailAgent = new TicketEmailAgentHistory( );
             emailAgent.setIdTask( daoUtil.getInt( nIndex++ ) );
             emailAgent.setIdResourceHistory( daoUtil.getInt( nIndex++ ) );
             emailAgent.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return emailAgent;
     }
@@ -111,27 +108,26 @@ public class TicketEmailAgentHistoryDAO implements ITicketEmailAgentHistoryDAO
     @Override
     public List<TicketEmailAgentHistory> loadByIdMessageAgent( int nIdMessageAgent )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_MESSAGE,
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_MESSAGE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdMessageAgent );
 
-        daoUtil.executeQuery(  );
+        daoUtil.executeQuery( );
 
         int nIndex = 1;
-        List<TicketEmailAgentHistory> lstEmailAgent = new ArrayList<TicketEmailAgentHistory>(  );
+        List<TicketEmailAgentHistory> lstEmailAgent = new ArrayList<TicketEmailAgentHistory>( );
         TicketEmailAgentHistory emailAgent = null;
 
-        while ( daoUtil.next(  ) )
+        while ( daoUtil.next( ) )
         {
-            emailAgent = new TicketEmailAgentHistory(  );
+            emailAgent = new TicketEmailAgentHistory( );
             emailAgent.setIdTask( daoUtil.getInt( nIndex++ ) );
             emailAgent.setIdResourceHistory( daoUtil.getInt( nIndex++ ) );
             emailAgent.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );
             lstEmailAgent.add( emailAgent );
         }
 
-        daoUtil.free(  );
+        daoUtil.free( );
 
         return lstEmailAgent;
     }
@@ -143,12 +139,11 @@ public class TicketEmailAgentHistoryDAO implements ITicketEmailAgentHistoryDAO
     @Transactional( "workflow.transactionManager" )
     public void deleteByHistory( int nIdHistory, int nIdTask )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE,
-                PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdTask );
         daoUtil.setInt( 2, nIdHistory );
-        daoUtil.executeUpdate(  );
-        daoUtil.free(  );
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 }

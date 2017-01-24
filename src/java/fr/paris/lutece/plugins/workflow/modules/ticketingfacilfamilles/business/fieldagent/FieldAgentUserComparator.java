@@ -37,7 +37,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.Comparator;
 
-
 /**
  *
  */
@@ -50,17 +49,19 @@ public class FieldAgentUserComparator implements Comparator<FieldAgentUser>
     public int compare( FieldAgentUser o1, FieldAgentUser o2 )
     {
         int nCompare = 0;
-        nCompare = compareAlphaNumeric( o1.getEntite(  ), o2.getEntite(  ), nCompare );
-        nCompare = compareAlphaNumeric( o1.getLastname(  ), o2.getLastname(  ), nCompare );
-        nCompare = compareAlphaNumeric( o1.getFirstname(  ), o2.getFirstname(  ), nCompare );
-        nCompare = compareAlphaNumeric( o1.getEmail(  ), o2.getEmail(  ), nCompare );
+        nCompare = compareAlphaNumeric( o1.getEntite( ), o2.getEntite( ), nCompare );
+        nCompare = compareAlphaNumeric( o1.getLastname( ), o2.getLastname( ), nCompare );
+        nCompare = compareAlphaNumeric( o1.getFirstname( ), o2.getFirstname( ), nCompare );
+        nCompare = compareAlphaNumeric( o1.getEmail( ), o2.getEmail( ), nCompare );
 
         return nCompare;
     }
 
     /**
      * return true if the character is numeric
-     * @param cDigit a character
+     * 
+     * @param cDigit
+     *            a character
      * @return true if the character is numeric
      */
     private boolean isDigit( char cDigit )
@@ -70,14 +71,18 @@ public class FieldAgentUserComparator implements Comparator<FieldAgentUser>
 
     /**
      * Length of string is passed in for improved efficiency (only need to calculate it once)
-     * @param strCompare original string
-     * @param nStrLength size of the given string
-     * @param nCurrentMarker current position in the given String
+     * 
+     * @param strCompare
+     *            original string
+     * @param nStrLength
+     *            size of the given string
+     * @param nCurrentMarker
+     *            current position in the given String
      * @return substring to compare
      */
     private String getChunk( String strCompare, int nStrLength, int nCurrentMarker )
     {
-        StringBuilder strChunk = new StringBuilder(  );
+        StringBuilder strChunk = new StringBuilder( );
         int nMarker = nCurrentMarker;
         char c = strCompare.charAt( nMarker );
         strChunk.append( c );
@@ -114,15 +119,18 @@ public class FieldAgentUserComparator implements Comparator<FieldAgentUser>
             }
         }
 
-        return strChunk.toString(  );
+        return strChunk.toString( );
     }
 
     /**
-     * compare with natural order two string if nCurrentCompare is equal to 0
-     * null/empty string have to be at 'the bottom' of the list
-     * @param str1 , first string to compare
-     * @param str2 , second string to compare
-     * @param nCurrentCompare , current compare value
+     * compare with natural order two string if nCurrentCompare is equal to 0 null/empty string have to be at 'the bottom' of the list
+     * 
+     * @param str1
+     *            , first string to compare
+     * @param str2
+     *            , second string to compare
+     * @param nCurrentCompare
+     *            , current compare value
      * @return comparison value
      */
     private int compareAlphaNumeric( String str1, String str2, int nCurrentCompare )
@@ -145,10 +153,11 @@ public class FieldAgentUserComparator implements Comparator<FieldAgentUser>
                 nCompare = 1;
             }
         }
-        else if ( StringUtils.isEmpty( str2 ) )
-        {
-            nCompare = -1;
-        }
+        else
+            if ( StringUtils.isEmpty( str2 ) )
+            {
+                nCompare = -1;
+            }
 
         if ( nCompare != 0 )
         {
@@ -157,23 +166,23 @@ public class FieldAgentUserComparator implements Comparator<FieldAgentUser>
 
         int nMarker1 = 0;
         int nMarker2 = 0;
-        int nLength1 = str1.length(  );
-        int nLength2 = str2.length(  );
+        int nLength1 = str1.length( );
+        int nLength2 = str2.length( );
 
         while ( ( nMarker1 < nLength1 ) && ( nMarker2 < nLength2 ) )
         {
             String strChunk1 = getChunk( str1, nLength1, nMarker1 );
-            nMarker1 += strChunk1.length(  );
+            nMarker1 += strChunk1.length( );
 
             String strChunk2 = getChunk( str2, nLength2, nMarker2 );
-            nMarker2 += strChunk2.length(  );
+            nMarker2 += strChunk2.length( );
 
             // If both chunks contain numeric characters, sort them numerically
             if ( isDigit( strChunk1.charAt( 0 ) ) && isDigit( strChunk2.charAt( 0 ) ) )
             {
                 // Simple chunk comparison by length.
-                int thisChunkLength = strChunk1.length(  );
-                nCompare = thisChunkLength - strChunk2.length(  );
+                int thisChunkLength = strChunk1.length( );
+                nCompare = thisChunkLength - strChunk2.length( );
 
                 // If equal, the first different number counts
                 if ( nCompare == 0 )
@@ -189,21 +198,23 @@ public class FieldAgentUserComparator implements Comparator<FieldAgentUser>
                     }
                 }
             }
-            else if ( isDigit( strChunk1.charAt( 0 ) ) )
-            {
-                //in this case strChunk2 is not numeric
-                nCompare = 1;
-            }
-            else if ( isDigit( strChunk1.charAt( 0 ) ) )
-            {
-                //in this case strChunk1 is not numeric
-                nCompare = -1;
-            }
             else
-            {
-                //in this case both are string
-                nCompare = strChunk1.compareTo( strChunk2 );
-            }
+                if ( isDigit( strChunk1.charAt( 0 ) ) )
+                {
+                    // in this case strChunk2 is not numeric
+                    nCompare = 1;
+                }
+                else
+                    if ( isDigit( strChunk1.charAt( 0 ) ) )
+                    {
+                        // in this case strChunk1 is not numeric
+                        nCompare = -1;
+                    }
+                    else
+                    {
+                        // in this case both are string
+                        nCompare = strChunk1.compareTo( strChunk2 );
+                    }
 
             if ( nCompare != 0 )
             {

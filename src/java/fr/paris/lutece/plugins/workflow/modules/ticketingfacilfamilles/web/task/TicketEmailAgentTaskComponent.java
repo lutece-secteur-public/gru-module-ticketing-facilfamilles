@@ -67,7 +67,6 @@ import javax.inject.Named;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  *
  */
@@ -118,35 +117,34 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     public String getDisplayTaskInformation( int nIdHistory, HttpServletRequest request, Locale locale, ITask task )
     {
         TicketEmailAgentHistory ticketFacilFamille = _ticketEmailAgentHistoryDAO.loadByIdHistory( nIdHistory );
-        TicketingEmailAgentMessage ticketingEmailAgentMessage = _ticketingEmailAgentMessageDAO.loadByIdMessageAgent( ticketFacilFamille.getIdMessageAgent(  ) );
-        TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
+        TicketingEmailAgentMessage ticketingEmailAgentMessage = _ticketingEmailAgentMessageDAO.loadByIdMessageAgent( ticketFacilFamille.getIdMessageAgent( ) );
+        TaskTicketEmailAgentConfig config = this.getTaskConfigService( ).findByPrimaryKey( task.getId( ) );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
 
-        if ( config.getMessageDirection(  ) == MessageDirection.AGENT_TO_TERRAIN )
+        if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN )
         {
-            model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageQuestion(  ) );
+            model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageQuestion( ) );
         }
         else
         {
-            model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageResponse(  ) );
+            model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageResponse( ) );
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_TICKET_INFORMATION, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getDisplayTaskForm( int nIdResource, String strResourceType, HttpServletRequest request,
-        Locale locale, ITask task )
+    public String getDisplayTaskForm( int nIdResource, String strResourceType, HttpServletRequest request, Locale locale, ITask task )
     {
-        TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
+        TaskTicketEmailAgentConfig config = this.getTaskConfigService( ).findByPrimaryKey( task.getId( ) );
 
-        Map<String, Object> model = new HashMap<String, Object>(  );
+        Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MARK_CONFIG, config );
 
         ModelUtils.storeRichText( request, model );
@@ -154,7 +152,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_TICKET_FORM, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -176,42 +174,38 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     @Override
-    public String doValidateTask( int nIdResource, String strResourceType, HttpServletRequest request, Locale locale,
-        ITask task )
+    public String doValidateTask( int nIdResource, String strResourceType, HttpServletRequest request, Locale locale, ITask task )
     {
-        TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
-        String strEmail = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL + TaskTicketEmailAgent.UNDERSCORE +
-                task.getId(  ) );
+        TaskTicketEmailAgentConfig config = this.getTaskConfigService( ).findByPrimaryKey( task.getId( ) );
+        String strEmail = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL + TaskTicketEmailAgent.UNDERSCORE + task.getId( ) );
         String strError = null;
         int nLevelError = -1;
 
-        if ( config.getMessageDirection(  ) == MessageDirection.AGENT_TO_TERRAIN )
+        if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN )
         {
             if ( StringUtils.isEmpty( strEmail ) )
             {
                 strError = MESSAGE_EMPTY_EMAIL;
                 nLevelError = AdminMessage.TYPE_STOP;
             }
-            else if ( !_fieldAgentUserDAO.isValidEmail( strEmail ) )
-            {
-                strError = MESSAGE_INVALID_EMAIL;
-                nLevelError = AdminMessage.TYPE_STOP;
-            }
+            else
+                if ( !_fieldAgentUserDAO.isValidEmail( strEmail ) )
+                {
+                    strError = MESSAGE_INVALID_EMAIL;
+                    nLevelError = AdminMessage.TYPE_STOP;
+                }
         }
 
-        if ( ( config.getMessageDirection(  ) == MessageDirection.TERRAIN_TO_AGENT ) )
+        if ( ( config.getMessageDirection( ) == MessageDirection.TERRAIN_TO_AGENT ) )
         {
-            Action action = _actionService.findByPrimaryKeyWithoutIcon( task.getAction(  ).getId(  ) );
-            ResourceHistory history = _resourceHistoryService.getLastHistoryResource( nIdResource, strResourceType,
-                    action.getWorkflow(  ).getId(  ) );
-            TicketEmailAgentHistory ticketFacilFamille = _ticketEmailAgentHistoryDAO.loadByIdHistory( history.getId(  ) );
+            Action action = _actionService.findByPrimaryKeyWithoutIcon( task.getAction( ).getId( ) );
+            ResourceHistory history = _resourceHistoryService.getLastHistoryResource( nIdResource, strResourceType, action.getWorkflow( ).getId( ) );
+            TicketEmailAgentHistory ticketFacilFamille = _ticketEmailAgentHistoryDAO.loadByIdHistory( history.getId( ) );
 
-            if ( ( ticketFacilFamille == null ) ||
-                    ( !_ticketingEmailAgentMessageDAO.isLastQuestion( nIdResource,
-                        ticketFacilFamille.getIdMessageAgent(  ) ) ) )
+            if ( ( ticketFacilFamille == null ) || ( !_ticketingEmailAgentMessageDAO.isLastQuestion( nIdResource, ticketFacilFamille.getIdMessageAgent( ) ) ) )
             {
                 strError = MESSAGE_ALREADY_ANSWER;
                 nLevelError = AdminMessage.TYPE_WARNING;
@@ -227,13 +221,13 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public String getDisplayConfigForm( HttpServletRequest request, Locale locale, ITask task )
     {
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        TaskTicketEmailAgentConfig config = this.getTaskConfigService( ).findByPrimaryKey( task.getId( ) );
 
         ReferenceList listMessageDirections = MessageDirection.getReferenceList( locale );
 
@@ -242,11 +236,11 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         if ( config != null )
         {
-            model.put( MARK_MESSAGE_DIRECTION, config.getMessageDirection(  ).ordinal(  ) );
+            model.put( MARK_MESSAGE_DIRECTION, config.getMessageDirection( ).ordinal( ) );
 
-            if ( config.getIdFollowingAction(  ) != null )
+            if ( config.getIdFollowingAction( ) != null )
             {
-                model.put( MARK_CONFIG_FOLLOW_ACTION_ID, config.getIdFollowingAction(  ) );
+                model.put( MARK_CONFIG_FOLLOW_ACTION_ID, config.getIdFollowingAction( ) );
             }
         }
         else
@@ -258,7 +252,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_TICKET_CONFIG, locale, model );
 
-        return template.getHtml(  );
+        return template.getHtml( );
     }
 
     /**
@@ -276,13 +270,13 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
             nIdFollowingAction = Integer.parseInt( strFollowActionId );
         }
 
-        TaskTicketEmailAgentConfig config = this.getTaskConfigService(  ).findByPrimaryKey( task.getId(  ) );
+        TaskTicketEmailAgentConfig config = this.getTaskConfigService( ).findByPrimaryKey( task.getId( ) );
         Boolean bConfigToCreate = false;
 
         if ( config == null )
         {
-            config = new TaskTicketEmailAgentConfig(  );
-            config.setIdTask( task.getId(  ) );
+            config = new TaskTicketEmailAgentConfig( );
+            config.setIdTask( task.getId( ) );
             bConfigToCreate = true;
         }
 
@@ -291,11 +285,11 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         if ( bConfigToCreate )
         {
-            this.getTaskConfigService(  ).create( config );
+            this.getTaskConfigService( ).create( config );
         }
         else
         {
-            this.getTaskConfigService(  ).update( config );
+            this.getTaskConfigService( ).update( config );
         }
 
         return null;

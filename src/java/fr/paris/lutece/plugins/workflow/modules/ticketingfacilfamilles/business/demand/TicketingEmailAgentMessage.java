@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand;
 
-
 /**
  *
  */
@@ -45,13 +44,13 @@ public class TicketingEmailAgentMessage
     /** The id demand. */
     private int _nIdTicket;
 
-    /** the email of the user agent*/
+    /** the email of the user agent */
     private String _strEmailAgent;
 
-    /** the message to the agent*/
+    /** the message to the agent */
     private String _strMessageQuestion;
 
-    /** the response to the agent*/
+    /** the response to the agent */
     private String _strMessageResponse;
 
     /** true if the field agent has answered */
@@ -60,13 +59,14 @@ public class TicketingEmailAgentMessage
     /**
      * @return the idMessageAgent
      */
-    public int getIdMessageAgent(  )
+    public int getIdMessageAgent( )
     {
         return _nIdMessageAgent;
     }
 
     /**
-     * @param nIdMessageAgent the idMessageAgent to set
+     * @param nIdMessageAgent
+     *            the idMessageAgent to set
      */
     public void setIdMessageAgent( int nIdMessageAgent )
     {
@@ -76,13 +76,14 @@ public class TicketingEmailAgentMessage
     /**
      * @return the IdTicket
      */
-    public int getIdTicket(  )
+    public int getIdTicket( )
     {
         return _nIdTicket;
     }
 
     /**
-     * @param nIdTicket the IdTicket to set
+     * @param nIdTicket
+     *            the IdTicket to set
      */
     public void setIdTicket( int nIdTicket )
     {
@@ -90,15 +91,16 @@ public class TicketingEmailAgentMessage
     }
 
     /**
-    * @return the _strEmailAgent
-    */
-    public String getEmailAgent(  )
+     * @return the _strEmailAgent
+     */
+    public String getEmailAgent( )
     {
         return _strEmailAgent;
     }
 
     /**
-     * @param strEmailAgent the strEmailAgent to set
+     * @param strEmailAgent
+     *            the strEmailAgent to set
      */
     public void setEmailAgent( String strEmailAgent )
     {
@@ -108,13 +110,14 @@ public class TicketingEmailAgentMessage
     /**
      * @return the strMessageQuestion
      */
-    public String getMessageQuestion(  )
+    public String getMessageQuestion( )
     {
         return _strMessageQuestion;
     }
 
     /**
-     * @param strMessageQuestion the strMessageQuestion to set
+     * @param strMessageQuestion
+     *            the strMessageQuestion to set
      */
     public void setMessageQuestion( String strMessageQuestion )
     {
@@ -124,13 +127,14 @@ public class TicketingEmailAgentMessage
     /**
      * @return the strMessageResponse
      */
-    public String getMessageResponse(  )
+    public String getMessageResponse( )
     {
         return _strMessageResponse;
     }
 
     /**
-     * @param strMessageResponse the strMessageResponse to set
+     * @param strMessageResponse
+     *            the strMessageResponse to set
      */
     public void setMessageResponse( String strMessageResponse )
     {
@@ -140,13 +144,14 @@ public class TicketingEmailAgentMessage
     /**
      * @return the bIsAnswered
      */
-    public boolean getIsAnswered(  )
+    public boolean getIsAnswered( )
     {
         return _bIsAnswered;
     }
 
     /**
-     * @param bIsAnswered the bIsAnswered to set
+     * @param bIsAnswered
+     *            the bIsAnswered to set
      */
     public void setIsAnswered( boolean bIsAnswered )
     {
