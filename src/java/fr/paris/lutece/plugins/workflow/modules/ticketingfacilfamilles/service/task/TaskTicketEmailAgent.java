@@ -105,9 +105,14 @@ public class TaskTicketEmailAgent extends SimpleTask
                 processAgentTask( nIdResourceHistory, ticket, request, locale, config );
             }
             else
-            {
-                processTerrainTask( nIdResourceHistory, ticket, request, locale, config );
-            }
+                if ( messageDirection == MessageDirection.TERRAIN_TO_AGENT )
+                {
+                    processTerrainTask( nIdResourceHistory, ticket, request, locale, config );
+                }
+                else
+                {
+                    processAgentRecontactTask( nIdResourceHistory, ticket, request, locale, config );
+                }
         }
     }
 
@@ -129,6 +134,42 @@ public class TaskTicketEmailAgent extends SimpleTask
     {
         String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId( ) );
         String strEmail = request.getParameter( PARAMETER_EMAIL + UNDERSCORE + getId( ) );
+
+        // create demand item
+        TicketingEmailAgentMessage emailAgentDemand = new TicketingEmailAgentMessage( );
+        emailAgentDemand.setIdTicket( ticket.getId( ) );
+        emailAgentDemand.setMessageQuestion( strAgentMessage );
+        emailAgentDemand.setEmailAgent( strEmail );
+        _ticketingEmailAgentDemandDAO.createQuestion( emailAgentDemand );
+
+        // create resource item
+        TicketEmailAgentHistory emailAgent = new TicketEmailAgentHistory( );
+        emailAgent.setIdResourceHistory( nIdResourceHistory );
+        emailAgent.setIdTask( getId( ) );
+        emailAgent.setIdMessageAgent( emailAgentDemand.getIdMessageAgent( ) );
+        _ticketEmailAgentHistoryDAO.insert( emailAgent );
+    }
+
+    /**
+     * Process agent to agent terrain task (recontact)
+     * 
+     * @param nIdResourceHistory
+     *            resourceHistory ID
+     * @param ticket
+     *            the current ticket
+     * @param request
+     *            HttpRequest from doAction
+     * @param locale
+     *            current Locale
+     * @param config
+     *            configuration of the current task
+     */
+    private void processAgentRecontactTask( int nIdResourceHistory, Ticket ticket, HttpServletRequest request, Locale locale, TaskTicketEmailAgentConfig config )
+    {
+        String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId( ) );
+        TicketingEmailAgentMessage firstEmailAgentDemand = _ticketingEmailAgentDemandDAO.loadFirstByIdTicket( ticket.getId( ) );
+
+        String strEmail = firstEmailAgentDemand.getEmailAgent( );
 
         // create demand item
         TicketingEmailAgentMessage emailAgentDemand = new TicketingEmailAgentMessage( );

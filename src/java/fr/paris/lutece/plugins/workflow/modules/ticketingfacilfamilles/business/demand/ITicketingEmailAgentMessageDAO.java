@@ -91,6 +91,15 @@ public interface ITicketingEmailAgentMessageDAO
     TicketingEmailAgentMessage loadByIdMessageAgent( int nIdMessageAgent );
 
     /**
+     * Load first message by ticket
+     *
+     * @param nIdTicket
+     *            the id of ticket
+     * @return the TicketingEmailAgentMessage element
+     */
+    TicketingEmailAgentMessage loadFirstByIdTicket( int nIdTicket );
+
+    /**
      * Load list of TicketingEmailAgentMessage by given nIdTicket
      *
      * @param nIdTicket

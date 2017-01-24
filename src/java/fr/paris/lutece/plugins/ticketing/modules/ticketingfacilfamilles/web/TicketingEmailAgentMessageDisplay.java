@@ -57,8 +57,8 @@ public class TicketingEmailAgentMessageDisplay
     }
 
     /**
-     * @param _strMessageQuestion
-     *            the _strMessageQuestion to set
+     * @param strMessageQuestion
+     *            the strMessageQuestion to set
      */
     public void setMessageQuestion( String strMessageQuestion )
     {
@@ -74,8 +74,8 @@ public class TicketingEmailAgentMessageDisplay
     }
 
     /**
-     * @param _adminUser
-     *            the _adminUser to set
+     * @param adminUser
+     *            the adminUser to set
      */
     public void setAdminUser( AdminUser adminUser )
     {
@@ -91,8 +91,8 @@ public class TicketingEmailAgentMessageDisplay
     }
 
     /**
-     * @param _listUploadedFiles
-     *            the _listUploadedFiles to set
+     * @param listUploadedFiles
+     *            the listUploadedFiles to set
      */
     public void setUploadedFiles( List<UploadFile> listUploadedFiles )
     {

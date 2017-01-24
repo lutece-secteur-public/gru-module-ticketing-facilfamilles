@@ -58,6 +58,8 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
     private static final String SQL_QUERY_FIND_BY_ID_TICKET_NOT_CLOSED = " SELECT id_message_agent, id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
             + " WHERE id_ticket = ? AND is_answered = 0 ORDER BY id_message_agent DESC ";
     private static final String SQL_QUERY_CLOSE_BY_ID_TICKET = " UPDATE ticketing_facilfamilles_emailagent SET is_answered = 1 WHERE id_ticket = ? ";
+    private static final String SQL_QUERY_FIRST_MESSAGE = " SELECT min(id_message_agent), id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
+            + " WHERE id_ticket = ? AND is_answered = 0 ";
 
     /**
      * Generates a new primary key
@@ -188,6 +190,37 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ID_DEMAND, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
 
         daoUtil.setInt( 1, nIdMessageAgent );
+
+        daoUtil.executeQuery( );
+
+        int nIndex = 1;
+        TicketingEmailAgentMessage emailAgentDemand = null;
+
+        if ( daoUtil.next( ) )
+        {
+            emailAgentDemand = new TicketingEmailAgentMessage( );
+            emailAgentDemand.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );
+            emailAgentDemand.setIdTicket( daoUtil.getInt( nIndex++ ) );
+            emailAgentDemand.setEmailAgent( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setMessageQuestion( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setMessageResponse( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setIsAnswered( daoUtil.getBoolean( nIndex++ ) );
+        }
+
+        daoUtil.free( );
+
+        return emailAgentDemand;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TicketingEmailAgentMessage loadFirstByIdTicket( int nIdTicket )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIRST_MESSAGE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+
+        daoUtil.setInt( 1, nIdTicket );
 
         daoUtil.executeQuery( );
 

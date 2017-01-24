@@ -122,7 +122,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         Map<String, Object> model = new HashMap<String, Object>( );
 
-        if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN )
+        if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN || config.getMessageDirection( ) == MessageDirection.RE_AGENT_TO_TERRAIN )
         {
             model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageQuestion( ) );
         }

@@ -47,7 +47,7 @@ import java.util.Map;
  */
 public enum MessageDirection
 {
-    TERRAIN_TO_AGENT, AGENT_TO_TERRAIN;
+    TERRAIN_TO_AGENT, AGENT_TO_TERRAIN, RE_AGENT_TO_TERRAIN;
 
     private static final String MESSAGE_PREFIX = "module.workflow.ticketingfacilfamilles.task_facilfamilles.message.direction.";
     private static Map<Integer, MessageDirection> _mapMessageDirection = new HashMap<Integer, MessageDirection>( );
