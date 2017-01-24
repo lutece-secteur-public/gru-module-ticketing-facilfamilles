@@ -57,6 +57,7 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
     private static final String SQL_QUERY_DELETE = " DELETE FROM ticketing_facilfamilles_emailagent WHERE id_message_agent = ? ";
     private static final String SQL_QUERY_FIND_BY_ID_TICKET_NOT_CLOSED = " SELECT id_message_agent, id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
             + " WHERE id_ticket = ? AND is_answered = 0 ORDER BY id_message_agent DESC ";
+    private static final String SQL_QUERY_CLOSE_BY_ID_TICKET = " UPDATE ticketing_facilfamilles_emailagent SET is_answered = 1 WHERE id_ticket = ? ";
 
     /**
      * Generates a new primary key
@@ -161,6 +162,21 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
         daoUtil.free( );
 
         return nIdMessageAgent;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional( "workflow.transactionManager" )
+    public void closeMessagesByIdTicket( int nIdTicket )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_CLOSE_BY_ID_TICKET, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
+
+        daoUtil.setInt( 1, nIdTicket );
+
+        daoUtil.executeUpdate( );
+        daoUtil.free( );
     }
 
     /**

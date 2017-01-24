@@ -166,6 +166,9 @@ public class TaskTicketEmailAgent extends SimpleTask
         // create demand item
         int nIdMessageAgent = _ticketingEmailAgentDemandDAO.addAnswer( ticket.getId( ), strAgentMessage );
 
+        // Close all messages for this ticket
+        _ticketingEmailAgentDemandDAO.closeMessagesByIdTicket( ticket.getId( ) );
+
         // create resource item
         TicketEmailAgentHistory emailAgent = new TicketEmailAgentHistory( );
         emailAgent.setIdResourceHistory( nIdResourceHistory );

@@ -74,6 +74,14 @@ public interface ITicketingEmailAgentMessageDAO
     int addAnswer( int nIdTicket, String strReponse );
 
     /**
+     * Close all tickets for given id_ticket.
+     *
+     * @param nIdTicket
+     *            the id of the ticket
+     */
+    public void closeMessagesByIdTicket( int nIdTicket );
+
+    /**
      * Load.
      *
      * @param nIdMessageAgent
