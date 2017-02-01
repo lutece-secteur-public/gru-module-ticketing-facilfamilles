@@ -35,6 +35,8 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider
 
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketType;
+import fr.paris.lutece.plugins.ticketing.business.tickettype.TicketTypeHome;
 import fr.paris.lutece.plugins.workflow.modules.notifygru.service.AbstractServiceProvider;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.ITicketingEmailAgentMessageDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.TicketingEmailAgentMessage;
@@ -213,8 +215,19 @@ public class TicketEmailAgentNotifyGruProvider extends AbstractServiceProvider
     @Override
     public int getOptionalDemandIdType( int nIdResourceHistory )
     {
-        // NOT USED FOR THE MOMENT
-        return TicketEmailAgentNotifyGruConstants.EMPTY_OPTIONAL_DEMAND_ID_TYPE;
+        return getDemandType( getTicket( nIdResourceHistory ) );
+    }
+
+    /**
+     * Return a demand type ID corresponding to a ticket type
+     * 
+     * @param ticket
+     *            The ticket
+     * @return The demand type id
+     */
+    private int getDemandType( Ticket ticket )
+    {
+        return TicketTypeHome.findByPrimaryKey( ticket.getIdTicketType( ) ).getDemandTypeId( );
     }
 
     /**

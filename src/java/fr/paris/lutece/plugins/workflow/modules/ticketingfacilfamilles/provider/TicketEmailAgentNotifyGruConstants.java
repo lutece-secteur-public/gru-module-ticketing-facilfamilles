@@ -38,9 +38,6 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider
  */
 public final class TicketEmailAgentNotifyGruConstants
 {
-    // DEFAULT PROVIDER IMPL
-    public static final int EMPTY_OPTIONAL_DEMAND_ID_TYPE = 0;
-
     // GENERIC GRU
     public static final String MARK_GUID = "identification_guid";
     public static final String MARK_FIRSTNAME = "firstname";
