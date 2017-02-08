@@ -209,11 +209,11 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
                 listFileUpload.addAll( listFileUploadTemp );
 
                 ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( facilFamilesHistory.getIdResourceHistory( ) );
-                
+
                 userAdmin = AdminUserHome.findUserByLogin( resourceHistory.getUserAccessCode( ) );
                 emailAgentMessageDisplay.setAdminUser( userAdmin );
-                
-                emailAgentMessageDisplay.setDateCreate( resourceHistory.getCreationDate() );
+
+                emailAgentMessageDisplay.setDateCreate( resourceHistory.getCreationDate( ) );
 
                 listEmailAgentMessageDisplay.add( emailAgentMessageDisplay );
             }

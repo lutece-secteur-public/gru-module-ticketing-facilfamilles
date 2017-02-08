@@ -44,29 +44,32 @@ import fr.paris.lutece.portal.business.user.AdminUser;
 /*** Class to display ticket email agent message and associated objects ***/
 public class TicketingEmailAgentMessageDisplay
 {
-	private Timestamp _dDateCreate;
-	
+    private Timestamp _dDateCreate;
+
     private String _strMessageQuestion;
 
     private AdminUser _adminUser;
 
     private List<UploadFile> _listUploadedFiles;
-    
+
     /**
-	 * @return the _dateCreate
-	 */
-	public Timestamp getDateCreate() {
-		return _dDateCreate;
-	}
+     * @return the _dateCreate
+     */
+    public Timestamp getDateCreate( )
+    {
+        return _dDateCreate;
+    }
 
-	/**
-	 * @param _dateCreate the _dateCreate to set
-	 */
-	public void setDateCreate(Timestamp dDateCreate) {
-		this._dDateCreate = dDateCreate;
-	}
+    /**
+     * @param _dateCreate
+     *            the _dateCreate to set
+     */
+    public void setDateCreate( Timestamp dDateCreate )
+    {
+        this._dDateCreate = dDateCreate;
+    }
 
-	/**
+    /**
      * @return the _strMessageQuestion
      */
     public String getMessageQuestion( )
