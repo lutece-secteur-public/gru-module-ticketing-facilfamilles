@@ -68,6 +68,7 @@ import fr.paris.lutece.portal.util.mvc.commons.annotations.View;
 import fr.paris.lutece.portal.web.constants.Messages;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -208,8 +209,12 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
                 listFileUpload.addAll( listFileUploadTemp );
 
                 ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( facilFamilesHistory.getIdResourceHistory( ) );
+                
                 userAdmin = AdminUserHome.findUserByLogin( resourceHistory.getUserAccessCode( ) );
                 emailAgentMessageDisplay.setAdminUser( userAdmin );
+                
+                emailAgentMessageDisplay.setDateCreate( resourceHistory.getCreationDate() );
+
                 listEmailAgentMessageDisplay.add( emailAgentMessageDisplay );
             }
 
