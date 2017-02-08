@@ -56,7 +56,7 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
     private static final String SQL_QUERY_ADD_ANSWER = " UPDATE ticketing_facilfamilles_emailagent SET message_response = ?, is_answered = 1 WHERE id_message_agent = ? ";
     private static final String SQL_QUERY_DELETE = " DELETE FROM ticketing_facilfamilles_emailagent WHERE id_message_agent = ? ";
     private static final String SQL_QUERY_FIND_BY_ID_TICKET_NOT_CLOSED = " SELECT id_message_agent, id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
-            + " WHERE id_ticket = ? AND is_answered = 0 ORDER BY id_message_agent DESC ";
+            + " WHERE id_ticket = ? AND is_answered = 0 ORDER BY id_message_agent ASC ";
     private static final String SQL_QUERY_CLOSE_BY_ID_TICKET = " UPDATE ticketing_facilfamilles_emailagent SET is_answered = 1 WHERE id_ticket = ? ";
     private static final String SQL_QUERY_FIRST_MESSAGE = " SELECT min(id_message_agent), id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
             + " WHERE id_ticket = ? AND is_answered = 0 ";
