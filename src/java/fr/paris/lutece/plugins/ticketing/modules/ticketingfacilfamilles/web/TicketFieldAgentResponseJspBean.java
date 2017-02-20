@@ -202,7 +202,11 @@ public class TicketFieldAgentResponseJspBean extends WorkflowCapableJspBean
                 }
 
                 // if the size is not 1, facilFamilesHistory is null, so NPE will be throw
-                config = _taskTicketConfigService.findByPrimaryKey( facilFamilesHistory.getIdTask( ) );
+                if ( config == null )
+                {
+                    config = _taskTicketConfigService.findByPrimaryKey( facilFamilesHistory.getIdTask( ) );
+                }
+
                 listFileUploadTemp = FactoryDOA.getUploadFileDAO( ).load( facilFamilesHistory.getIdResourceHistory( ), WorkflowUtils.getPlugin( ) );
 
                 emailAgentMessageDisplay.setUploadedFiles( listFileUploadTemp );
