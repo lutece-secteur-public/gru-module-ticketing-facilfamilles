@@ -37,12 +37,11 @@
         class="fr.paris.lutece.plugins.workflowcore.service.config.TaskConfigService"
         p:taskConfigDAO-ref="workflow-ticketingfacilfamilles.taskTicketEmailAgentConfigDAO" />
         
+
     <!-- NotifyGRU Provider -->
-    <bean id="workflow-ticketingfacilfamilles.EmailAgentProviderService" class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider.TicketEmailAgentNotifyGruProvider" scope="prototype"
-        p:key="workflow-ticketingfacilfamilles.EmailAgentProviderService"
-        p:titleI18nKey="module.workflow.ticketingfacilfamilles.task_ticket_emailagent.notifygru_provider"
-        p:beanName="workflow-ticketingfacilfamilles.EmailAgentProviderService"   
-        p:managerProvider="false" />
+    <bean id="workflow-ticketingfacilfamilles.provider-manager" class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.provider.TicketEmailAgentProviderManager">
+        <constructor-arg type="java.lang.String" value="workflow-ticketingfacilfamilles.provider-manager"/>
+    </bean>
         
     <!-- Task config -->
     <bean id="workflow-ticketingfacilfamilles.taskTicketEmailAgentConfig"

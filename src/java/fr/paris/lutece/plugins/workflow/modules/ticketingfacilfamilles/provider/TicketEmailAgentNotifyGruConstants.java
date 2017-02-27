@@ -40,25 +40,26 @@ public final class TicketEmailAgentNotifyGruConstants
 {
     // GENERIC GRU
     public static final String MARK_GUID = "identification_guid";
-    public static final String MARK_FIRSTNAME = "firstname";
-    public static final String MARK_LASTNAME = "lastname";
-    public static final String MARK_FIXED_PHONE = "fixed_phone";
-    public static final String MARK_MOBILE_PHONE = "mobile_phone";
-    public static final String MARK_REFERENCE = "reference";
-    public static final String MARK_EMAIL = "email";
-    public static final String MARK_UNIT_NAME = "unit_name";
-    public static final String MARK_USER_TITLES = "civility";
-    public static final String MARK_TICKET_TYPES = "ticket_type";
-    public static final String MARK_TICKET_DOMAINS = "ticket_domain";
-    public static final String MARK_TICKET_CATEGORIES = "ticket_category";
-    public static final String MARK_CONTACT_MODES = "contact_mode";
-    public static final String MARK_COMMENT = "comment";
-    public static final String MARK_URL_COMPLETED = "url_completed";
+    public static final String MARK_USER_TITLE = "civility";
+    public static final String MARK_USER_FIRSTNAME = "firstname";
+    public static final String MARK_USER_LASTNAME = "lastname";
+    public static final String MARK_USER_CONTACT_MODE = "contact_mode";
+    public static final String MARK_USER_FIXED_PHONE = "fixed_phone";
+    public static final String MARK_USER_MOBILE_PHONE = "mobile_phone";
+    public static final String MARK_USER_EMAIL = "email";
+    public static final String MARK_USER_UNIT_NAME = "unit_name";
     public static final String MARK_USER_MESSAGE = "user_message";
-    public static final String MARK_CHANNEL = "ticket_channel";
-    public static final String MARK_LIST_FORM = "list_form";
+    public static final String MARK_TICKET_REFERENCE = "reference";
+    public static final String MARK_TICKET_TYPE = "ticket_type";
+    public static final String MARK_TICKET_DOMAIN = "ticket_domain";
+    public static final String MARK_TICKET_CATEGORY = "ticket_category";
+    public static final String MARK_TICKET_CATEGORY_PRECISION = "ticket_category_precision";
+    public static final String MARK_TICKET_CHANNEL = "ticket_channel";
+    public static final String MARK_TICKET_COMMENT = "comment";
+    public static final String MARK_TECHNICAL_URL_COMPLETED = "url_completed";
+    public static final String MARK_TECHNICAL_LIST_FORM = "list_form";
     public static final String MARK_TICKET = "ticket";
-    public static final String MARK_LIST_MARKER = "list_markers";
+    public static final String MARK_TECHNICAL_LIST_MARKER = "list_markers";
 
     // SPECIFIC FACILFAMILLE
     public static final String MARK_FACILFAMILLE_EMAIL = "agent_email";
