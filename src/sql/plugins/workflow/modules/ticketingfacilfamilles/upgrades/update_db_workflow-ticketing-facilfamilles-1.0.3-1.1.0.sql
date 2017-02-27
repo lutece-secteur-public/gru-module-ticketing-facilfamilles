@@ -1,0 +1,1 @@
+UPDATE workflow_task_notify_gru_cf SET id_spring_provider = 'workflow-ticketingfacilfamilles.provider-manager.@.ticket' WHERE id_spring_provider = 'workflow-ticketingfacilfamilles.EmailAgentProviderService';
