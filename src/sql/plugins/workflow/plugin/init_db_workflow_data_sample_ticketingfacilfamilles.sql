@@ -62,3 +62,6 @@ INSERT INTO core_datastore (entity_key, entity_value) VALUES
 ('ticketing.configuration.adminUser.id.front', '5'),
 ('ticketing.configuration.channel.id.front', '99')
 ;
+
+DELETE FROM core_datastore WHERE entity_key='module.workflow.ticketingfacilfamilles.site_property.fieldagent.entiteattribut';
+INSERT INTO core_datastore VALUES ('module.workflow.ticketingfacilfamilles.site_property.fieldagent.entiteattribut', '');
