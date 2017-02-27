@@ -55,6 +55,7 @@ import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.RequestAuthenticationService;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
@@ -91,14 +92,10 @@ public class TicketEmailAgentProvider implements IProvider
     private static final String RESPONSE_URL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.url_response";
 
     /** The TicketEmailAgentHistory DAO. */
-    @Inject
-    @Named( ITicketEmailAgentHistoryDAO.BEAN_SERVICE )
-    private ITicketEmailAgentHistoryDAO _ticketEmailAgentHistoryDAO;
+    private ITicketEmailAgentHistoryDAO _ticketEmailAgentHistoryDAO = SpringContextService.getBean( ITicketEmailAgentHistoryDAO.BEAN_SERVICE );
 
     /** The TicketingEmailAgentDemand DAO. */
-    @Inject
-    @Named( ITicketingEmailAgentMessageDAO.BEAN_SERVICE )
-    private ITicketingEmailAgentMessageDAO _ticketingEmailAgentDemandDAO;
+    private ITicketingEmailAgentMessageDAO _ticketingEmailAgentDemandDAO = SpringContextService.getBean( ITicketingEmailAgentMessageDAO.BEAN_SERVICE );
 
     private Ticket _ticket;
     private TicketingEmailAgentMessage _emailAgentDemand;
@@ -116,10 +113,10 @@ public class TicketEmailAgentProvider implements IProvider
         {
             throw new AppException( "No ticket for resource history Id : " + resourceHistory.getIdResource( ) );
         }
-        TicketEmailAgentHistory ticketEmailAgentHistory = _ticketEmailAgentHistoryDAO.loadByIdHistory( resourceHistory.getIdResource( ) );
+        TicketEmailAgentHistory ticketEmailAgentHistory = _ticketEmailAgentHistoryDAO.loadByIdHistory( resourceHistory.getId( ) );
         if ( ticketEmailAgentHistory == null )
         {
-            throw new AppException( "No ticketEmailAgentHistory found for resource history Id : " + resourceHistory.getIdResource( ) );
+            throw new AppException( "No ticketEmailAgentHistory found for resource history Id : " + resourceHistory.getId( ) );
         }
         _emailAgentDemand = _ticketingEmailAgentDemandDAO.loadByIdMessageAgent( ticketEmailAgentHistory.getIdMessageAgent( ) );
         if ( _emailAgentDemand == null )
