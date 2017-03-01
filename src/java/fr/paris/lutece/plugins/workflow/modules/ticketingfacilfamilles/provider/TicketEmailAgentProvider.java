@@ -331,7 +331,7 @@ public class TicketEmailAgentProvider implements IProvider
         String strTimestamp = Long.toString( new Date( ).getTime( ) );
         String strSignature = RequestAuthenticationService.getRequestAuthenticator( ).buildSignature( listElements, strTimestamp );
 
-        UrlItem urlTicketLink = new UrlItem( AppPathService.getProdUrl( LocalVariables.getRequest( ) ) + AppPropertiesService.getProperty( RESPONSE_URL ) );
+        UrlItem urlTicketLink = new UrlItem( AppPathService.getBaseUrl( LocalVariables.getRequest( ) ) + AppPropertiesService.getProperty( RESPONSE_URL ) );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_MESSAGE_AGENT, nIdMessageAgent );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_SIGNATURE, strSignature );
         urlTicketLink.addParameter( TicketEmailAgentNotifyGruConstants.PARAMETER_ID_TIMETAMP, strTimestamp );
