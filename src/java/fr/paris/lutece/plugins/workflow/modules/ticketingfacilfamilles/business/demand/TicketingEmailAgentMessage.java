@@ -44,8 +44,11 @@ public class TicketingEmailAgentMessage
     /** The id demand. */
     private int _nIdTicket;
 
-    /** the email of the user agent */
-    private String _strEmailAgent;
+    /** the recipients email */
+    private String _strEmailRecipients;
+
+    /** the recipients email in copy */
+    private String _strEmailRecipientsCc;
 
     /** the message to the agent */
     private String _strMessageQuestion;
@@ -91,20 +94,37 @@ public class TicketingEmailAgentMessage
     }
 
     /**
-     * @return the _strEmailAgent
+     * @return the _strEmailRecipients
      */
-    public String getEmailAgent( )
+    public String getEmailRecipients( )
     {
-        return _strEmailAgent;
+        return _strEmailRecipients;
     }
 
     /**
-     * @param strEmailAgent
-     *            the strEmailAgent to set
+     * @param strEmailRecipients
+     *            the strEmailRecipients to set
      */
-    public void setEmailAgent( String strEmailAgent )
+    public void setEmailRecipients( String strEmailRecipients )
     {
-        this._strEmailAgent = strEmailAgent;
+        this._strEmailRecipients = strEmailRecipients;
+    }
+
+    /**
+     * @return the _strEmailRecipientsCc
+     */
+    public String getEmailRecipientsCc( )
+    {
+        return _strEmailRecipientsCc;
+    }
+
+    /**
+     * @param strEmailRecipientsCc
+     *            the strEmailRecipientsCc to set
+     */
+    public void setEmailRecipientsCc( String strEmailRecipientsCc )
+    {
+        this._strEmailRecipientsCc = strEmailRecipientsCc;
     }
 
     /**

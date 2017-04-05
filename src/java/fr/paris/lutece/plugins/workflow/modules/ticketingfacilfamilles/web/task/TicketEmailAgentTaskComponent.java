@@ -180,23 +180,24 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     public String doValidateTask( int nIdResource, String strResourceType, HttpServletRequest request, Locale locale, ITask task )
     {
         TaskTicketEmailAgentConfig config = this.getTaskConfigService( ).findByPrimaryKey( task.getId( ) );
-        String strEmail = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL + TaskTicketEmailAgent.UNDERSCORE + task.getId( ) );
+        String strEmailRecipients = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL_RECIPIENTS + TaskTicketEmailAgent.UNDERSCORE + task.getId( ) );
+        String strEmailRecipientsCc = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL_RECIPIENTS_CC + TaskTicketEmailAgent.UNDERSCORE + task.getId( ) );
         String strError = null;
         int nLevelError = -1;
 
         if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN )
         {
-            if ( StringUtils.isEmpty( strEmail ) )
+            if ( StringUtils.isEmpty( strEmailRecipients ) )
             {
                 strError = MESSAGE_EMPTY_EMAIL;
                 nLevelError = AdminMessage.TYPE_STOP;
             }
-            else
-                if ( !_fieldAgentUserDAO.isValidEmail( strEmail ) )
-                {
-                    strError = MESSAGE_INVALID_EMAIL;
-                    nLevelError = AdminMessage.TYPE_STOP;
-                }
+//            else
+//                if ( !_fieldAgentUserDAO.isValidEmail( strEmailAddressesTo ) )
+//                {
+//                    strError = MESSAGE_INVALID_EMAIL;
+//                    nLevelError = AdminMessage.TYPE_STOP;
+//                }
         }
 
         if ( ( config.getMessageDirection( ) == MessageDirection.TERRAIN_TO_AGENT ) )

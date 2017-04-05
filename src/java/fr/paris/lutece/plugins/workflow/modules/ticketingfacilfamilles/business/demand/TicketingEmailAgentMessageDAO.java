@@ -49,16 +49,16 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
 {
     private static final String SQL_QUERY_NEW_PK = " SELECT max( id_message_agent ) FROM ticketing_facilfamilles_emailagent ";
     private static final String SQL_QUERY_LAST_QUESTION = " SELECT max( id_message_agent ) FROM ticketing_facilfamilles_emailagent WHERE id_ticket = ? AND is_answered = 0";
-    private static final String SQL_QUERY_FIND_BY_ID_DEMAND = " SELECT id_message_agent, id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
+    private static final String SQL_QUERY_FIND_BY_ID_DEMAND = " SELECT id_message_agent, id_ticket, email_recipients, email_recipients_cc, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
             + " WHERE id_message_agent = ? ";
-    private static final String SQL_QUERY_INSERT_QUESTION = " INSERT INTO ticketing_facilfamilles_emailagent ( id_message_agent, id_ticket, email_agent, message_question ) "
-            + " VALUES ( ?,?,?,? ) ";
+    private static final String SQL_QUERY_INSERT_QUESTION = " INSERT INTO ticketing_facilfamilles_emailagent ( id_message_agent, id_ticket, email_recipients, email_recipients_cc, message_question ) "
+            + " VALUES ( ?,?,?,?,? ) ";
     private static final String SQL_QUERY_ADD_ANSWER = " UPDATE ticketing_facilfamilles_emailagent SET message_response = ?, is_answered = 1 WHERE id_message_agent = ? ";
     private static final String SQL_QUERY_DELETE = " DELETE FROM ticketing_facilfamilles_emailagent WHERE id_message_agent = ? ";
-    private static final String SQL_QUERY_FIND_BY_ID_TICKET_NOT_CLOSED = " SELECT id_message_agent, id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
+    private static final String SQL_QUERY_FIND_BY_ID_TICKET_NOT_CLOSED = " SELECT id_message_agent, id_ticket, email_recipients, email_recipients_cc, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
             + " WHERE id_ticket = ? AND is_answered = 0 ORDER BY id_message_agent ASC ";
     private static final String SQL_QUERY_CLOSE_BY_ID_TICKET = " UPDATE ticketing_facilfamilles_emailagent SET is_answered = 1 WHERE id_ticket = ? ";
-    private static final String SQL_QUERY_FIRST_MESSAGE = " SELECT min(id_message_agent), id_ticket, email_agent, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
+    private static final String SQL_QUERY_FIRST_MESSAGE = " SELECT min(id_message_agent), id_ticket, email_recipients, email_recipients_cc, message_question, message_response, is_answered FROM ticketing_facilfamilles_emailagent "
             + " WHERE id_ticket = ? AND is_answered = 0 ";
 
     /**
@@ -127,7 +127,8 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
 
         daoUtil.setInt( nIndex++, emailAgentDemand.getIdMessageAgent( ) );
         daoUtil.setInt( nIndex++, emailAgentDemand.getIdTicket( ) );
-        daoUtil.setString( nIndex++, emailAgentDemand.getEmailAgent( ) );
+        daoUtil.setString( nIndex++, emailAgentDemand.getEmailRecipients( ) );
+        daoUtil.setString( nIndex++, emailAgentDemand.getEmailRecipientsCc( ) );
         daoUtil.setString( nIndex++, emailAgentDemand.getMessageQuestion( ) );
 
         daoUtil.executeUpdate( );
@@ -201,7 +202,8 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
             emailAgentDemand = new TicketingEmailAgentMessage( );
             emailAgentDemand.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );
             emailAgentDemand.setIdTicket( daoUtil.getInt( nIndex++ ) );
-            emailAgentDemand.setEmailAgent( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setEmailRecipients( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setEmailRecipientsCc( daoUtil.getString( nIndex++ ) );
             emailAgentDemand.setMessageQuestion( daoUtil.getString( nIndex++ ) );
             emailAgentDemand.setMessageResponse( daoUtil.getString( nIndex++ ) );
             emailAgentDemand.setIsAnswered( daoUtil.getBoolean( nIndex++ ) );
@@ -232,7 +234,8 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
             emailAgentDemand = new TicketingEmailAgentMessage( );
             emailAgentDemand.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );
             emailAgentDemand.setIdTicket( daoUtil.getInt( nIndex++ ) );
-            emailAgentDemand.setEmailAgent( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setEmailRecipients( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setEmailRecipientsCc( daoUtil.getString( nIndex++ ) );
             emailAgentDemand.setMessageQuestion( daoUtil.getString( nIndex++ ) );
             emailAgentDemand.setMessageResponse( daoUtil.getString( nIndex++ ) );
             emailAgentDemand.setIsAnswered( daoUtil.getBoolean( nIndex++ ) );
@@ -265,7 +268,8 @@ public class TicketingEmailAgentMessageDAO implements ITicketingEmailAgentMessag
             emailAgentDemand = new TicketingEmailAgentMessage( );
             emailAgentDemand.setIdMessageAgent( daoUtil.getInt( nIndex++ ) );
             emailAgentDemand.setIdTicket( daoUtil.getInt( nIndex++ ) );
-            emailAgentDemand.setEmailAgent( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setEmailRecipients( daoUtil.getString( nIndex++ ) );
+            emailAgentDemand.setEmailRecipientsCc( daoUtil.getString( nIndex++ ) );
             emailAgentDemand.setMessageQuestion( daoUtil.getString( nIndex++ ) );
             emailAgentDemand.setMessageResponse( daoUtil.getString( nIndex++ ) );
             emailAgentDemand.setIsAnswered( daoUtil.getBoolean( nIndex++ ) );

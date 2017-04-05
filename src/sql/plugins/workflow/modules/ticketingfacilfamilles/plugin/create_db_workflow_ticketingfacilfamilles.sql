@@ -30,7 +30,8 @@ CREATE TABLE ticketing_facilfamilles_emailagent
 (
     id_message_agent INT DEFAULT 0 NOT NULL,
     id_ticket INT DEFAULT 0 NOT NULL,
-    email_agent VARCHAR(255) DEFAULT NULL,
+    email_recipients MEDIUMTEXT DEFAULT NULL,
+    email_recipients_cc MEDIUMTEXT DEFAULT NULL,
     message_question LONG VARCHAR DEFAULT NULL,
     message_response LONG VARCHAR DEFAULT NULL,
     is_answered INT DEFAULT 0,

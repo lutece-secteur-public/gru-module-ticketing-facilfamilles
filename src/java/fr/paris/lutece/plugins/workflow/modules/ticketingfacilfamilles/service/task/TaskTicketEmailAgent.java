@@ -51,7 +51,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -64,7 +63,8 @@ public class TaskTicketEmailAgent extends SimpleTask
 
     // Parameters
     public static final String PARAMETER_MESSAGE = "message";
-    public static final String PARAMETER_EMAIL = "email";
+    public static final String PARAMETER_EMAIL_RECIPIENTS = "email_recipients";
+    public static final String PARAMETER_EMAIL_RECIPIENTS_CC = "email_recipients_cc";
 
     // Other constants
     public static final String UNDERSCORE = "_";
@@ -133,13 +133,15 @@ public class TaskTicketEmailAgent extends SimpleTask
     private void processAgentTask( int nIdResourceHistory, Ticket ticket, HttpServletRequest request, Locale locale, TaskTicketEmailAgentConfig config )
     {
         String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId( ) );
-        String strEmail = request.getParameter( PARAMETER_EMAIL + UNDERSCORE + getId( ) );
+        String strEmailRecipients = request.getParameter( PARAMETER_EMAIL_RECIPIENTS + UNDERSCORE + getId( ) );
+        String strEmailRecipientsCc = request.getParameter( PARAMETER_EMAIL_RECIPIENTS_CC + UNDERSCORE + getId( ) );
 
         // create demand item
         TicketingEmailAgentMessage emailAgentDemand = new TicketingEmailAgentMessage( );
         emailAgentDemand.setIdTicket( ticket.getId( ) );
         emailAgentDemand.setMessageQuestion( strAgentMessage );
-        emailAgentDemand.setEmailAgent( strEmail );
+        emailAgentDemand.setEmailRecipients( strEmailRecipients );
+        emailAgentDemand.setEmailRecipientsCc( strEmailRecipientsCc );
         _ticketingEmailAgentDemandDAO.createQuestion( emailAgentDemand );
 
         // create resource item
@@ -167,15 +169,17 @@ public class TaskTicketEmailAgent extends SimpleTask
     private void processAgentRecontactTask( int nIdResourceHistory, Ticket ticket, HttpServletRequest request, Locale locale, TaskTicketEmailAgentConfig config )
     {
         String strAgentMessage = request.getParameter( PARAMETER_MESSAGE + UNDERSCORE + getId( ) );
-        TicketingEmailAgentMessage firstEmailAgentDemand = _ticketingEmailAgentDemandDAO.loadFirstByIdTicket( ticket.getId( ) );
+        TicketingEmailAgentMessage firstEmailsAgentDemand = _ticketingEmailAgentDemandDAO.loadFirstByIdTicket( ticket.getId( ) );
 
-        String strEmail = firstEmailAgentDemand.getEmailAgent( );
+        String strEmailRecipients = firstEmailsAgentDemand.getEmailRecipients( );
+        String strEmailRecipientsCc = firstEmailsAgentDemand.getEmailRecipientsCc( );
 
         // create demand item
         TicketingEmailAgentMessage emailAgentDemand = new TicketingEmailAgentMessage( );
         emailAgentDemand.setIdTicket( ticket.getId( ) );
         emailAgentDemand.setMessageQuestion( strAgentMessage );
-        emailAgentDemand.setEmailAgent( strEmail );
+        emailAgentDemand.setEmailRecipients( strEmailRecipients );
+        emailAgentDemand.setEmailRecipientsCc( strEmailRecipientsCc );
         _ticketingEmailAgentDemandDAO.createQuestion( emailAgentDemand );
 
         // create resource item

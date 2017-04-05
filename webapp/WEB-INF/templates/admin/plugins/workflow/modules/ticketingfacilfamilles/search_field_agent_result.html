@@ -24,7 +24,19 @@
 </div>
 <script>
 $("tr.result_user_${id_task}").click(function(){
-	var mail = $(this).attr("data-email");
-	$("#${input_email}").val(mail);
+	const SEMICOLON = ";";
+    var mail = $(this).attr("data-email");
+    var input_email = $("#${input_email}").val();
+    var array_input_email = [];
+
+    if (input_email.length > 0) {
+        array_input_email = $("#${input_email}").val().split(SEMICOLON);
+        }
+  
+    if (input_email.length == 0 || !array_input_email.includes(mail)) {
+        array_input_email.push(mail)
+        }
+
+    $("#${input_email}").val(array_input_email.join(SEMICOLON));
 })
 </script>
