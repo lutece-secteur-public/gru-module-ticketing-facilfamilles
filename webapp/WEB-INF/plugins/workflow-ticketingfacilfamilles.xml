@@ -49,6 +49,11 @@
             <url-pattern>/servlet/plugins/workflow/ticketingfacilfamilles/fieldagent</url-pattern>
             <servlet-class>fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.search.FieldAgentSearchServlet</servlet-class>
         </servlet>
+        <servlet>
+            <servlet-name>FieldAgentEmailValidationServlet</servlet-name>
+            <url-pattern>/servlet/plugins/workflow/ticketingfacilfamilles/fieldagentemailvalidation</url-pattern>
+            <servlet-class>fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.search.FieldAgentEmailValidationServlet</servlet-class>
+        </servlet>
     </servlets>
     
     
