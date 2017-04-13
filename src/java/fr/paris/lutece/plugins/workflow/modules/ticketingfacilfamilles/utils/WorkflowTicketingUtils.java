@@ -83,57 +83,61 @@ public final class WorkflowTicketingUtils
 
         return ticket;
     }
-    
+
     /**
      * Check if a list of emails (as string) is valid
-     * @param strEmails the string of emails
-     * @param fieldAgentUserDAO if not null check in luteceUser if email is valid
      * 
-     * @return Empty list if no error, else a list with first element is the message key, and following element are parameters 
+     * @param strEmails
+     *            the string of emails
+     * @param fieldAgentUserDAO
+     *            if not null check in luteceUser if email is valid
+     * 
+     * @return Empty list if no error, else a list with first element is the message key, and following element are parameters
      */
     public static List<String> validEmailList( String strEmails, IFieldAgentUserDAO fieldAgentUserDAO )
     {
-    	List<String> listForError = new ArrayList<String>( );
-    	if( StringUtils.isBlank( strEmails ) )
-    	{
-    		listForError.add( TicketEmailAgentTaskComponent.MESSAGE_EMPTY_EMAIL );
-    	}
-    	else
-    	{
-	    	String[] arrayEmails = strEmails.split(SEMICOLON);
-	    	if( arrayEmails.length == 0 )
-	    	{
-	    		listForError.add( TicketEmailAgentTaskComponent.MESSAGE_EMPTY_EMAIL );	    		
-	    	}
-	    	else
-	    	{
-		    	EmailValidator validator = EmailValidator.getInstance( );
-		    	for (String strEmail : arrayEmails) 
-		        {
-			        if ( StringUtils.isBlank( strEmail ) )
-			        {
-			        	listForError.add( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL );
-			        	listForError.add( strEmail );
-			        	break;
-			        }
-			        else
-			        {
-			        	if( !validator.isValid(strEmail) )
-			        	{
-			            	listForError.add( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL );
-			            	listForError.add( strEmail );
-			            	break;
-			        	}
-			        	else if ( fieldAgentUserDAO!=null && !fieldAgentUserDAO.isValidEmail( strEmail ) )
-			            {
-			            	listForError.add( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL_OR_NOT_AUTHORIZED );
-			            	listForError.add( strEmail );
-			            	break;
-			            }
-			        }
-		        }
-	    	}
-    	}
-    	return listForError;
+        List<String> listForError = new ArrayList<String>( );
+        if ( StringUtils.isBlank( strEmails ) )
+        {
+            listForError.add( TicketEmailAgentTaskComponent.MESSAGE_EMPTY_EMAIL );
+        }
+        else
+        {
+            String [ ] arrayEmails = strEmails.split( SEMICOLON );
+            if ( arrayEmails.length == 0 )
+            {
+                listForError.add( TicketEmailAgentTaskComponent.MESSAGE_EMPTY_EMAIL );
+            }
+            else
+            {
+                EmailValidator validator = EmailValidator.getInstance( );
+                for ( String strEmail : arrayEmails )
+                {
+                    if ( StringUtils.isBlank( strEmail ) )
+                    {
+                        listForError.add( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL );
+                        listForError.add( strEmail );
+                        break;
+                    }
+                    else
+                    {
+                        if ( !validator.isValid( strEmail ) )
+                        {
+                            listForError.add( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL );
+                            listForError.add( strEmail );
+                            break;
+                        }
+                        else
+                            if ( fieldAgentUserDAO != null && !fieldAgentUserDAO.isValidEmail( strEmail ) )
+                            {
+                                listForError.add( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL_OR_NOT_AUTHORIZED );
+                                listForError.add( strEmail );
+                                break;
+                            }
+                    }
+                }
+            }
+        }
+        return listForError;
     }
 }

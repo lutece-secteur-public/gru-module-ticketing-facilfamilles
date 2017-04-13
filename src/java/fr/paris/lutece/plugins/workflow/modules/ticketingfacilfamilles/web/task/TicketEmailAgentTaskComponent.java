@@ -237,31 +237,31 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
             }
             else
             {
-            	List<String> listErrorRecipients = WorkflowTicketingUtils.validEmailList( strEmailRecipients, _fieldAgentUserDAO);
-            	if( ! listErrorRecipients.isEmpty( ) )
-            	{
-            		strError = listErrorRecipients.get( 0 );
+                List<String> listErrorRecipients = WorkflowTicketingUtils.validEmailList( strEmailRecipients, _fieldAgentUserDAO );
+                if ( !listErrorRecipients.isEmpty( ) )
+                {
+                    strError = listErrorRecipients.get( 0 );
                     nLevelError = AdminMessage.TYPE_STOP;
-                    
-            		if( listErrorRecipients.size( ) > 1 )
-            		{
-            			errorParams = listErrorRecipients.subList( 1, listErrorRecipients.size( ) ).toArray( );
-            		}
-            	}
+
+                    if ( listErrorRecipients.size( ) > 1 )
+                    {
+                        errorParams = listErrorRecipients.subList( 1, listErrorRecipients.size( ) ).toArray( );
+                    }
+                }
             }
 
             if ( strError == null && StringUtils.isNotEmpty( strEmailRecipientsCc ) )
             {
-            	List<String> listErrorRecipientsCc = WorkflowTicketingUtils.validEmailList( strEmailRecipientsCc, null );
-            	if( ! listErrorRecipientsCc.isEmpty( ) )
-            	{
+                List<String> listErrorRecipientsCc = WorkflowTicketingUtils.validEmailList( strEmailRecipientsCc, null );
+                if ( !listErrorRecipientsCc.isEmpty( ) )
+                {
                     strError = listErrorRecipientsCc.get( 0 );
                     nLevelError = AdminMessage.TYPE_STOP;
-            		if( listErrorRecipientsCc.size( ) > 1 )
-            		{
-            			errorParams = listErrorRecipientsCc.subList( 1, listErrorRecipientsCc.size( ) ).toArray( );
-        			}
-            	}
+                    if ( listErrorRecipientsCc.size( ) > 1 )
+                    {
+                        errorParams = listErrorRecipientsCc.subList( 1, listErrorRecipientsCc.size( ) ).toArray( );
+                    }
+                }
             }
         }
 

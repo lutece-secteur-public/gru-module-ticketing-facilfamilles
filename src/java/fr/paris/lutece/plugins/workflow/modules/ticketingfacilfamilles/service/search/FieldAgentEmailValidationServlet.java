@@ -79,7 +79,7 @@ public class FieldAgentEmailValidationServlet extends HttpServlet
     // Json parameters
     private static final String ERROR_INVALID_EMAIL = "error_invalid_email";
     private static final String ERROR_INVALID_EMAIL_CC = "error_invalid_email_cc";
-    
+
     // message
     private static final String LOG_UNAUTHENTICATED_USER = "Calling FieldAgentEmailValidationServlet with unauthenticated user";
 
@@ -123,38 +123,40 @@ public class FieldAgentEmailValidationServlet extends HttpServlet
         }
         else
         {
-        	List<String> listErrorRecipients = WorkflowTicketingUtils.validEmailList( strEmailRecipients, _fieldAgentUserDAO);
-        	if( ! listErrorRecipients.isEmpty( ) )
-        	{
-        		String strErrorRecipients;
-        		if( listErrorRecipients.size( ) == 1 )
-        		{
-        			strErrorRecipients =  I18nService.getLocalizedString( listErrorRecipients.get( 0 ), locale );
-        		}
-        		else
-    			{
-        			strErrorRecipients = I18nService.getLocalizedString( listErrorRecipients.get( 0 ), listErrorRecipients.subList( 1, listErrorRecipients.size( ) ).toArray( ), locale );
-    			}
-        		mapErrors.put( ERROR_INVALID_EMAIL, strErrorRecipients );
-        	}
+            List<String> listErrorRecipients = WorkflowTicketingUtils.validEmailList( strEmailRecipients, _fieldAgentUserDAO );
+            if ( !listErrorRecipients.isEmpty( ) )
+            {
+                String strErrorRecipients;
+                if ( listErrorRecipients.size( ) == 1 )
+                {
+                    strErrorRecipients = I18nService.getLocalizedString( listErrorRecipients.get( 0 ), locale );
+                }
+                else
+                {
+                    strErrorRecipients = I18nService.getLocalizedString( listErrorRecipients.get( 0 ),
+                            listErrorRecipients.subList( 1, listErrorRecipients.size( ) ).toArray( ), locale );
+                }
+                mapErrors.put( ERROR_INVALID_EMAIL, strErrorRecipients );
+            }
         }
 
         if ( StringUtils.isNotEmpty( strEmailRecipientsCc ) )
         {
-        	List<String> listErrorRecipientsCc = WorkflowTicketingUtils.validEmailList( strEmailRecipientsCc, null );
-        	if( ! listErrorRecipientsCc.isEmpty( ) )
-        	{
-        		String strErrorRecipientsCc;
-        		if( listErrorRecipientsCc.size( ) == 1 )
-        		{
-        			strErrorRecipientsCc =  I18nService.getLocalizedString( listErrorRecipientsCc.get( 0 ), locale );
-        		}
-        		else
-    			{
-        			strErrorRecipientsCc = I18nService.getLocalizedString( listErrorRecipientsCc.get( 0 ), listErrorRecipientsCc.subList( 1, listErrorRecipientsCc.size( ) ).toArray( ), locale );
-    			}
-        		mapErrors.put( ERROR_INVALID_EMAIL_CC, strErrorRecipientsCc );
-        	}
+            List<String> listErrorRecipientsCc = WorkflowTicketingUtils.validEmailList( strEmailRecipientsCc, null );
+            if ( !listErrorRecipientsCc.isEmpty( ) )
+            {
+                String strErrorRecipientsCc;
+                if ( listErrorRecipientsCc.size( ) == 1 )
+                {
+                    strErrorRecipientsCc = I18nService.getLocalizedString( listErrorRecipientsCc.get( 0 ), locale );
+                }
+                else
+                {
+                    strErrorRecipientsCc = I18nService.getLocalizedString( listErrorRecipientsCc.get( 0 ),
+                            listErrorRecipientsCc.subList( 1, listErrorRecipientsCc.size( ) ).toArray( ), locale );
+                }
+                mapErrors.put( ERROR_INVALID_EMAIL_CC, strErrorRecipientsCc );
+            }
         }
 
         String jsonText = new ObjectMapper( ).writeValueAsString( mapErrors );
