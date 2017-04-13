@@ -12,9 +12,9 @@
 		</div>
 	</div>
 	<div class="row form-group">
-         <div class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-6 col-lg-6 alert alert-danger hide" id="message_error_email_div">
+         <div class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-6 col-lg-6 alert alert-danger hide" id="message_error_email_div_${config.idTask}">
              <i class="fa fa-exclamation-circle"></i>
-             <span id="message_error_email"></span>
+             <span id="message_error_email_${config.idTask}"></span>
          </div>
 	</div>
     <div class="row form-group">
@@ -24,9 +24,9 @@
         </div>
     </div>
 	<div class="row form-group">
-         <div class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-6 col-lg-6 alert alert-danger hide" id="message_error_email_cc_div">
+         <div class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-6 col-lg-6 alert alert-danger hide" id="message_error_email_cc_div_${config.idTask}">
              <i class="fa fa-exclamation-circle"></i>
-             <span id="message_error_email_cc"></span>
+             <span id="message_error_email_cc_${config.idTask}"></span>
          </div>
 	</div>
 	<div class="row form-group" id="search_results_div_${config.idTask}" style="display:none;">
@@ -45,7 +45,7 @@
 		}
 	</script>
 	<script>
-    function validateBeforeSave() {
+    function validateBeforeSave_${config.idTask}() {
         var targetUrl="servlet/plugins/workflow/ticketingfacilfamilles/fieldagentemailvalidation";
         var dataToSend={
         	    "email_recipients":$("#email_recipients_${config.idTask}").val(),
@@ -60,20 +60,20 @@
             dataType : "json",
             success: function( email_errors ) {
                 if (email_errors.error_invalid_email.length > 0) {
-                    $("#message_error_email_div").removeClass("hide");
-                    $("#message_error_email").html(email_errors.error_invalid_email);
+                    $("#message_error_email_div_${config.idTask}").removeClass("hide");
+                    $("#message_error_email_${config.idTask}").html(email_errors.error_invalid_email);
                     bResult = false;
                     }
                 else {
-                    $("#message_error_email_div").addClass("hide");
+                    $("#message_error_email_div_${config.idTask}").addClass("hide");
                     }
                 if (email_errors.error_invalid_email_cc.length > 0) {
-                    $("#message_error_email_cc_div").removeClass("hide");
-                    $("#message_error_email_cc").html(email_errors.error_invalid_email_cc);
+                    $("#message_error_email_cc_div_${config.idTask}").removeClass("hide");
+                    $("#message_error_email_cc_${config.idTask}").html(email_errors.error_invalid_email_cc);
                     bResult = false;
                     }
                 else {
-                    $("#message_error_email_cc_div").addClass("hide");
+                    $("#message_error_email_cc_div_${config.idTask}").addClass("hide");
                     }
                 }
         });
@@ -83,10 +83,10 @@
     $("#next_button").click( function (e) {
         e.preventDefault();
 		   
-        if (validateBeforeSave()) {
+        if (validateBeforeSave_${config.idTask}()) {
             $("#wf_action_form").submit();
-            };
-            });
+        };
+    });
 
     </script>
 	<#else>

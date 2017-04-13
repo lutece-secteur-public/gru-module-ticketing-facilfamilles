@@ -46,7 +46,7 @@
     <servlets>
         <servlet>
             <servlet-name>FieldAgentSearchServlet</servlet-name>
-            <url-pattern>/servlet/plugins/workflow/ticketingfacilfamilles/fieldagent</url-pattern>
+            <url-pattern>/servlet/plugins/workflow/ticketingfacilfamilles/fieldagentsearch</url-pattern>
             <servlet-class>fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.search.FieldAgentSearchServlet</servlet-class>
         </servlet>
         <servlet>

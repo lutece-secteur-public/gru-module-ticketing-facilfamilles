@@ -38,9 +38,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.apache.commons.lang.StringEscapeUtils;
 
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;

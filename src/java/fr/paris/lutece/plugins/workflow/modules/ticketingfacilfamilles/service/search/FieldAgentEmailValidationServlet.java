@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.
 
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.fieldagent.IFieldAgentUserDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.task.TaskTicketEmailAgent;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.utils.WorkflowTicketingUtils;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.web.task.TicketEmailAgentTaskComponent;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminAuthenticationService;
@@ -45,6 +46,7 @@ import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -55,7 +57,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -78,9 +79,7 @@ public class FieldAgentEmailValidationServlet extends HttpServlet
     // Json parameters
     private static final String ERROR_INVALID_EMAIL = "error_invalid_email";
     private static final String ERROR_INVALID_EMAIL_CC = "error_invalid_email_cc";
-
-    private static final String SEMICOLON = ";";
-
+    
     // message
     private static final String LOG_UNAUTHENTICATED_USER = "Calling FieldAgentEmailValidationServlet with unauthenticated user";
 
@@ -124,36 +123,38 @@ public class FieldAgentEmailValidationServlet extends HttpServlet
         }
         else
         {
-            String [ ] arrayEmails = strEmailRecipients.split( SEMICOLON );
-            arrayEmails = StringUtils.stripAll( arrayEmails );
-            for ( String strEmail : arrayEmails )
-            {
-                if ( StringUtils.isNotEmpty( strEmail ) && !_fieldAgentUserDAO.isValidEmail( strEmail ) )
-                {
-                    mapErrors.put( ERROR_INVALID_EMAIL,
-                            I18nService.getLocalizedString( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL_OR_NOT_AUTHORIZED, new Object [ ] {
-                                strEmail
-                            }, locale ) );
-                    break;
-                }
-            }
+        	List<String> listErrorRecipients = WorkflowTicketingUtils.validEmailList( strEmailRecipients, _fieldAgentUserDAO);
+        	if( ! listErrorRecipients.isEmpty( ) )
+        	{
+        		String strErrorRecipients;
+        		if( listErrorRecipients.size( ) == 1 )
+        		{
+        			strErrorRecipients =  I18nService.getLocalizedString( listErrorRecipients.get( 0 ), locale );
+        		}
+        		else
+    			{
+        			strErrorRecipients = I18nService.getLocalizedString( listErrorRecipients.get( 0 ), listErrorRecipients.subList( 1, listErrorRecipients.size( ) ).toArray( ), locale );
+    			}
+        		mapErrors.put( ERROR_INVALID_EMAIL, strErrorRecipients );
+        	}
         }
 
         if ( StringUtils.isNotEmpty( strEmailRecipientsCc ) )
         {
-            String [ ] arrayEmails = strEmailRecipientsCc.split( SEMICOLON );
-            arrayEmails = StringUtils.stripAll( arrayEmails );
-            EmailValidator validator = EmailValidator.getInstance( );
-            for ( String strEmail : arrayEmails )
-            {
-                if ( StringUtils.isNotEmpty( strEmail ) && !validator.isValid( strEmail ) )
-                {
-                    mapErrors.put( ERROR_INVALID_EMAIL_CC, I18nService.getLocalizedString( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL, new Object [ ] {
-                        strEmail
-                    }, locale ) );
-                    break;
-                }
-            }
+        	List<String> listErrorRecipientsCc = WorkflowTicketingUtils.validEmailList( strEmailRecipientsCc, null );
+        	if( ! listErrorRecipientsCc.isEmpty( ) )
+        	{
+        		String strErrorRecipientsCc;
+        		if( listErrorRecipientsCc.size( ) == 1 )
+        		{
+        			strErrorRecipientsCc =  I18nService.getLocalizedString( listErrorRecipientsCc.get( 0 ), locale );
+        		}
+        		else
+    			{
+        			strErrorRecipientsCc = I18nService.getLocalizedString( listErrorRecipientsCc.get( 0 ), listErrorRecipientsCc.subList( 1, listErrorRecipientsCc.size( ) ).toArray( ), locale );
+    			}
+        		mapErrors.put( ERROR_INVALID_EMAIL_CC, strErrorRecipientsCc );
+        	}
         }
 
         String jsonText = new ObjectMapper( ).writeValueAsString( mapErrors );

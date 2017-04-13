@@ -66,7 +66,7 @@ import javax.servlet.http.HttpServletResponse;
 public class FieldAgentSearchServlet extends HttpServlet
 {
     // Other constants
-    public static final String URL_SERVLET = "servlet/plugins/workflow/ticketingfacilfamilles/fieldagent";
+    public static final String URL_SERVLET = "servlet/plugins/workflow/ticketingfacilfamilles/fieldagentsearch";
 
     /**
      * Generated serial Id

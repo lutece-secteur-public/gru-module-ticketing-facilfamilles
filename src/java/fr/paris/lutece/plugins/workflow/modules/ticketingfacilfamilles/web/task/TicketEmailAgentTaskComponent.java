@@ -46,6 +46,7 @@ import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.recipient.ITicketEmailAgentRecipientDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.recipient.TicketEmailAgentRecipient;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.task.TaskTicketEmailAgent;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.utils.WorkflowTicketingUtils;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.config.ITaskConfig;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
@@ -61,7 +62,6 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.HashMap;
 import java.util.List;
@@ -103,7 +103,6 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
     // Constant
     private static final String DISPLAY_SEMICOLON = " ; ";
-    private static final String SEMICOLON = ";";
 
     @Inject
     @Named( TaskTicketEmailAgent.BEAN_TICKET_CONFIG_SERVICE )
@@ -236,42 +235,33 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
                 strError = MESSAGE_EMPTY_EMAIL;
                 nLevelError = AdminMessage.TYPE_STOP;
             }
-
             else
             {
-                String [ ] arrayEmails = strEmailRecipients.split( SEMICOLON );
-                arrayEmails = StringUtils.stripAll( arrayEmails );
-                for ( String strEmail : arrayEmails )
-                {
-                    if ( StringUtils.isNotEmpty( strEmail ) && !_fieldAgentUserDAO.isValidEmail( strEmail ) )
-                    {
-                        errorParams = new Object [ ] {
-                            strEmail
-                        };
-                        strError = MESSAGE_INVALID_EMAIL_OR_NOT_AUTHORIZED;
-                        nLevelError = AdminMessage.TYPE_STOP;
-                        break;
-                    }
-                }
+            	List<String> listErrorRecipients = WorkflowTicketingUtils.validEmailList( strEmailRecipients, _fieldAgentUserDAO);
+            	if( ! listErrorRecipients.isEmpty( ) )
+            	{
+            		strError = listErrorRecipients.get( 0 );
+                    nLevelError = AdminMessage.TYPE_STOP;
+                    
+            		if( listErrorRecipients.size( ) > 1 )
+            		{
+            			errorParams = listErrorRecipients.subList( 1, listErrorRecipients.size( ) ).toArray( );
+            		}
+            	}
             }
 
             if ( strError == null && StringUtils.isNotEmpty( strEmailRecipientsCc ) )
             {
-                String [ ] arrayEmails = strEmailRecipientsCc.split( SEMICOLON );
-                arrayEmails = StringUtils.stripAll( arrayEmails );
-                EmailValidator validator = EmailValidator.getInstance( );
-                for ( String strEmail : arrayEmails )
-                {
-                    if ( StringUtils.isNotEmpty( strEmail ) && !validator.isValid( strEmail ) )
-                    {
-                        errorParams = new Object [ ] {
-                            strEmail
-                        };
-                        strError = MESSAGE_INVALID_EMAIL;
-                        nLevelError = AdminMessage.TYPE_STOP;
-                        break;
-                    }
-                }
+            	List<String> listErrorRecipientsCc = WorkflowTicketingUtils.validEmailList( strEmailRecipientsCc, null );
+            	if( ! listErrorRecipientsCc.isEmpty( ) )
+            	{
+                    strError = listErrorRecipientsCc.get( 0 );
+                    nLevelError = AdminMessage.TYPE_STOP;
+            		if( listErrorRecipientsCc.size( ) > 1 )
+            		{
+            			errorParams = listErrorRecipientsCc.subList( 1, listErrorRecipientsCc.size( ) ).toArray( );
+        			}
+            	}
             }
         }
 
