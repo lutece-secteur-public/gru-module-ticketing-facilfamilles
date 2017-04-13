@@ -27,6 +27,10 @@
         class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketEmailAgentConfigDAO" />
     <bean id="workflow-ticketingfacilfamilles.ticketEmailAgentHistoryDAO"
         class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketEmailAgentHistoryDAO" />
+    <bean id="workflow-ticketingfacilfamilles.ticketEmailAgentRecipientDAO"
+        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.recipient.TicketEmailAgentRecipientDAO" />
+        <bean id="workflow-ticketingfacilfamilles.ticketEmailAgentCcDAO"
+        class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.cc.TicketEmailAgentCcDAO" />
     <bean id="workflow-ticketingfacilfamilles.ticketingEmailAgentMessageDAO"
         class="fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.TicketingEmailAgentMessageDAO" />
     <bean id="workflow-ticketingfacilfamilles.fieldAgentUserDAO"

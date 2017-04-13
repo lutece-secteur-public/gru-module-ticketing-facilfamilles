@@ -35,18 +35,28 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.
 
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.cc.ITicketEmailAgentCcDAO;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.cc.TicketEmailAgentCc;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.MessageDirection;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketEmailAgentConfig;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.ITicketingEmailAgentMessageDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.TicketingEmailAgentMessage;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.fieldagent.FieldAgentUser;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.fieldagent.IFieldAgentUserDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.ITicketEmailAgentHistoryDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketEmailAgentHistory;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.recipient.ITicketEmailAgentRecipientDAO;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.recipient.TicketEmailAgentRecipient;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
 import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.task.SimpleTask;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.business.user.AdminUserHome;
 import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.spring.SpringContextService;
 
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -68,6 +78,7 @@ public class TaskTicketEmailAgent extends SimpleTask
 
     // Other constants
     public static final String UNDERSCORE = "_";
+    public static final String SEMICOLON = ";";
 
     // Messages
     private static final String MESSAGE_TICKET = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.label";
@@ -78,8 +89,16 @@ public class TaskTicketEmailAgent extends SimpleTask
     @Named( ITicketEmailAgentHistoryDAO.BEAN_SERVICE )
     private ITicketEmailAgentHistoryDAO _ticketEmailAgentHistoryDAO;
     @Inject
+    @Named( ITicketEmailAgentRecipientDAO.BEAN_SERVICE )
+    private ITicketEmailAgentRecipientDAO _ticketEmailAgentRecipientDAO;
+    @Inject
+    @Named( ITicketEmailAgentCcDAO.BEAN_SERVICE )
+    private ITicketEmailAgentCcDAO _ticketEmailAgentCcDAO;
+    @Inject
     @Named( ITicketingEmailAgentMessageDAO.BEAN_SERVICE )
     private ITicketingEmailAgentMessageDAO _ticketingEmailAgentDemandDAO;
+    
+    private IFieldAgentUserDAO _fieldAgentUserDAO = SpringContextService.getBean( IFieldAgentUserDAO.BEAN_SERVICE );
 
     /** The _resource history service. */
     @Inject
@@ -150,6 +169,48 @@ public class TaskTicketEmailAgent extends SimpleTask
         emailAgent.setIdTask( getId( ) );
         emailAgent.setIdMessageAgent( emailAgentDemand.getIdMessageAgent( ) );
         _ticketEmailAgentHistoryDAO.insert( emailAgent );
+        
+        // create resource infos item
+        String[] emailRecipients = null;
+        if( strEmailRecipients != null && !strEmailRecipients.isEmpty() )
+        {
+        	emailRecipients = strEmailRecipients.split(SEMICOLON);
+        	
+        	for (int i = 0 ; i < emailRecipients.length ; i++)
+            {
+            	AdminUser user = AdminUserHome.findUserByLogin(AdminUserHome.findUserByEmail(emailRecipients[i]));
+            	
+            	TicketEmailAgentRecipient infosEmailAgent = new TicketEmailAgentRecipient( );
+            	infosEmailAgent.setIdResourceHistory( nIdResourceHistory );
+            	infosEmailAgent.setIdTask( getId( ) );
+            	infosEmailAgent.setEmail(user.getEmail());
+                
+                List<FieldAgentUser> listUsers = _fieldAgentUserDAO.findFieldAgentUser( user.getLastName(), user.getEmail(), null );
+                
+                if(listUsers != null && listUsers.size() > 0)
+                {
+                	infosEmailAgent.setField( listUsers.iterator().next().getEntite() );
+                }
+                
+            	infosEmailAgent.setName(user.getLastName());
+            	infosEmailAgent.setFirstName(user.getFirstName());
+            	_ticketEmailAgentRecipientDAO.insert(infosEmailAgent);
+            }
+        }
+        
+        String[] emailRecipientsCc = null;
+        if( strEmailRecipientsCc != null && !strEmailRecipientsCc.isEmpty() ) 
+        {
+        	emailRecipientsCc = strEmailRecipientsCc.split(SEMICOLON);
+        	for (int i = 0 ; i < emailRecipientsCc.length ; i++)
+            {
+            	TicketEmailAgentCc infosEmailAgent = new TicketEmailAgentCc( );
+            	infosEmailAgent.setIdResourceHistory( nIdResourceHistory );
+            	infosEmailAgent.setIdTask( getId( ) );
+            	infosEmailAgent.setEmail(emailRecipientsCc[i]);
+            	_ticketEmailAgentCcDAO.insert(infosEmailAgent);
+            }
+        }        
     }
 
     /**

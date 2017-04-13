@@ -34,6 +34,8 @@
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.web.task;
 
 import fr.paris.lutece.plugins.ticketing.web.util.ModelUtils;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.cc.ITicketEmailAgentCcDAO;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.cc.TicketEmailAgentCc;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.MessageDirection;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.config.TaskTicketEmailAgentConfig;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.demand.ITicketingEmailAgentMessageDAO;
@@ -41,6 +43,8 @@ import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.fieldagent.IFieldAgentUserDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.ITicketEmailAgentHistoryDAO;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.history.TicketEmailAgentHistory;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.recipient.ITicketEmailAgentRecipientDAO;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.recipient.TicketEmailAgentRecipient;
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.task.TaskTicketEmailAgent;
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.config.ITaskConfig;
@@ -59,6 +63,7 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -81,6 +86,8 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     private static final String MARK_CONFIG = "config";
     private static final String MARK_CONFIG_FOLLOW_ACTION_ID = "following_action_id";
     private static final String MARK_TICKETING_FF_MESSAGE = "facilfamille_message";
+    private static final String MARK_TICKETING_EMAIL_INFO_CC = "email_infos_cc";
+    private static final String MARK_TICKETING_LIST_EMAIL_INFOS = "list_email_infos";
     private static final String MARK_MESSAGE_DIRECTIONS_LIST = "message_directions_list";
     private static final String MARK_MESSAGE_DIRECTION = "message_direction";
 
@@ -92,12 +99,22 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     private static final String MESSAGE_EMPTY_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.empty";
     private static final String MESSAGE_INVALID_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.invalid";
     private static final String MESSAGE_ALREADY_ANSWER = "module.workflow.ticketingfacilfamilles.fieldAgentResponse.message.already_answer";
+    
+    // Constant
+    private static final String SEMICOLON = " ; ";
+    
     @Inject
     @Named( TaskTicketEmailAgent.BEAN_TICKET_CONFIG_SERVICE )
     private ITaskConfigService _taskTicketConfigService;
     @Inject
     @Named( ITicketEmailAgentHistoryDAO.BEAN_SERVICE )
     private ITicketEmailAgentHistoryDAO _ticketEmailAgentHistoryDAO;
+    @Inject
+    @Named( ITicketEmailAgentRecipientDAO.BEAN_SERVICE )
+    private ITicketEmailAgentRecipientDAO _ticketEmailAgentRecipientDAO;
+    @Inject
+    @Named( ITicketEmailAgentCcDAO.BEAN_SERVICE )
+    private ITicketEmailAgentCcDAO _ticketEmailAgentCcDAO;
     @Inject
     @Named( ITicketingEmailAgentMessageDAO.BEAN_SERVICE )
     private ITicketingEmailAgentMessageDAO _ticketingEmailAgentMessageDAO;
@@ -122,9 +139,30 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         Map<String, Object> model = new HashMap<String, Object>( );
 
-        if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN || config.getMessageDirection( ) == MessageDirection.RE_AGENT_TO_TERRAIN )
+        if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN )
         {
             model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageQuestion( ) );
+            List<TicketEmailAgentRecipient> listRecipientTicketFacilFamille = _ticketEmailAgentRecipientDAO.loadByIdHistory( nIdHistory, task.getId() );
+            List<TicketEmailAgentCc> listCcTicketFacilFamille = _ticketEmailAgentCcDAO.loadByIdHistory( nIdHistory, task.getId() );
+            
+            StringBuilder sbInfosCc = new StringBuilder();
+            
+            for(TicketEmailAgentCc infosTicketFacilFamille : listCcTicketFacilFamille)
+            {
+            	sbInfosCc.append(infosTicketFacilFamille.getEmail()).append(SEMICOLON);
+            }
+            
+            if(sbInfosCc != null && sbInfosCc.length() > 0 )
+            {
+            	sbInfosCc.setLength(sbInfosCc.length() - 3);
+            }
+            
+            model.put( MARK_TICKETING_LIST_EMAIL_INFOS, listRecipientTicketFacilFamille);
+            model.put( MARK_TICKETING_EMAIL_INFO_CC, sbInfosCc.toString());
+        }
+        else if ( config.getMessageDirection( ) == MessageDirection.RE_AGENT_TO_TERRAIN )
+        {
+        	model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageQuestion( ) );
         }
         else
         {
