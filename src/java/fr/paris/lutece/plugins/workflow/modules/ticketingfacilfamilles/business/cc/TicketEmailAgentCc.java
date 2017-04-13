@@ -38,9 +38,9 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business
  */
 public class TicketEmailAgentCc
 {
-	/** The _n id cc. */
+    /** The _n id cc. */
     private int _nIdCc;
-    
+
     /** The _n id task. */
     private int _nIdTask;
 
@@ -49,10 +49,10 @@ public class TicketEmailAgentCc
 
     /** The _str email. */
     private String _strEmail;
-    
+
     /** The _str field. */
     private String _strField;
-    
+
     /**
      * @return the _nIdInfosHistory
      */
@@ -104,31 +104,37 @@ public class TicketEmailAgentCc
         this._nIdResourceHistory = nIdResourceHistory;
     }
 
-	/**
-	 * @return the _strEmail
-	 */
-	public String getEmail() {
-		return _strEmail;
-	}
+    /**
+     * @return the _strEmail
+     */
+    public String getEmail( )
+    {
+        return _strEmail;
+    }
 
-	/**
-	 * @param strEmail the strEmail to set
-	 */
-	public void setEmail(String strEmail) {
-		this._strEmail = strEmail;
-	}
+    /**
+     * @param strEmail
+     *            the strEmail to set
+     */
+    public void setEmail( String strEmail )
+    {
+        this._strEmail = strEmail;
+    }
 
-	/**
-	 * @return the _strField
-	 */
-	public String getField() {
-		return _strField;
-	}
+    /**
+     * @return the _strField
+     */
+    public String getField( )
+    {
+        return _strField;
+    }
 
-	/**
-	 * @param strField the strField to set
-	 */
-	public void setField(String strField) {
-		this._strField = strField;
-	}
+    /**
+     * @param strField
+     *            the strField to set
+     */
+    public void setField( String strField )
+    {
+        this._strField = strField;
+    }
 }

@@ -97,7 +97,7 @@ public class TaskTicketEmailAgent extends SimpleTask
     @Inject
     @Named( ITicketingEmailAgentMessageDAO.BEAN_SERVICE )
     private ITicketingEmailAgentMessageDAO _ticketingEmailAgentDemandDAO;
-    
+
     private IFieldAgentUserDAO _fieldAgentUserDAO = SpringContextService.getBean( IFieldAgentUserDAO.BEAN_SERVICE );
 
     /** The _resource history service. */
@@ -169,48 +169,48 @@ public class TaskTicketEmailAgent extends SimpleTask
         emailAgent.setIdTask( getId( ) );
         emailAgent.setIdMessageAgent( emailAgentDemand.getIdMessageAgent( ) );
         _ticketEmailAgentHistoryDAO.insert( emailAgent );
-        
+
         // create resource infos item
-        String[] emailRecipients = null;
-        if( strEmailRecipients != null && !strEmailRecipients.isEmpty() )
+        String [ ] emailRecipients = null;
+        if ( strEmailRecipients != null && !strEmailRecipients.isEmpty( ) )
         {
-        	emailRecipients = strEmailRecipients.split(SEMICOLON);
-        	
-        	for (int i = 0 ; i < emailRecipients.length ; i++)
+            emailRecipients = strEmailRecipients.split( SEMICOLON );
+
+            for ( int i = 0; i < emailRecipients.length; i++ )
             {
-            	AdminUser user = AdminUserHome.findUserByLogin(AdminUserHome.findUserByEmail(emailRecipients[i]));
-            	
-            	TicketEmailAgentRecipient infosEmailAgent = new TicketEmailAgentRecipient( );
-            	infosEmailAgent.setIdResourceHistory( nIdResourceHistory );
-            	infosEmailAgent.setIdTask( getId( ) );
-            	infosEmailAgent.setEmail(user.getEmail());
-                
-                List<FieldAgentUser> listUsers = _fieldAgentUserDAO.findFieldAgentUser( user.getLastName(), user.getEmail(), null );
-                
-                if(listUsers != null && listUsers.size() > 0)
+                AdminUser user = AdminUserHome.findUserByLogin( AdminUserHome.findUserByEmail( emailRecipients [i] ) );
+
+                TicketEmailAgentRecipient infosEmailAgent = new TicketEmailAgentRecipient( );
+                infosEmailAgent.setIdResourceHistory( nIdResourceHistory );
+                infosEmailAgent.setIdTask( getId( ) );
+                infosEmailAgent.setEmail( user.getEmail( ) );
+
+                List<FieldAgentUser> listUsers = _fieldAgentUserDAO.findFieldAgentUser( user.getLastName( ), user.getEmail( ), null );
+
+                if ( listUsers != null && listUsers.size( ) > 0 )
                 {
-                	infosEmailAgent.setField( listUsers.iterator().next().getEntite() );
+                    infosEmailAgent.setField( listUsers.iterator( ).next( ).getEntite( ) );
                 }
-                
-            	infosEmailAgent.setName(user.getLastName());
-            	infosEmailAgent.setFirstName(user.getFirstName());
-            	_ticketEmailAgentRecipientDAO.insert(infosEmailAgent);
+
+                infosEmailAgent.setName( user.getLastName( ) );
+                infosEmailAgent.setFirstName( user.getFirstName( ) );
+                _ticketEmailAgentRecipientDAO.insert( infosEmailAgent );
             }
         }
-        
-        String[] emailRecipientsCc = null;
-        if( strEmailRecipientsCc != null && !strEmailRecipientsCc.isEmpty() ) 
+
+        String [ ] emailRecipientsCc = null;
+        if ( strEmailRecipientsCc != null && !strEmailRecipientsCc.isEmpty( ) )
         {
-        	emailRecipientsCc = strEmailRecipientsCc.split(SEMICOLON);
-        	for (int i = 0 ; i < emailRecipientsCc.length ; i++)
+            emailRecipientsCc = strEmailRecipientsCc.split( SEMICOLON );
+            for ( int i = 0; i < emailRecipientsCc.length; i++ )
             {
-            	TicketEmailAgentCc infosEmailAgent = new TicketEmailAgentCc( );
-            	infosEmailAgent.setIdResourceHistory( nIdResourceHistory );
-            	infosEmailAgent.setIdTask( getId( ) );
-            	infosEmailAgent.setEmail(emailRecipientsCc[i]);
-            	_ticketEmailAgentCcDAO.insert(infosEmailAgent);
+                TicketEmailAgentCc infosEmailAgent = new TicketEmailAgentCc( );
+                infosEmailAgent.setIdResourceHistory( nIdResourceHistory );
+                infosEmailAgent.setIdTask( getId( ) );
+                infosEmailAgent.setEmail( emailRecipientsCc [i] );
+                _ticketEmailAgentCcDAO.insert( infosEmailAgent );
             }
-        }        
+        }
     }
 
     /**

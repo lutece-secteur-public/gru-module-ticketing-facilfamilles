@@ -238,8 +238,10 @@ public class TicketEmailAgentProvider implements IProvider
         }
 
         // SPECIFIC EMAIL AGENT
-        collectionNotifyGruMarkers.add( createMarkerValues( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL_RECIPIENTS, _emailAgentDemand.getEmailRecipients( ) ) );
-        collectionNotifyGruMarkers.add( createMarkerValues( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL_RECIPIENTS_CC, _emailAgentDemand.getEmailRecipientsCc( ) ) );
+        collectionNotifyGruMarkers.add( createMarkerValues( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL_RECIPIENTS,
+                _emailAgentDemand.getEmailRecipients( ) ) );
+        collectionNotifyGruMarkers.add( createMarkerValues( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL_RECIPIENTS_CC,
+                _emailAgentDemand.getEmailRecipientsCc( ) ) );
         collectionNotifyGruMarkers.add( createMarkerValues( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE,
                 _emailAgentDemand.getMessageQuestion( ) ) );
         collectionNotifyGruMarkers.add( createMarkerValues( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_LINK,
@@ -280,10 +282,10 @@ public class TicketEmailAgentProvider implements IProvider
         collectionNotifyGruMarkers.add( createMarkerDescriptions( TicketEmailAgentNotifyGruConstants.MARK_TECHNICAL_URL_COMPLETED,
                 MESSAGE_MARKER_TECHNICAL_URL_COMPLETE ) );
         // SPECIFIC EMAIL AGENT
-        collectionNotifyGruMarkers
-                .add( createMarkerDescriptions( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL_RECIPIENTS, MESSAGE_MARKER_FACILFAMILLE_EMAIL_RECIPIENTS ) );
-        collectionNotifyGruMarkers
-        .add( createMarkerDescriptions( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL_RECIPIENTS_CC, MESSAGE_MARKER_FACILFAMILLE_EMAIL_RECIPIENTS_CC ) );
+        collectionNotifyGruMarkers.add( createMarkerDescriptions( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL_RECIPIENTS,
+                MESSAGE_MARKER_FACILFAMILLE_EMAIL_RECIPIENTS ) );
+        collectionNotifyGruMarkers.add( createMarkerDescriptions( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_EMAIL_RECIPIENTS_CC,
+                MESSAGE_MARKER_FACILFAMILLE_EMAIL_RECIPIENTS_CC ) );
         collectionNotifyGruMarkers.add( createMarkerDescriptions( TicketEmailAgentNotifyGruConstants.MARK_FACILFAMILLE_MESSAGE,
                 MESSAGE_MARKER_FACILFAMILLE_MESSAGE ) );
         collectionNotifyGruMarkers

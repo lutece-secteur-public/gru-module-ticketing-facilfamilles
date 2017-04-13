@@ -99,10 +99,10 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     private static final String MESSAGE_EMPTY_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.empty";
     private static final String MESSAGE_INVALID_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.invalid";
     private static final String MESSAGE_ALREADY_ANSWER = "module.workflow.ticketingfacilfamilles.fieldAgentResponse.message.already_answer";
-    
+
     // Constant
     private static final String SEMICOLON = " ; ";
-    
+
     @Inject
     @Named( TaskTicketEmailAgent.BEAN_TICKET_CONFIG_SERVICE )
     private ITaskConfigService _taskTicketConfigService;
@@ -142,32 +142,33 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
         if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN )
         {
             model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageQuestion( ) );
-            List<TicketEmailAgentRecipient> listRecipientTicketFacilFamille = _ticketEmailAgentRecipientDAO.loadByIdHistory( nIdHistory, task.getId() );
-            List<TicketEmailAgentCc> listCcTicketFacilFamille = _ticketEmailAgentCcDAO.loadByIdHistory( nIdHistory, task.getId() );
-            
-            StringBuilder sbInfosCc = new StringBuilder();
-            
-            for(TicketEmailAgentCc infosTicketFacilFamille : listCcTicketFacilFamille)
+            List<TicketEmailAgentRecipient> listRecipientTicketFacilFamille = _ticketEmailAgentRecipientDAO.loadByIdHistory( nIdHistory, task.getId( ) );
+            List<TicketEmailAgentCc> listCcTicketFacilFamille = _ticketEmailAgentCcDAO.loadByIdHistory( nIdHistory, task.getId( ) );
+
+            StringBuilder sbInfosCc = new StringBuilder( );
+
+            for ( TicketEmailAgentCc infosTicketFacilFamille : listCcTicketFacilFamille )
             {
-            	sbInfosCc.append(infosTicketFacilFamille.getEmail()).append(SEMICOLON);
+                sbInfosCc.append( infosTicketFacilFamille.getEmail( ) ).append( SEMICOLON );
             }
-            
-            if(sbInfosCc != null && sbInfosCc.length() > 0 )
+
+            if ( sbInfosCc != null && sbInfosCc.length( ) > 0 )
             {
-            	sbInfosCc.setLength(sbInfosCc.length() - 3);
+                sbInfosCc.setLength( sbInfosCc.length( ) - 3 );
             }
-            
-            model.put( MARK_TICKETING_LIST_EMAIL_INFOS, listRecipientTicketFacilFamille);
-            model.put( MARK_TICKETING_EMAIL_INFO_CC, sbInfosCc.toString());
-        }
-        else if ( config.getMessageDirection( ) == MessageDirection.RE_AGENT_TO_TERRAIN )
-        {
-        	model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageQuestion( ) );
+
+            model.put( MARK_TICKETING_LIST_EMAIL_INFOS, listRecipientTicketFacilFamille );
+            model.put( MARK_TICKETING_EMAIL_INFO_CC, sbInfosCc.toString( ) );
         }
         else
-        {
-            model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageResponse( ) );
-        }
+            if ( config.getMessageDirection( ) == MessageDirection.RE_AGENT_TO_TERRAIN )
+            {
+                model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageQuestion( ) );
+            }
+            else
+            {
+                model.put( MARK_TICKETING_FF_MESSAGE, ticketingEmailAgentMessage.getMessageResponse( ) );
+            }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_TICKET_INFORMATION, locale, model );
 
@@ -219,7 +220,8 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     {
         TaskTicketEmailAgentConfig config = this.getTaskConfigService( ).findByPrimaryKey( task.getId( ) );
         String strEmailRecipients = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL_RECIPIENTS + TaskTicketEmailAgent.UNDERSCORE + task.getId( ) );
-        String strEmailRecipientsCc = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL_RECIPIENTS_CC + TaskTicketEmailAgent.UNDERSCORE + task.getId( ) );
+        String strEmailRecipientsCc = request
+                .getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL_RECIPIENTS_CC + TaskTicketEmailAgent.UNDERSCORE + task.getId( ) );
         String strError = null;
         int nLevelError = -1;
 
@@ -230,12 +232,12 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
                 strError = MESSAGE_EMPTY_EMAIL;
                 nLevelError = AdminMessage.TYPE_STOP;
             }
-//            else
-//                if ( !_fieldAgentUserDAO.isValidEmail( strEmailAddressesTo ) )
-//                {
-//                    strError = MESSAGE_INVALID_EMAIL;
-//                    nLevelError = AdminMessage.TYPE_STOP;
-//                }
+            // else
+            // if ( !_fieldAgentUserDAO.isValidEmail( strEmailAddressesTo ) )
+            // {
+            // strError = MESSAGE_INVALID_EMAIL;
+            // nLevelError = AdminMessage.TYPE_STOP;
+            // }
         }
 
         if ( ( config.getMessageDirection( ) == MessageDirection.TERRAIN_TO_AGENT ) )

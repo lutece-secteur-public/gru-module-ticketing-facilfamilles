@@ -57,7 +57,7 @@ public interface ITicketEmailAgentRecipientDAO
      * @param nIdHistory
      *            the id of history resource
      * @param nIdTask
-     *            the id of task            
+     *            the id of task
      * @return the TicketEmailAgentHistory list
      */
     List<TicketEmailAgentRecipient> loadByIdHistory( int nIdHistory, int nIdTask );

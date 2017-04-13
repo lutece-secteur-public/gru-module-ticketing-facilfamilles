@@ -38,9 +38,9 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business
  */
 public class TicketEmailAgentRecipient
 {
-	/** The _n id recipient. */
+    /** The _n id recipient. */
     private int _nIdRecipient;
-    
+
     /** The _n id task. */
     private int _nIdTask;
 
@@ -49,16 +49,16 @@ public class TicketEmailAgentRecipient
 
     /** The _str email. */
     private String _strEmail;
-    
+
     /** The _str field. */
     private String _strField;
-    
+
     /** The _str name. */
     private String _strName;
-    
+
     /** The _str firstname. */
     private String _strFirstName;
-    
+
     /**
      * @return the _nIdRecipient
      */
@@ -110,59 +110,71 @@ public class TicketEmailAgentRecipient
         this._nIdResourceHistory = nIdResourceHistory;
     }
 
-	/**
-	 * @return the _strEmail
-	 */
-	public String getEmail() {
-		return _strEmail;
-	}
+    /**
+     * @return the _strEmail
+     */
+    public String getEmail( )
+    {
+        return _strEmail;
+    }
 
-	/**
-	 * @param strEmail the strEmail to set
-	 */
-	public void setEmail(String strEmail) {
-		this._strEmail = strEmail;
-	}
+    /**
+     * @param strEmail
+     *            the strEmail to set
+     */
+    public void setEmail( String strEmail )
+    {
+        this._strEmail = strEmail;
+    }
 
-	/**
-	 * @return the _strField
-	 */
-	public String getField() {
-		return _strField;
-	}
+    /**
+     * @return the _strField
+     */
+    public String getField( )
+    {
+        return _strField;
+    }
 
-	/**
-	 * @param strField the strField to set
-	 */
-	public void setField(String strField) {
-		this._strField = strField;
-	}
+    /**
+     * @param strField
+     *            the strField to set
+     */
+    public void setField( String strField )
+    {
+        this._strField = strField;
+    }
 
-	/**
-	 * @return the _strName
-	 */
-	public String getName() {
-		return _strName;
-	}
+    /**
+     * @return the _strName
+     */
+    public String getName( )
+    {
+        return _strName;
+    }
 
-	/**
-	 * @param strName the strName to set
-	 */
-	public void setName(String strName) {
-		this._strName = strName;
-	}
+    /**
+     * @param strName
+     *            the strName to set
+     */
+    public void setName( String strName )
+    {
+        this._strName = strName;
+    }
 
-	/**
-	 * @return the _strFirstName
-	 */
-	public String getFirstName() {
-		return _strFirstName;
-	}
+    /**
+     * @return the _strFirstName
+     */
+    public String getFirstName( )
+    {
+        return _strFirstName;
+    }
 
-	/**
-	 * @param strFirstName the strFirstName to set
-	 */
-	public void setFirstName(String strFirstName) {
-		this._strFirstName = strFirstName;
-	}
+    /**
+     * @param strFirstName
+     *            the strFirstName to set
+     */
+    public void setFirstName( String strFirstName )
+    {
+        this._strFirstName = strFirstName;
+    }
 }

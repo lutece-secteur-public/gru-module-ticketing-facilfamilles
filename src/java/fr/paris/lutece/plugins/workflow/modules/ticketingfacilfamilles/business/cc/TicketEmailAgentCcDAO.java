@@ -77,7 +77,7 @@ public class TicketEmailAgentCcDAO implements ITicketEmailAgentCcDAO
 
         return nKey;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -87,9 +87,9 @@ public class TicketEmailAgentCcDAO implements ITicketEmailAgentCcDAO
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
         infosEmailAgent.setIdInfosHistory( newPrimaryKey( ) );
-        
+
         int nIndex = 1;
-        
+
         daoUtil.setInt( nIndex++, infosEmailAgent.getIdInfosHistory( ) );
         daoUtil.setInt( nIndex++, infosEmailAgent.getIdTask( ) );
         daoUtil.setInt( nIndex++, infosEmailAgent.getIdResourceHistory( ) );
@@ -114,18 +114,18 @@ public class TicketEmailAgentCcDAO implements ITicketEmailAgentCcDAO
 
         int nIndex = 1;
         TicketEmailAgentCc infosEmailAgent;
-        List<TicketEmailAgentCc> listInfosEmailAgent = new ArrayList<TicketEmailAgentCc>();
+        List<TicketEmailAgentCc> listInfosEmailAgent = new ArrayList<TicketEmailAgentCc>( );
 
         while ( daoUtil.next( ) )
         {
-        	nIndex = 1;
-        	infosEmailAgent = new TicketEmailAgentCc( );
-        	infosEmailAgent.setIdInfosHistory( daoUtil.getInt( nIndex++ ) );
-        	infosEmailAgent.setIdTask( daoUtil.getInt( nIndex++ ) );
-        	infosEmailAgent.setIdResourceHistory( daoUtil.getInt( nIndex++ ) );
-        	infosEmailAgent.setEmail( daoUtil.getString( nIndex++ ) );
-            
-            listInfosEmailAgent.add(infosEmailAgent);
+            nIndex = 1;
+            infosEmailAgent = new TicketEmailAgentCc( );
+            infosEmailAgent.setIdInfosHistory( daoUtil.getInt( nIndex++ ) );
+            infosEmailAgent.setIdTask( daoUtil.getInt( nIndex++ ) );
+            infosEmailAgent.setIdResourceHistory( daoUtil.getInt( nIndex++ ) );
+            infosEmailAgent.setEmail( daoUtil.getString( nIndex++ ) );
+
+            listInfosEmailAgent.add( infosEmailAgent );
         }
 
         daoUtil.free( );

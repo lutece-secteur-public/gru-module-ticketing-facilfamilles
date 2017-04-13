@@ -77,7 +77,7 @@ public class TicketEmailAgentRecipientDAO implements ITicketEmailAgentRecipientD
 
         return nKey;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -87,9 +87,9 @@ public class TicketEmailAgentRecipientDAO implements ITicketEmailAgentRecipientD
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
         infosEmailAgent.setIdRecipient( newPrimaryKey( ) );
-        
+
         int nIndex = 1;
-        
+
         daoUtil.setInt( nIndex++, infosEmailAgent.getIdRecipient( ) );
         daoUtil.setInt( nIndex++, infosEmailAgent.getIdTask( ) );
         daoUtil.setInt( nIndex++, infosEmailAgent.getIdResourceHistory( ) );
@@ -117,21 +117,21 @@ public class TicketEmailAgentRecipientDAO implements ITicketEmailAgentRecipientD
 
         int nIndex = 1;
         TicketEmailAgentRecipient infosEmailAgent;
-        List<TicketEmailAgentRecipient> listInfosEmailAgent = new ArrayList<TicketEmailAgentRecipient>();
+        List<TicketEmailAgentRecipient> listInfosEmailAgent = new ArrayList<TicketEmailAgentRecipient>( );
 
         while ( daoUtil.next( ) )
         {
-        	nIndex = 1;
-        	infosEmailAgent = new TicketEmailAgentRecipient( );
-        	infosEmailAgent.setIdRecipient( daoUtil.getInt( nIndex++ ) );
-        	infosEmailAgent.setIdTask( daoUtil.getInt( nIndex++ ) );
-        	infosEmailAgent.setIdResourceHistory( daoUtil.getInt( nIndex++ ) );
-        	infosEmailAgent.setEmail( daoUtil.getString( nIndex++ ) );
-        	infosEmailAgent.setField( daoUtil.getString( nIndex++ ) );
-        	infosEmailAgent.setName( daoUtil.getString( nIndex++ ) );
+            nIndex = 1;
+            infosEmailAgent = new TicketEmailAgentRecipient( );
+            infosEmailAgent.setIdRecipient( daoUtil.getInt( nIndex++ ) );
+            infosEmailAgent.setIdTask( daoUtil.getInt( nIndex++ ) );
+            infosEmailAgent.setIdResourceHistory( daoUtil.getInt( nIndex++ ) );
+            infosEmailAgent.setEmail( daoUtil.getString( nIndex++ ) );
+            infosEmailAgent.setField( daoUtil.getString( nIndex++ ) );
+            infosEmailAgent.setName( daoUtil.getString( nIndex++ ) );
             infosEmailAgent.setFirstName( daoUtil.getString( nIndex++ ) );
-            
-            listInfosEmailAgent.add(infosEmailAgent);
+
+            listInfosEmailAgent.add( infosEmailAgent );
         }
 
         daoUtil.free( );
