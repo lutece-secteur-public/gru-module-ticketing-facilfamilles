@@ -104,7 +104,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     // Constant
     private static final String DISPLAY_SEMICOLON = " ; ";
     private static final String SEMICOLON = ";";
-    
+
     @Inject
     @Named( TaskTicketEmailAgent.BEAN_TICKET_CONFIG_SERVICE )
     private ITaskConfigService _taskTicketConfigService;
@@ -128,7 +128,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     @Inject
     @Named( IFieldAgentUserDAO.BEAN_SERVICE )
     private IFieldAgentUserDAO _fieldAgentUserDAO;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -227,7 +227,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         String strError = null;
         int nLevelError = -1;
-        Object[] errorParams = new Object[1];
+        Object [ ] errorParams = new Object [ 1];
 
         if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN )
         {
@@ -239,13 +239,15 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
             else
             {
-                String[] arrayEmails = strEmailRecipients.split(SEMICOLON);
-                arrayEmails = StringUtils.stripAll(arrayEmails);
-                for (String strEmail : arrayEmails) 
+                String [ ] arrayEmails = strEmailRecipients.split( SEMICOLON );
+                arrayEmails = StringUtils.stripAll( arrayEmails );
+                for ( String strEmail : arrayEmails )
                 {
                     if ( StringUtils.isNotEmpty( strEmail ) && !_fieldAgentUserDAO.isValidEmail( strEmail ) )
                     {
-                        errorParams = new Object [ ] { strEmail };
+                        errorParams = new Object [ ] {
+                            strEmail
+                        };
                         strError = MESSAGE_INVALID_EMAIL_OR_NOT_AUTHORIZED;
                         nLevelError = AdminMessage.TYPE_STOP;
                         break;
@@ -255,14 +257,16 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
             if ( strError == null && StringUtils.isNotEmpty( strEmailRecipientsCc ) )
             {
-                String[] arrayEmails = strEmailRecipientsCc.split(SEMICOLON);
-                arrayEmails = StringUtils.stripAll(arrayEmails);
+                String [ ] arrayEmails = strEmailRecipientsCc.split( SEMICOLON );
+                arrayEmails = StringUtils.stripAll( arrayEmails );
                 EmailValidator validator = EmailValidator.getInstance( );
-                for (String strEmail : arrayEmails) 
+                for ( String strEmail : arrayEmails )
                 {
-                    if ( StringUtils.isNotEmpty( strEmail ) && !validator.isValid(strEmail) )
+                    if ( StringUtils.isNotEmpty( strEmail ) && !validator.isValid( strEmail ) )
                     {
-                        errorParams = new Object [ ] { strEmail };
+                        errorParams = new Object [ ] {
+                            strEmail
+                        };
                         strError = MESSAGE_INVALID_EMAIL;
                         nLevelError = AdminMessage.TYPE_STOP;
                         break;
@@ -270,7 +274,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
                 }
             }
         }
-        
+
         if ( ( config.getMessageDirection( ) == MessageDirection.TERRAIN_TO_AGENT ) )
         {
             Action action = _actionService.findByPrimaryKeyWithoutIcon( task.getAction( ).getId( ) );
@@ -288,7 +292,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
         {
             return AdminMessageService.getMessageUrl( request, strError, errorParams, nLevelError );
         }
-        
+
         return StringUtils.EMPTY;
     }
 
@@ -305,7 +309,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         model.put( MARK_MESSAGE_DIRECTIONS_LIST, listMessageDirections );
         model.put( MARK_CONFIG_FOLLOW_ACTION_ID, StringUtils.EMPTY );
-        
+
         if ( config != null )
         {
             model.put( MARK_MESSAGE_DIRECTION, config.getMessageDirection( ).ordinal( ) );

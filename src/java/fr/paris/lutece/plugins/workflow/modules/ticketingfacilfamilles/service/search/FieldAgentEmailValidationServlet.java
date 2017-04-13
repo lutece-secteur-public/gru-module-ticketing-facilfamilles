@@ -80,10 +80,10 @@ public class FieldAgentEmailValidationServlet extends HttpServlet
     private static final String ERROR_INVALID_EMAIL_CC = "error_invalid_email_cc";
 
     private static final String SEMICOLON = ";";
-    
+
     // message
     private static final String LOG_UNAUTHENTICATED_USER = "Calling FieldAgentEmailValidationServlet with unauthenticated user";
-    
+
     // BEAN
     private IFieldAgentUserDAO _fieldAgentUserDAO = SpringContextService.getBean( IFieldAgentUserDAO.BEAN_SERVICE );
 
@@ -108,29 +108,32 @@ public class FieldAgentEmailValidationServlet extends HttpServlet
             AppLogService.error( LOG_UNAUTHENTICATED_USER );
             throw new ServletException( LOG_UNAUTHENTICATED_USER );
         }
-        
+
         Locale locale = user.getLocale( );
         Map<String, String> mapErrors = new HashMap<String, String>( );
         mapErrors.put( ERROR_INVALID_EMAIL, StringUtils.EMPTY );
         mapErrors.put( ERROR_INVALID_EMAIL_CC, StringUtils.EMPTY );
-        
+
         // request param
         String strEmailRecipients = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL_RECIPIENTS );
         String strEmailRecipientsCc = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL_RECIPIENTS_CC );
-        
+
         if ( StringUtils.isEmpty( strEmailRecipients ) )
         {
             mapErrors.put( ERROR_INVALID_EMAIL, I18nService.getLocalizedString( TicketEmailAgentTaskComponent.MESSAGE_EMPTY_EMAIL, locale ) );
         }
         else
         {
-            String[] arrayEmails = strEmailRecipients.split(SEMICOLON);
-            arrayEmails = StringUtils.stripAll(arrayEmails);
-            for (String strEmail : arrayEmails) 
+            String [ ] arrayEmails = strEmailRecipients.split( SEMICOLON );
+            arrayEmails = StringUtils.stripAll( arrayEmails );
+            for ( String strEmail : arrayEmails )
             {
                 if ( StringUtils.isNotEmpty( strEmail ) && !_fieldAgentUserDAO.isValidEmail( strEmail ) )
                 {
-                    mapErrors.put( ERROR_INVALID_EMAIL, I18nService.getLocalizedString( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL_OR_NOT_AUTHORIZED, new Object [ ] { strEmail }, locale ) );
+                    mapErrors.put( ERROR_INVALID_EMAIL,
+                            I18nService.getLocalizedString( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL_OR_NOT_AUTHORIZED, new Object [ ] {
+                                strEmail
+                            }, locale ) );
                     break;
                 }
             }
@@ -138,21 +141,23 @@ public class FieldAgentEmailValidationServlet extends HttpServlet
 
         if ( StringUtils.isNotEmpty( strEmailRecipientsCc ) )
         {
-            String[] arrayEmails = strEmailRecipientsCc.split(SEMICOLON);
-            arrayEmails = StringUtils.stripAll(arrayEmails);
+            String [ ] arrayEmails = strEmailRecipientsCc.split( SEMICOLON );
+            arrayEmails = StringUtils.stripAll( arrayEmails );
             EmailValidator validator = EmailValidator.getInstance( );
-            for (String strEmail : arrayEmails) 
+            for ( String strEmail : arrayEmails )
             {
-                if ( StringUtils.isNotEmpty( strEmail ) && !validator.isValid(strEmail) )
+                if ( StringUtils.isNotEmpty( strEmail ) && !validator.isValid( strEmail ) )
                 {
-                    mapErrors.put( ERROR_INVALID_EMAIL_CC, I18nService.getLocalizedString( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL, new Object [ ] { strEmail }, locale ) );
+                    mapErrors.put( ERROR_INVALID_EMAIL_CC, I18nService.getLocalizedString( TicketEmailAgentTaskComponent.MESSAGE_INVALID_EMAIL, new Object [ ] {
+                        strEmail
+                    }, locale ) );
                     break;
                 }
             }
         }
 
-        String jsonText = new ObjectMapper().writeValueAsString(mapErrors);
-        
+        String jsonText = new ObjectMapper( ).writeValueAsString( mapErrors );
+
         ServletOutputStream outStream = httpResponse.getOutputStream( );
         outStream.write( jsonText.getBytes( AppPropertiesService.getProperty( PROPERTY_ENCODING ) ) );
         outStream.flush( );
