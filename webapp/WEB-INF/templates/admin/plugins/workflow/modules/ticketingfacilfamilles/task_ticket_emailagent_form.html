@@ -11,12 +11,24 @@
 			<span id="search_results_button" onclick="showSearchResponse_${config.idTask}()" class="btn btn-primary">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent.search.button}</span>
 		</div>
 	</div>
+	<div class="row form-group">
+         <div class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-6 col-lg-6 alert alert-danger hide" id="message_error_email_div">
+             <i class="fa fa-exclamation-circle"></i>
+             <span id="message_error_email"></span>
+         </div>
+	</div>
     <div class="row form-group">
         <label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label" for="email_recipients_cc_${config.idTask}">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent_form.label_email_recipients_cc}&nbsp;:</label>
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <input class="form-control" id="email_recipients_cc_${config.idTask}" name="email_recipients_cc_${config.idTask}" type="text" value="" />
         </div>
     </div>
+	<div class="row form-group">
+         <div class="col-xs-12 col-sm-offset-3 col-sm-6 col-md-6 col-lg-6 alert alert-danger hide" id="message_error_email_cc_div">
+             <i class="fa fa-exclamation-circle"></i>
+             <span id="message_error_email_cc"></span>
+         </div>
+	</div>
 	<div class="row form-group" id="search_results_div_${config.idTask}" style="display:none;">
 		<#assign inputEmail="email_recipients_${config.idTask}" >
 		<#include "/admin/plugins/workflow/modules/ticketingfacilfamilles/search_field_agent.html" />
@@ -32,6 +44,51 @@
  			$("#search_results_div_${config.idTask}").toggle();
 		}
 	</script>
+	<script>
+    function validateBeforeSave() {
+        var targetUrl="servlet/plugins/workflow/ticketingfacilfamilles/fieldagentemailvalidation";
+        var dataToSend={
+        	    "email_recipients":$("#email_recipients_${config.idTask}").val(),
+        	    "email_recipients_cc":$("#email_recipients_cc_${config.idTask}").val()
+        	    };
+        var bResult = true;
+        $.ajax({
+            url: targetUrl,
+            async: false,
+            type: "POST",
+            data: dataToSend,
+            dataType : "json",
+            success: function( email_errors ) {
+                if (email_errors.error_invalid_email.length > 0) {
+                    $("#message_error_email_div").removeClass("hide");
+                    $("#message_error_email").html(email_errors.error_invalid_email);
+                    bResult = false;
+                    }
+                else {
+                    $("#message_error_email_div").addClass("hide");
+                    }
+                if (email_errors.error_invalid_email_cc.length > 0) {
+                    $("#message_error_email_cc_div").removeClass("hide");
+                    $("#message_error_email_cc").html(email_errors.error_invalid_email_cc);
+                    bResult = false;
+                    }
+                else {
+                    $("#message_error_email_cc_div").addClass("hide");
+                    }
+                }
+        });
+        return bResult;
+        }
+		  
+    $("#next_button").click( function (e) {
+        e.preventDefault();
+		   
+        if (validateBeforeSave()) {
+            $("#wf_action_form").submit();
+            };
+            });
+
+    </script>
 	<#else>
     <div class="row form-group">
 		<label class="col-xs-12 col-sm-12 col-md-3 col-lg-3 control-label" for="message_${config.idTask}">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent_form.label_message} : </label>

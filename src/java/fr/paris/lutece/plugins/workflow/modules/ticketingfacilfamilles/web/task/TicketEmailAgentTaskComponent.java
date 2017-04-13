@@ -61,6 +61,7 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +70,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -96,13 +96,15 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     private static final String PARAMETER_FOLLOW_ACTION_ID = "following_action_id";
 
     // Error message
-    private static final String MESSAGE_EMPTY_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.empty";
-    private static final String MESSAGE_INVALID_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.invalid";
+    public static final String MESSAGE_EMPTY_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.empty";
+    public static final String MESSAGE_INVALID_EMAIL_OR_NOT_AUTHORIZED = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.invalid.not_authorized";
+    public static final String MESSAGE_INVALID_EMAIL = "module.workflow.ticketingfacilfamilles.task_ticket_emailagent.error.email.invalid";
     private static final String MESSAGE_ALREADY_ANSWER = "module.workflow.ticketingfacilfamilles.fieldAgentResponse.message.already_answer";
 
     // Constant
-    private static final String SEMICOLON = " ; ";
-
+    private static final String DISPLAY_SEMICOLON = " ; ";
+    private static final String SEMICOLON = ";";
+    
     @Inject
     @Named( TaskTicketEmailAgent.BEAN_TICKET_CONFIG_SERVICE )
     private ITaskConfigService _taskTicketConfigService;
@@ -126,7 +128,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
     @Inject
     @Named( IFieldAgentUserDAO.BEAN_SERVICE )
     private IFieldAgentUserDAO _fieldAgentUserDAO;
-
+    
     /**
      * {@inheritDoc}
      */
@@ -149,7 +151,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
             for ( TicketEmailAgentCc infosTicketFacilFamille : listCcTicketFacilFamille )
             {
-                sbInfosCc.append( infosTicketFacilFamille.getEmail( ) ).append( SEMICOLON );
+                sbInfosCc.append( infosTicketFacilFamille.getEmail( ) ).append( DISPLAY_SEMICOLON );
             }
 
             if ( sbInfosCc != null && sbInfosCc.length( ) > 0 )
@@ -222,8 +224,10 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
         String strEmailRecipients = request.getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL_RECIPIENTS + TaskTicketEmailAgent.UNDERSCORE + task.getId( ) );
         String strEmailRecipientsCc = request
                 .getParameter( TaskTicketEmailAgent.PARAMETER_EMAIL_RECIPIENTS_CC + TaskTicketEmailAgent.UNDERSCORE + task.getId( ) );
+
         String strError = null;
         int nLevelError = -1;
+        Object[] errorParams = new Object[1];
 
         if ( config.getMessageDirection( ) == MessageDirection.AGENT_TO_TERRAIN )
         {
@@ -232,14 +236,41 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
                 strError = MESSAGE_EMPTY_EMAIL;
                 nLevelError = AdminMessage.TYPE_STOP;
             }
-            // else
-            // if ( !_fieldAgentUserDAO.isValidEmail( strEmailAddressesTo ) )
-            // {
-            // strError = MESSAGE_INVALID_EMAIL;
-            // nLevelError = AdminMessage.TYPE_STOP;
-            // }
-        }
 
+            else
+            {
+                String[] arrayEmails = strEmailRecipients.split(SEMICOLON);
+                arrayEmails = StringUtils.stripAll(arrayEmails);
+                for (String strEmail : arrayEmails) 
+                {
+                    if ( StringUtils.isNotEmpty( strEmail ) && !_fieldAgentUserDAO.isValidEmail( strEmail ) )
+                    {
+                        errorParams = new Object [ ] { strEmail };
+                        strError = MESSAGE_INVALID_EMAIL_OR_NOT_AUTHORIZED;
+                        nLevelError = AdminMessage.TYPE_STOP;
+                        break;
+                    }
+                }
+            }
+
+            if ( strError == null && StringUtils.isNotEmpty( strEmailRecipientsCc ) )
+            {
+                String[] arrayEmails = strEmailRecipientsCc.split(SEMICOLON);
+                arrayEmails = StringUtils.stripAll(arrayEmails);
+                EmailValidator validator = EmailValidator.getInstance( );
+                for (String strEmail : arrayEmails) 
+                {
+                    if ( StringUtils.isNotEmpty( strEmail ) && !validator.isValid(strEmail) )
+                    {
+                        errorParams = new Object [ ] { strEmail };
+                        strError = MESSAGE_INVALID_EMAIL;
+                        nLevelError = AdminMessage.TYPE_STOP;
+                        break;
+                    }
+                }
+            }
+        }
+        
         if ( ( config.getMessageDirection( ) == MessageDirection.TERRAIN_TO_AGENT ) )
         {
             Action action = _actionService.findByPrimaryKeyWithoutIcon( task.getAction( ).getId( ) );
@@ -255,9 +286,9 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         if ( ( strError != null ) && ( nLevelError >= 0 ) )
         {
-            return AdminMessageService.getMessageUrl( request, strError, nLevelError );
+            return AdminMessageService.getMessageUrl( request, strError, errorParams, nLevelError );
         }
-
+        
         return StringUtils.EMPTY;
     }
 
@@ -274,7 +305,7 @@ public class TicketEmailAgentTaskComponent extends TaskComponent
 
         model.put( MARK_MESSAGE_DIRECTIONS_LIST, listMessageDirections );
         model.put( MARK_CONFIG_FOLLOW_ACTION_ID, StringUtils.EMPTY );
-
+        
         if ( config != null )
         {
             model.put( MARK_MESSAGE_DIRECTION, config.getMessageDirection( ).ordinal( ) );
