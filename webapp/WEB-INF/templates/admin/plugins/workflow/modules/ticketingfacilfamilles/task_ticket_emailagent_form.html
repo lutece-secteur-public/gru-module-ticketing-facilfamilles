@@ -5,7 +5,7 @@
 	<div class="row form-group">
 		<label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label" for="email_recipients_${config.idTask}">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent_form.label_email_recipients}&nbsp;*&nbsp;:</label>
 		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-			<input class="form-control" id="email_recipients_${config.idTask}" name="email_recipients_${config.idTask}" type="text" value="" />
+			<input class="form-control" id="email_recipients_${config.idTask}" name="email_recipients_${config.idTask}" type="text" value="" maxlength='255' />
 		</div>
 		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
 			<span id="search_results_button" onclick="showSearchResponse_${config.idTask}()" class="btn btn-primary">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent.search.button}</span>
@@ -20,7 +20,7 @@
     <div class="row form-group">
         <label class="col-xs-12 col-sm-3 col-md-3 col-lg-3 control-label" for="email_recipients_cc_${config.idTask}">#i18n{module.workflow.ticketingfacilfamilles.task_ticket_emailagent_form.label_email_recipients_cc}&nbsp;:</label>
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-            <input class="form-control" id="email_recipients_cc_${config.idTask}" name="email_recipients_cc_${config.idTask}" type="text" value="" />
+            <input class="form-control" id="email_recipients_cc_${config.idTask}" name="email_recipients_cc_${config.idTask}" type="text" value="" maxlength='255' />
         </div>
     </div>
 	<div class="row form-group">
