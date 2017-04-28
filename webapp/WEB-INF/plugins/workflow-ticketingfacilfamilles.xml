@@ -23,14 +23,6 @@
 
     <!-- Admin features parameters -->
     <admin-features>
-        <admin-feature>
-            <feature-id>TICKETING_ACTEUR_TERRAIN</feature-id>
-            <feature-title>module.workflow.ticketingfacilfamilles.fieldAgentResponse.page.name</feature-title>
-            <feature-description>module.workflow.ticketingfacilfamilles.fieldAgentResponse.page.description</feature-description>
-            <feature-level>3</feature-level>
-            <feature-url>jsp/admin/plugins/ticketing/modules/ticketingfacilfamilles/TicketFieldAgentResponse.jsp</feature-url>
-            <feature-icon-url/>
-        </admin-feature>
     </admin-features>    
     
     
@@ -42,20 +34,9 @@
     <portlets>
    	</portlets>
    
-    <!-- servlets -->
+    <!-- Servlets -->
     <servlets>
-        <servlet>
-            <servlet-name>FieldAgentSearchServlet</servlet-name>
-            <url-pattern>/servlet/plugins/workflow/ticketingfacilfamilles/fieldagentsearch</url-pattern>
-            <servlet-class>fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.search.FieldAgentSearchServlet</servlet-class>
-        </servlet>
-        <servlet>
-            <servlet-name>FieldAgentEmailValidationServlet</servlet-name>
-            <url-pattern>/servlet/plugins/workflow/ticketingfacilfamilles/fieldagentemailvalidation</url-pattern>
-            <servlet-class>fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.search.FieldAgentEmailValidationServlet</servlet-class>
-        </servlet>
-    </servlets>
-    
+    </servlets>   
     
 	<!-- Specific plugin Javascript files -->
     <javascript-files>
