@@ -1,0 +1,50 @@
+<div class="form-group">
+    <label for="attribute${entry.idEntry}">${entry.title}<#if entry.mandatory> *</#if></label>
+    <#list entry.fields as field>
+    	<#if field.code?exists && field.code==entry.code>
+	        <input type="text" name="attribute${entry.idEntry}" id="attribute${entry.idEntry}" size="${field.width}" class="form-control input-lg"
+	            <#if list_responses??>
+	                <#list list_responses as response>
+	                    <#if response.entry.idEntry == entry.idEntry>
+	                        <#if response.responseValue??>
+	                            value="${response.responseValue}"
+	                        </#if>
+	                        <#if response.entry.error??>
+	                            class="error"
+	                        </#if>
+	                    </#if>
+	                </#list>
+	            <#else>
+	                <#if field.value?exists>
+	                    value="${field.value}"
+	                <#else>
+	                    value=""
+	                </#if>
+	            </#if>
+	            <#if field.maxSizeEnter!=-1>
+	                    maxlength="${field.maxSizeEnter}"
+	            </#if>
+	            class="form-control ${entry.CSSClass!} " />
+	        <#if entry.helpMessage?exists&&entry.helpMessage!=''>
+	            <p class="help-block">${entry.helpMessage}</p>
+	        </#if>
+        </#if>
+    </#list>
+</div>
+<#if list_responses??>
+    <#list list_responses as response>
+        <#if response.entry.idEntry == entry.idEntry && response.entry.error??    && response.entry.error.isDisplayableError>
+            <#assign error = response.entry.error>
+            <div class="alert alert-error alert-danger">${error.errorMessage}</div>
+        </#if>
+    </#list>
+</#if>
+<#if entry.confirmField>
+<div class="form-group">
+    <label for="attribute${entry.idEntry}_confirm_field">${entry.confirmFieldTitle}<#if entry.mandatory> *</#if></label>
+    <#list entry.fields as field>
+        <input type="text" name="attribute${entry.idEntry}_confirm_field" id="attribute${entry.idEntry}_confirm_field" size="${field.width}" value=""
+        <#if field.maxSizeEnter!=-1>maxlength="${field.maxSizeEnter}"</#if> class="form-control input-lg"/>
+    </#list>
+</div>
+</#if>
