@@ -8,7 +8,7 @@
   
   <groupId>fr.paris.lutece.plugins</groupId>
   <artifactId>module-ticketing-facilfamilles</artifactId>
-  <version>1.0.5-SNAPSHOT</version>
+  <version>1.0.6-SNAPSHOT</version>
   <packaging>lutece-plugin</packaging>
   <name>Lutece Ticketing FacilFamilles module</name>
   <description>Lutece Ticketing FacilFamilles module</description>
