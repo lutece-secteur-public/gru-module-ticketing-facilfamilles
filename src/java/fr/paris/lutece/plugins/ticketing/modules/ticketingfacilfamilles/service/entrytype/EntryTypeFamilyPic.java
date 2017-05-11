@@ -68,12 +68,12 @@ import org.apache.commons.lang.StringUtils;
  */
 public class EntryTypeFamilyPic extends EntryTypeService
 {
-	// PARAMETERS
+    // PARAMETERS
     protected static final String PARAMETER_BASE_URL = "base_url";
 
     // CONSTANTS
     protected static final String CONSTANT_BASE_URL = "base_url";
-    
+
     // Templates
     private static final String TEMPLATE_CREATE = "admin/plugins/ticketing/modules/facilfamilles/entries/create_entry_type_familypic.html";
     private static final String TEMPLATE_MODIFY = "admin/plugins/ticketing/modules/facilfamilles/entries/modify_entry_type_familypic.html";
@@ -116,30 +116,30 @@ public class EntryTypeFamilyPic extends EntryTypeService
     public String getResponseValueForRecap( Entry entry, HttpServletRequest request, Response response, Locale locale )
     {
         Map<String, Object> model = EntryTypeUtils.initModel( entry, response );
-        
+
         for ( Field field : FieldHome.getFieldListByIdEntry( entry.getIdEntry( ) ) )
         {
-        	if( CONSTANT_BASE_URL.equals( field.getTitle( ) ) )
-        	{
-        		model.put( CONSTANT_BASE_URL, field.getValue( ) );
-        	}
+            if ( CONSTANT_BASE_URL.equals( field.getTitle( ) ) )
+            {
+                model.put( CONSTANT_BASE_URL, field.getValue( ) );
+            }
         }
-        
+
         HtmlTemplate template = new HtmlTemplate( );
         Object bDisplayFront = request.getAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT );
-        
-        if( bDisplayFront != null && (Boolean) bDisplayFront )
+
+        if ( bDisplayFront != null && (Boolean) bDisplayFront )
         {
-        	template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
+            template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
         }
-        else 
+        else
         {
-        	template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML_ADMIN, locale, model );
+            template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML_ADMIN, locale, model );
         }
 
         return template.getHtml( );
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -160,7 +160,7 @@ public class EntryTypeFamilyPic extends EntryTypeService
         String strCSSClass = request.getParameter( PARAMETER_CSS_CLASS );
         String strOnlyDisplayInBack = request.getParameter( PARAMETER_ONLY_DISPLAY_IN_BACK );
         String strErrorMessage = request.getParameter( PARAMETER_ERROR_MESSAGE );
-        
+
         int nWidth = -1;
         int nMaxSizeEnter = -1;
 
@@ -263,7 +263,7 @@ public class EntryTypeFamilyPic extends EntryTypeService
         {
             entry.setUnique( false );
         }
-        
+
         setFields( entry, request );
 
         return null;
@@ -398,7 +398,7 @@ public class EntryTypeFamilyPic extends EntryTypeService
     {
         return response.getResponseValue( );
     }
-    
+
     /**
      * Set the list of fields
      * 
@@ -411,7 +411,7 @@ public class EntryTypeFamilyPic extends EntryTypeService
     {
         entry.getFields( ).add( buildBaseUrlField( entry, request ) );
     }
-    
+
     /**
      * Build the field for base url
      * 
@@ -428,7 +428,7 @@ public class EntryTypeFamilyPic extends EntryTypeService
 
         if ( fieldBaseUrl == null )
         {
-        	fieldBaseUrl = new Field( );
+            fieldBaseUrl = new Field( );
         }
 
         fieldBaseUrl.setParentEntry( entry );
