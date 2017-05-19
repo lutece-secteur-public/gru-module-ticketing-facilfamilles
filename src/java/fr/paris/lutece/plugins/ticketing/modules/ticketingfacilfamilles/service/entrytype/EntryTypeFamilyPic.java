@@ -43,11 +43,16 @@ import fr.paris.lutece.plugins.genericattributes.service.entrytype.EntryTypeServ
 import fr.paris.lutece.plugins.genericattributes.util.GenericAttributesUtils;
 import fr.paris.lutece.plugins.ticketing.service.entrytype.EntryTypeUtils;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.FamilyPicResourceIdService;
 import fr.paris.lutece.portal.business.regularexpression.RegularExpression;
+import fr.paris.lutece.portal.business.user.AdminUser;
+import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.portal.service.rbac.RBACResource;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.regularexpression.RegularExpressionService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.ReferenceList;
@@ -66,13 +71,16 @@ import org.apache.commons.lang.StringUtils;
 /**
  * class EntryTypeText
  */
-public class EntryTypeFamilyPic extends EntryTypeService
+public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
 {
     // PARAMETERS
     protected static final String PARAMETER_BASE_URL = "base_url";
 
     // CONSTANTS
     protected static final String CONSTANT_BASE_URL = "base_url";
+    private static final String CONSTANT_LINK_FAMILYPIC = "link_familypic";
+    public static final String RESOURCE_TYPE = "FAMILY_PIC";
+    private static final String RESOURCE_ID = "1";
 
     // Templates
     private static final String TEMPLATE_CREATE = "admin/plugins/ticketing/modules/facilfamilles/entries/create_entry_type_familypic.html";
@@ -80,6 +88,7 @@ public class EntryTypeFamilyPic extends EntryTypeService
     private static final String TEMPLATE_HTML_CODE = "skin/plugins/ticketing/modules/facilfamilles/entries/html_code_entry_type_familypic.html";
     private static final String TEMPLATE_HTML_CODE_ADMIN = "admin/plugins/ticketing/modules/facilfamilles/entries/html_code_entry_type_familypic.html";
     private static final String TEMPLATE_READ_ONLY_HTML_ADMIN = "admin/plugins/ticketing/modules/facilfamilles/entries/read_only_entry_type_familypic.html";
+    private static final String TEMPLATE_LINK_FAMILYPIC = "admin/plugins/ticketing/modules/facilfamilles/entries/link_familypic.html";
     private static final String TEMPLATE_READ_ONLY_HTML = "skin/plugins/ticketing/modules/facilfamilles/entries/read_only_entry_type_familypic.html";
 
     /**
@@ -124,8 +133,17 @@ public class EntryTypeFamilyPic extends EntryTypeService
                 model.put( CONSTANT_BASE_URL, field.getValue( ) );
             }
         }
-
+        
         HtmlTemplate template = new HtmlTemplate( );
+        
+        AdminUser user = AdminUserService.getAdminUser( request );
+        if ( RBACService.isAuthorized( this, FamilyPicResourceIdService.PERMISSION_ACCESS, user ) )
+        {
+            template = AppTemplateService.getTemplate( TEMPLATE_LINK_FAMILYPIC, locale, model );
+            model.put( CONSTANT_LINK_FAMILYPIC, template.getHtml( ) );
+        }
+
+        template = new HtmlTemplate( );
         Object bDisplayFront = request.getAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT );
 
         if ( bDisplayFront != null && (Boolean) bDisplayFront )
@@ -436,5 +454,17 @@ public class EntryTypeFamilyPic extends EntryTypeService
         fieldBaseUrl.setValue( strBaseUrl );
 
         return fieldBaseUrl;
+    }
+    
+    @Override
+    public String getResourceId( )
+    {
+        return RESOURCE_ID;
+    }
+
+    @Override
+    public String getResourceTypeCode( )
+    {
+        return RESOURCE_TYPE;
     }
 }

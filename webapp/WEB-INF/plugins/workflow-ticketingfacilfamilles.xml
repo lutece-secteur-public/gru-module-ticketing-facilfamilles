@@ -29,6 +29,15 @@
     <!-- Xpage configuration -->
     <applications>
     </applications>
+ 
+    <!-- RBAC Resources -->
+    <rbac-resource-types>
+        <rbac-resource-type>
+            <rbac-resource-type-class>
+                fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.FamilyPicResourceIdService
+            </rbac-resource-type-class>
+        </rbac-resource-type>
+    </rbac-resource-types>
     
     <!-- Portlet parameters -->
     <portlets>

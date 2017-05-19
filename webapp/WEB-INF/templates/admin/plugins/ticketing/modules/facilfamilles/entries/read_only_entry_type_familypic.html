@@ -2,10 +2,10 @@
 <#if response.responseValue?has_content>
     <div class="form-group">
         <label>${entry.title}</label>
-        <p class="form-control-static">${response.responseValue!''} 
-	        <#if base_url?has_content>
-	        	<a href="${base_url + response.responseValue}" target="redirectFF"><i class="fa fa-camera"></i></a>
-	        </#if>
+        <p class="form-control-static">${response.responseValue!''}
+          <#if link_familypic?has_content>
+             ${link_familypic}
+          </#if>
         </p>
     </div>
 </#if>
