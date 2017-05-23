@@ -135,18 +135,19 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
         }
         
         HtmlTemplate template = new HtmlTemplate( );
+        Object bDisplayFront = request.getAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT );
+        boolean bIsFront = ( bDisplayFront != null && (Boolean) bDisplayFront );
         
         AdminUser user = AdminUserService.getAdminUser( request );
-        if ( RBACService.isAuthorized( this, FamilyPicResourceIdService.PERMISSION_ACCESS, user ) )
+        if ( !bIsFront && RBACService.isAuthorized( this, FamilyPicResourceIdService.PERMISSION_ACCESS, user ) )
         {
             template = AppTemplateService.getTemplate( TEMPLATE_LINK_FAMILYPIC, locale, model );
             model.put( CONSTANT_LINK_FAMILYPIC, template.getHtml( ) );
         }
 
         template = new HtmlTemplate( );
-        Object bDisplayFront = request.getAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT );
 
-        if ( bDisplayFront != null && (Boolean) bDisplayFront )
+        if ( bIsFront )
         {
             template = AppTemplateService.getTemplate( TEMPLATE_READ_ONLY_HTML, locale, model );
         }
