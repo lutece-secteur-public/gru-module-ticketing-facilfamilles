@@ -74,7 +74,6 @@ public class FamilyPicResourceIdService extends ResourceIdService
         rt.setResourceTypeKey( EntryTypeFamilyPic.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
 
-        
         Permission p = new Permission( );
         p.setPermissionKey( PERMISSION_ACCESS );
         p.setPermissionTitleKey( PROPERTY_LABEL_ACCESS );

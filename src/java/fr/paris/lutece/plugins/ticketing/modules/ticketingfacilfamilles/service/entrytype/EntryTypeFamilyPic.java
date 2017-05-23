@@ -133,11 +133,11 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
                 model.put( CONSTANT_BASE_URL, field.getValue( ) );
             }
         }
-        
+
         HtmlTemplate template = new HtmlTemplate( );
         Object bDisplayFront = request.getAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT );
         boolean bIsFront = ( bDisplayFront != null && (Boolean) bDisplayFront );
-        
+
         AdminUser user = AdminUserService.getAdminUser( request );
         if ( !bIsFront && RBACService.isAuthorized( this, FamilyPicResourceIdService.PERMISSION_ACCESS, user ) )
         {
@@ -456,7 +456,7 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
 
         return fieldBaseUrl;
     }
-    
+
     @Override
     public String getResourceId( )
     {
