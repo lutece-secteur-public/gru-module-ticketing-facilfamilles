@@ -36,8 +36,6 @@ package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.
 import fr.paris.lutece.plugins.genericattributes.business.Response;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUnit;
 import fr.paris.lutece.plugins.ticketing.business.assignee.AssigneeUser;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomain;
-import fr.paris.lutece.plugins.ticketing.business.domain.TicketDomainHome;
 import fr.paris.lutece.plugins.ticketing.business.ticket.Ticket;
 import fr.paris.lutece.plugins.ticketing.business.ticket.TicketHome;
 import fr.paris.lutece.plugins.ticketing.web.TicketingConstants;
@@ -90,9 +88,8 @@ public class TaskAutomaticAssignment extends AbstractTicketingTask
     {
         String strTaskInformation = null;
         Ticket ticket = getTicket( nIdResourceHistory );
-        TicketDomain domain = TicketDomainHome.findByPrimaryKey( ticket.getIdTicketDomain( ) );
 
-        if ( ( domain != null ) && domain.getLabel( ).equals( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL ) ) )
+        if ( ( ticket.getTicketDomain( ) != null ) && ticket.getTicketDomain( ).getLabel( ).equalsIgnoreCase( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL ) ) )
         {
             String strSuffix = getTicketAssignCriteria( ticket );
 
