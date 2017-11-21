@@ -320,7 +320,7 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( );
+        String strValueEntry = ( request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) != null ) ? request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( ) : null;
         boolean bConfirmField = entry.isConfirmField( );
         String strValueEntryConfirmField = null;
 
