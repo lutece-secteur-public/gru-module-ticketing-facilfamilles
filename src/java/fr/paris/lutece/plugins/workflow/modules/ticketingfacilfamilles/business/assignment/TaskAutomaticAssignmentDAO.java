@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2016, Mairie de Paris
+ * Copyright (c) 2002-2024, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,13 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.assignment;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.WorkflowTicketingFacilFamillesPlugin;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
@@ -40,13 +47,6 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.sql.DAOUtil;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -74,14 +74,14 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
     @Override
     public void assign( int idTask, String strUserAccessCode, String strSuffix, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ASSIGN, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
-
         int nIndex = 1;
-        daoUtil.setString( nIndex++, strUserAccessCode );
-        daoUtil.setInt( nIndex++, idTask );
-        daoUtil.setString( nIndex++, strSuffix );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ASSIGN, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
+        {
+            daoUtil.setString( nIndex++, strUserAccessCode );
+            daoUtil.setInt( nIndex++, idTask );
+            daoUtil.setString( nIndex, strSuffix );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -90,12 +90,13 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
     @Override
     public void unassign( int nIdtask, String strSuffix, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UNASSIGN, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
         int nIndex = 1;
-        daoUtil.setInt( nIndex++, nIdtask );
-        daoUtil.setString( nIndex++, strSuffix );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UNASSIGN, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
+        {
+            daoUtil.setInt( nIndex++, nIdtask );
+            daoUtil.setString( nIndex, strSuffix );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -106,12 +107,14 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
     {
         if ( StringUtils.isNotEmpty( strUserAccessCode ) )
         {
-            DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UNASSIGN_BY_USER_ACCESS_CODE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
             int nIndex = 1;
-            daoUtil.setInt( nIndex++, nIdtask );
-            daoUtil.setString( nIndex++, strUserAccessCode );
-            daoUtil.executeUpdate( );
-            daoUtil.free( );
+            try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UNASSIGN_BY_USER_ACCESS_CODE,
+                    PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
+            {
+                daoUtil.setInt( nIndex++, nIdtask );
+                daoUtil.setString( nIndex, strUserAccessCode );
+                daoUtil.executeUpdate( );
+            }
         }
     }
 
@@ -123,24 +126,23 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
     {
         AdminUser adminUser = null;
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_SUFFIX, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
-        daoUtil.setInt( 1, nIdTask );
-        daoUtil.setString( 2, strSuffix );
-        daoUtil.executeQuery( );
-
-        if ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_SUFFIX, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
         {
-            int nIndex = 1;
-            String strUserAccessCode = daoUtil.getString( nIndex++ );
+            daoUtil.setInt( 1, nIdTask );
+            daoUtil.setString( 2, strSuffix );
+            daoUtil.executeQuery( );
 
-            if ( StringUtils.isNotBlank( strUserAccessCode ) )
+            if ( daoUtil.next( ) )
             {
-                adminUser = AdminUserHome.findUserByLogin( strUserAccessCode );
+                int nIndex = 1;
+                String strUserAccessCode = daoUtil.getString( nIndex++ );
+
+                if ( StringUtils.isNotBlank( strUserAccessCode ) )
+                {
+                    adminUser = AdminUserHome.findUserByLogin( strUserAccessCode );
+                }
             }
         }
-
-        daoUtil.free( );
-
         return adminUser;
     }
 
@@ -153,19 +155,19 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
         UserAutomaticAssignmentConfig userAutoAssignConf = new UserAutomaticAssignmentConfig( );
         userAutoAssignConf.setAdminUser( null );
 
-        List<String> listAssignedSuffix = new ArrayList<String>( );
+        List<String> listAssignedSuffix = new ArrayList<>( );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_UNASSIGNED, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
-        daoUtil.setInt( 1, nIdTask );
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_UNASSIGNED, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
         {
-            int nIndex = 1;
-            listAssignedSuffix.add( daoUtil.getString( nIndex++ ) );
-        }
+            daoUtil.setInt( 1, nIdTask );
+            daoUtil.executeQuery( );
 
-        daoUtil.free( );
+            while ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                listAssignedSuffix.add( daoUtil.getString( nIndex++ ) );
+            }
+        }
         userAutoAssignConf.setAssignedSuffix( listAssignedSuffix );
 
         return userAutoAssignConf;
@@ -177,42 +179,41 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
     @Override
     public List<UserAutomaticAssignmentConfig> getAllAutoAssignementConf( int nIdTask )
     {
-        Map<String, UserAutomaticAssignmentConfig> mapAssignmentConfig = new HashMap<String, UserAutomaticAssignmentConfig>( );
+        Map<String, UserAutomaticAssignmentConfig> mapAssignmentConfig = new HashMap<>( );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ALL, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
-        daoUtil.setInt( 1, nIdTask );
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_ALL, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
         {
-            int nIndex = 1;
+            daoUtil.setInt( 1, nIdTask );
+            daoUtil.executeQuery( );
 
-            String strUserAccessCode = daoUtil.getString( nIndex++ );
-
-            if ( StringUtils.isBlank( strUserAccessCode ) )
+            while ( daoUtil.next( ) )
             {
-                strUserAccessCode = StringUtils.EMPTY;
-            }
+                int nIndex = 1;
 
-            String strSuffix = daoUtil.getString( nIndex++ );
+                String strUserAccessCode = daoUtil.getString( nIndex++ );
 
-            if ( mapAssignmentConfig.containsKey( strUserAccessCode ) )
-            {
-                mapAssignmentConfig.get( strUserAccessCode ).getAssignedSuffix( ).add( strSuffix );
-            }
-            else
-            {
-                UserAutomaticAssignmentConfig userAssignConf = new UserAutomaticAssignmentConfig( );
-                AdminUser adminUser = AdminUserHome.findUserByLogin( strUserAccessCode );
-                userAssignConf.setAdminUser( adminUser );
-                userAssignConf.getAssignedSuffix( ).add( strSuffix );
-                mapAssignmentConfig.put( strUserAccessCode, userAssignConf );
+                if ( StringUtils.isBlank( strUserAccessCode ) )
+                {
+                    strUserAccessCode = StringUtils.EMPTY;
+                }
+
+                String strSuffix = daoUtil.getString( nIndex++ );
+
+                if ( mapAssignmentConfig.containsKey( strUserAccessCode ) )
+                {
+                    mapAssignmentConfig.get( strUserAccessCode ).getAssignedSuffix( ).add( strSuffix );
+                }
+                else
+                {
+                    UserAutomaticAssignmentConfig userAssignConf = new UserAutomaticAssignmentConfig( );
+                    AdminUser adminUser = AdminUserHome.findUserByLogin( strUserAccessCode );
+                    userAssignConf.setAdminUser( adminUser );
+                    userAssignConf.getAssignedSuffix( ).add( strSuffix );
+                    mapAssignmentConfig.put( strUserAccessCode, userAssignConf );
+                }
             }
         }
-
-        daoUtil.free( );
-
-        return new ArrayList<UserAutomaticAssignmentConfig>( mapAssignmentConfig.values( ) );
+        return new ArrayList<>( mapAssignmentConfig.values( ) );
     }
 
     @Override
@@ -222,16 +223,17 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
 
         for ( int nCpt = 0; nCpt < nSlotNb; nCpt++ )
         {
-            DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
             int nIndex = 1;
-            daoUtil.setInt( nIndex++, nIdTask );
-            daoUtil.setString( nIndex++, StringUtils.leftPad( String.valueOf( nCpt ), String.valueOf( nSlotNb ).length( ) - 1, "0" ) );
-            // no user assignment => set user_access_code to null
-            daoUtil.setString( nIndex++, null );
-            daoUtil.executeUpdate( );
-            daoUtil.free( );
-        }
 
+            try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
+            {
+                daoUtil.setInt( nIndex++, nIdTask );
+                daoUtil.setString( nIndex++, StringUtils.leftPad( String.valueOf( nCpt ), String.valueOf( nSlotNb ).length( ) - 1, "0" ) );
+                // no user assignment => set user_access_code to null
+                daoUtil.setString( nIndex, null );
+                daoUtil.executeUpdate( );
+            }
+        }
         return getAllAutoAssignementConf( nIdTask );
     }
 
@@ -241,25 +243,24 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
     @Override
     public void insert( TaskAutomaticAssignmentConfig config )
     {
-        if ( config != null )
+
+        if ( ( config != null ) && ( config.getAutomaticAssignmentConf( ) != null ) && ( !config.getAutomaticAssignmentConf( ).isEmpty( ) ) )
         {
-            if ( ( config.getAutomaticAssignmentConf( ) != null ) && ( config.getAutomaticAssignmentConf( ).size( ) > 0 ) )
+            for ( UserAutomaticAssignmentConfig userAutoAssignConf : config.getAutomaticAssignmentConf( ) )
             {
-                for ( UserAutomaticAssignmentConfig userAutoAssignConf : config.getAutomaticAssignmentConf( ) )
+                if ( ( userAutoAssignConf != null ) && ( userAutoAssignConf.getAssignedSuffix( ) != null )
+                        && ( !userAutoAssignConf.getAssignedSuffix( ).isEmpty( ) ) )
                 {
-                    if ( ( userAutoAssignConf != null ) && ( userAutoAssignConf.getAssignedSuffix( ) != null )
-                            && ( userAutoAssignConf.getAssignedSuffix( ).size( ) > 0 ) )
+                    for ( String strSuffix : userAutoAssignConf.getAssignedSuffix( ) )
                     {
-                        for ( String strSuffix : userAutoAssignConf.getAssignedSuffix( ) )
+                        int nIndex = 1;
+                        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
                         {
-                            DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
-                            int nIndex = 1;
                             daoUtil.setInt( nIndex++, config.getIdTask( ) );
                             daoUtil.setString( nIndex++, strSuffix );
-                            daoUtil.setString( nIndex++, ( userAutoAssignConf.getAdminUser( ) != null ) ? userAutoAssignConf.getAdminUser( ).getAccessCode( )
-                                    : null );
+                            daoUtil.setString( nIndex,
+                                    ( userAutoAssignConf.getAdminUser( ) != null ) ? userAutoAssignConf.getAdminUser( ).getAccessCode( ) : null );
                             daoUtil.executeUpdate( );
-                            daoUtil.free( );
                         }
                     }
                 }
@@ -282,7 +283,7 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
         TaskAutomaticAssignmentConfig config = null;
         List<UserAutomaticAssignmentConfig> listUserAutoAssConf = getAllAutoAssignementConf( nIdTask );
 
-        if ( ( listUserAutoAssConf != null ) && ( listUserAutoAssConf.size( ) > 0 ) )
+        if ( ( listUserAutoAssConf != null ) && ( !listUserAutoAssConf.isEmpty( ) ) )
         {
             config = new TaskAutomaticAssignmentConfig( );
             config.setAutomaticAssignmentConf( listUserAutoAssConf );
@@ -297,11 +298,13 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
     @Override
     public void delete( int nIdTask )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ALL, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
         int nIndex = 1;
-        daoUtil.setInt( nIndex++, nIdTask );
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_ALL, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
+        {
+            daoUtil.setInt( nIndex, nIdTask );
+            daoUtil.executeUpdate( );
+        }
     }
 
     /**
@@ -313,22 +316,21 @@ public class TaskAutomaticAssignmentDAO implements ITaskAutomaticAssignmentDAO
         UserAutomaticAssignmentConfig userAutoAssignConf = new UserAutomaticAssignmentConfig( );
         userAutoAssignConf.setAdminUser( adminUser );
 
-        List<String> listAssignedSuffix = new ArrayList<String>( );
+        List<String> listAssignedSuffix = new ArrayList<>( );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ACCESS_CODE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) );
-        daoUtil.setInt( 1, nIdTask );
-        daoUtil.setString( 2, adminUser.getAccessCode( ) );
-        daoUtil.executeQuery( );
-
-        while ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_FIND_BY_ACCESS_CODE, PluginService.getPlugin( WorkflowTicketingFacilFamillesPlugin.PLUGIN_NAME ) ) )
         {
-            int nIndex = 1;
-            listAssignedSuffix.add( daoUtil.getString( nIndex++ ) );
+            daoUtil.setInt( 1, nIdTask );
+            daoUtil.setString( 2, adminUser.getAccessCode( ) );
+            daoUtil.executeQuery( );
+
+            while ( daoUtil.next( ) )
+            {
+                int nIndex = 1;
+                listAssignedSuffix.add( daoUtil.getString( nIndex++ ) );
+            }
         }
-
-        daoUtil.free( );
         userAutoAssignConf.setAssignedSuffix( listAssignedSuffix );
-
         return userAutoAssignConf;
     }
 }

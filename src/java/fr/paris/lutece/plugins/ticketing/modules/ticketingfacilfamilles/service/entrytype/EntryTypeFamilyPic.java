@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2024, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,15 @@
  */
 package fr.paris.lutece.plugins.ticketing.modules.ticketingfacilfamilles.service.entrytype;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.genericattributes.business.Entry;
 import fr.paris.lutece.plugins.genericattributes.business.Field;
 import fr.paris.lutece.plugins.genericattributes.business.FieldHome;
@@ -58,15 +67,6 @@ import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.string.StringUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * class EntryTypeText
@@ -136,7 +136,7 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
 
         HtmlTemplate template = new HtmlTemplate( );
         Object bDisplayFront = request.getAttribute( TicketingConstants.ATTRIBUTE_IS_DISPLAY_FRONT );
-        boolean bIsFront = ( bDisplayFront != null && (Boolean) bDisplayFront );
+        boolean bIsFront = ( ( bDisplayFront != null ) && (Boolean) bDisplayFront );
 
         AdminUser user = AdminUserService.getAdminUser( request );
         if ( !bIsFront && RBACService.isAuthorized( this, FamilyPicResourceIdService.PERMISSION_ACCESS, user ) )
@@ -204,7 +204,7 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
+                    I18nService.getLocalizedString( strFieldError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_MANDATORY_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -234,7 +234,7 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
         if ( StringUtils.isNotBlank( strFieldError ) )
         {
             Object [ ] tabRequiredFields = {
-                I18nService.getLocalizedString( strFieldError, locale )
+                    I18nService.getLocalizedString( strFieldError, locale )
             };
 
             return AdminMessageService.getMessageUrl( request, MESSAGE_NUMERIC_FIELD, tabRequiredFields, AdminMessage.TYPE_STOP );
@@ -248,7 +248,7 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
 
         if ( entry.getFields( ) == null )
         {
-            ArrayList<Field> listFields = new ArrayList<Field>( );
+            ArrayList<Field> listFields = new ArrayList<>( );
             Field field = new Field( );
             listFields.add( field );
             entry.setFields( listFields );
@@ -320,7 +320,9 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
     @Override
     public GenericAttributeError getResponseData( Entry entry, HttpServletRequest request, List<Response> listResponse, Locale locale )
     {
-        String strValueEntry = ( request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) != null ) ? request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( ) : null;
+        String strValueEntry = ( request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ) != null )
+                ? request.getParameter( PREFIX_ATTRIBUTE + entry.getIdEntry( ) ).trim( )
+                : null;
         boolean bConfirmField = entry.isConfirmField( );
         String strValueEntryConfirmField = null;
 
@@ -399,7 +401,7 @@ public class EntryTypeFamilyPic extends EntryTypeService implements RBACResource
                 error.setMandatoryError( false );
                 error.setTitleQuestion( entry.getConfirmFieldTitle( ) );
                 error.setErrorMessage( I18nService.getLocalizedString( MESSAGE_CONFIRM_FIELD, new String [ ] {
-                    entry.getTitle( )
+                        entry.getTitle( )
                 }, request.getLocale( ) ) );
 
                 return error;
