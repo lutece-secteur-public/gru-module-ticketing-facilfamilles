@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.assignment;
 
-import fr.paris.lutece.portal.business.user.AdminUser;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.paris.lutece.portal.business.user.AdminUser;
 
 /**
  *
@@ -45,7 +45,7 @@ import java.util.List;
  */
 public class UserAutomaticAssignmentConfig
 {
-    private List<String> _listAssignedSuffix = new ArrayList<String>( );
+    private List<String> _listAssignedSuffix = new ArrayList<>( );
     private AdminUser _adminUser;
 
     /**
@@ -62,7 +62,7 @@ public class UserAutomaticAssignmentConfig
      */
     public void setAssignedSuffix( List<String> listAssignedSuffix )
     {
-        this._listAssignedSuffix = listAssignedSuffix;
+        _listAssignedSuffix = listAssignedSuffix;
     }
 
     /**
@@ -79,6 +79,6 @@ public class UserAutomaticAssignmentConfig
      */
     public void setAdminUser( AdminUser adminUser )
     {
-        this._adminUser = adminUser;
+        _adminUser = adminUser;
     }
 }

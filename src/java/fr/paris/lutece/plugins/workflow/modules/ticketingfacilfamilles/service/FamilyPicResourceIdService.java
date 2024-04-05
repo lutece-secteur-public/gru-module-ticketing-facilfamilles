@@ -33,14 +33,14 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service;
 
+import java.util.Locale;
+
 import fr.paris.lutece.plugins.ticketing.modules.ticketingfacilfamilles.service.entrytype.EntryTypeFamilyPic;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
 import fr.paris.lutece.util.ReferenceList;
-
-import java.util.Locale;
 
 /**
  *
@@ -66,6 +66,7 @@ public class FamilyPicResourceIdService extends ResourceIdService
     /**
      * Initializes the service
      */
+    @Override
     public void register( )
     {
         ResourceType rt = new ResourceType( );
@@ -84,19 +85,21 @@ public class FamilyPicResourceIdService extends ResourceIdService
 
     /**
      * Returns a list of resource ids
-     * 
+     *
      * @param locale
      *            The current locale
      * @return A list of resource ids
      */
+    @Override
     public ReferenceList getResourceIdList( Locale locale )
     {
-        return null;
+        return new ReferenceList( );
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getTitle( String strId, Locale locale )
     {
         return PROPERTY_LABEL_FAMILY_PIC;

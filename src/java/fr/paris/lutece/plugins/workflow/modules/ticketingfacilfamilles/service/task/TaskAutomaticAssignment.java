@@ -89,7 +89,8 @@ public class TaskAutomaticAssignment extends AbstractTicketingTask
         String strTaskInformation = null;
         Ticket ticket = getTicket( nIdResourceHistory );
 
-        if ( ( ticket.getTicketDomain( ) != null ) && ticket.getTicketDomain( ).getLabel( ).equalsIgnoreCase( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL ) ) )
+        if ( ( ticket.getTicketDomain( ) != null )
+                && ticket.getTicketDomain( ).getLabel( ).equalsIgnoreCase( AppPropertiesService.getProperty( PROPERTY_ACCOUNT_NUMBER_DOMAIN_LABEL ) ) )
         {
             String strSuffix = getTicketAssignCriteria( ticket );
 
