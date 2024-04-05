@@ -33,13 +33,23 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.web.task;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+
 import fr.paris.lutece.plugins.ticketing.web.util.RequestUtils;
-import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.assignment.UserAutomaticAssignmentConfig;
 import fr.paris.lutece.plugins.workflow.modules.ticketing.business.information.TaskInformation;
-import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.assignment.IAutomaticAssignmentService;
 import fr.paris.lutece.plugins.workflow.modules.ticketing.service.information.ITaskInformationService;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.business.assignment.UserAutomaticAssignmentConfig;
+import fr.paris.lutece.plugins.workflow.modules.ticketingfacilfamilles.service.assignment.IAutomaticAssignmentService;
 import fr.paris.lutece.plugins.workflow.utils.WorkflowUtils;
-import fr.paris.lutece.plugins.workflow.web.task.NoFormTaskComponent;
 import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.business.user.AdminUserHome;
@@ -53,23 +63,11 @@ import fr.paris.lutece.util.ErrorMessage;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * This class is a component for the task {@link fr.paris.lutece.plugins.workflow.modules.ticketing.service.task.TaskEditTicket}
  *
  */
-public class AutomaticAssignmentTaskComponent extends NoFormTaskComponent
+public class AutomaticAssignmentTaskComponent extends TicketingTaskComponent
 {
     // TEMPLATES
     private static final String TEMPLATE_TASK_AUTOMATIC_ASSIGNMENT_CONFIG = "admin/plugins/workflow/modules/facilfamilles/task_automatic_assignment_config.html";
@@ -142,7 +140,7 @@ public class AutomaticAssignmentTaskComponent extends NoFormTaskComponent
 
     /**
      * return automatic assignment user config form
-     * 
+     *
      * @param request
      *            http request
      * @param task
@@ -188,7 +186,7 @@ public class AutomaticAssignmentTaskComponent extends NoFormTaskComponent
 
     /**
      * return automatic assignment user config form for unassigned users only
-     * 
+     *
      * @param request
      *            http request
      * @param task
@@ -250,7 +248,7 @@ public class AutomaticAssignmentTaskComponent extends NoFormTaskComponent
 
     /**
      * return automatic assignment global config form
-     * 
+     *
      * @param task
      *            task
      * @param locale
@@ -297,7 +295,7 @@ public class AutomaticAssignmentTaskComponent extends NoFormTaskComponent
 
     /**
      * unassign all assignment for given user
-     * 
+     *
      * @param task
      *            task
      * @param strUserAccessCode
@@ -371,7 +369,7 @@ public class AutomaticAssignmentTaskComponent extends NoFormTaskComponent
 
     /**
      * build remove confirmation message
-     * 
+     *
      * @param request
      *            request
      * @param locale
@@ -397,7 +395,7 @@ public class AutomaticAssignmentTaskComponent extends NoFormTaskComponent
 
     /**
      * store user assignment configuration
-     * 
+     *
      * @param request
      *            request
      * @param task
@@ -419,7 +417,7 @@ public class AutomaticAssignmentTaskComponent extends NoFormTaskComponent
 
     /**
      * build and return display Config Form Url
-     * 
+     *
      * @param task
      *            task
      * @param mapParams
@@ -485,13 +483,12 @@ public class AutomaticAssignmentTaskComponent extends NoFormTaskComponent
     @Override
     public String getTaskInformationXml( int nIdHistory, HttpServletRequest request, Locale locale, ITask task )
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
     /**
      * Add an info message
-     * 
+     *
      * @param strMessage
      *            The message
      */
