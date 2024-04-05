@@ -1,17 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>fr.paris.lutece.tools</groupId>
-    <artifactId>lutece-global-pom</artifactId>
-    <version>6.0.0</version>
-  </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fr.paris.lutece.tools</groupId>
+        <artifactId>lutece-global-pom</artifactId>
+        <version>6.0.0</version>
+    </parent>
   
-  <groupId>fr.paris.lutece.plugins</groupId>
-  <artifactId>module-ticketing-facilfamilles</artifactId>
-  <version>2.0.2-SNAPSHOT</version>
-  <packaging>lutece-plugin</packaging>
-  <name>Lutece Ticketing FacilFamilles module</name>
-  <description>Lutece Ticketing FacilFamilles module</description>
+    <groupId>fr.paris.lutece.plugins</groupId>
+    <artifactId>module-ticketing-facilfamilles</artifactId>
+    <version>2.0.2-SNAPSHOT</version>
+    <packaging>lutece-plugin</packaging>
+    <name>Lutece Ticketing FacilFamilles module</name>
+    <description>Lutece Ticketing FacilFamilles module</description>
 
     <repositories>
         <repository>
