@@ -26,7 +26,7 @@
         <dependency>
             <groupId>fr.paris.lutece</groupId>
             <artifactId>lutece-core</artifactId>
-            <version>[5.1.1-SNAPSHOT,)</version>
+            <version>[5.1.1-SNAPSHOT,7.9.9)</version>
             <type>lutece-core</type>
         </dependency>
         <dependency>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>fr.paris.lutece.plugins</groupId>
             <artifactId>module-workflow-ticketing</artifactId>
-            <version>[1.2.8-SNAPSHOT,)</version>
+            <version>[1.2.8-SNAPSHOT,4.9.9)</version>
             <type>lutece-plugin</type>
         </dependency>
     </dependencies>
